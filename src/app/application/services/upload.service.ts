@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_ROUTES } from './enum';
+import { API_ROUTES } from '../models/api.enum';
 import { peyload_pdf } from '../models/signPdf';
 
 @Injectable({

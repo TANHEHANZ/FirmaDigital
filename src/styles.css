@@ -2,5 +2,11 @@
 @import "tailwindcss";
 
 @theme {
+  --color-uploaded: #4f46e5;
   --color-primary: #6ecde6;
+  --color-processing: #facc15;
+  --color-signed: #22c55e; /* firmado correctamente*/
+  --color-error: #dc2626;
+  --color-validated: #10b981;
+  --color-tampered: #e11d48;
 }
