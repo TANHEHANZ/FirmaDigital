@@ -10,7 +10,9 @@ import { RouterLink } from '@angular/router';
       [routerLink]="route()"
       routerLinkActive="active"
       [attr.aria-current]="isActive() ? 'page' : null"
-      >{{ label() }}</a
+    >
+      <i class="mr-2" [class]="'fa ' + iconName()"></i>
+      {{ label() }}</a
     >
   `,
   standalone: true,
@@ -19,4 +21,5 @@ export class LinkComponent {
   route = input<string>();
   isActive = input<boolean>(false);
   label = input<string>();
+  iconName = input<string>();
 }

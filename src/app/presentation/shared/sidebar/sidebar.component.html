@@ -2,10 +2,15 @@
   <h3 class="text-lg font-semibold mb-4">Firma Digital</h3>
   <nav class="space-y-2 flex flex-col gap-2">
     <app-link [label]="'Validar'" [route]="PATH_ROUTES.DASHBOARD_VALIDATE" />
-    <app-link [label]="'Firmar'" [route]="PATH_ROUTES.DASHBOARD_VERIFY" />
+    <app-link
+      [label]="'Firmar'"
+      [route]="PATH_ROUTES.DASHBOARD_VERIFY"
+      [iconName]="ICONS.VALIDATE"
+    />
     <app-link
       [label]="'Configuraciones'"
       [route]="PATH_ROUTES.DASHBOARD_PROFILE"
+      [iconName]="'fa-signature'"
     />
     <app-link [label]="'Salir'" [route]="PATH_ROUTES.LOGOUT" />
   </nav>

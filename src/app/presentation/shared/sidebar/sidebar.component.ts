@@ -1,3 +1,4 @@
+import { ICONS } from './../ui/icons';
 import { Component } from '@angular/core';
 import { LinkComponent } from '../ui/link/link.component';
 import { PATH_ROUTES } from '../../../application/models/route.enum';
@@ -10,4 +11,5 @@ import { PATH_ROUTES } from '../../../application/models/route.enum';
 })
 export class SidebarComponent {
   PATH_ROUTES = PATH_ROUTES;
+  ICONS = ICONS;
 }
