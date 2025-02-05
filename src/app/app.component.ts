@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { UploadService } from './services/upload.service';
-import { peyload_pdf } from './models/signPdf';
+import { UploadService } from './application/services/upload.service';
+import { peyload_pdf } from './application/models/signPdf';
 
 @Component({
   selector: 'app-root',
   imports: [],
   template: `
-    <form>
+    <!-- <form>
       <input
         type="file"
         (change)="onFileSelected($event)"
@@ -17,7 +17,7 @@ import { peyload_pdf } from './models/signPdf';
       <p>
         {{ pdf_reponse }}
       </p>
-    </form>
+    </form> -->
   `,
   styleUrl: './app.component.css',
 })
