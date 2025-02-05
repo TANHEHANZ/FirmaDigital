@@ -1,17 +1,55 @@
-<aside class="w-64 h-screen p-4">
-  <h3 class="text-lg font-semibold mb-4">Firma Digital</h3>
-  <nav class="space-y-2 flex flex-col gap-2">
-    <app-link [label]="'Validar'" [route]="PATH_ROUTES.DASHBOARD_VALIDATE" />
+<aside
+  class="h-screen py-8 px-4 flex flex-col gap-2 justify-between bg-backgraud transition-all duration-300 w-full items-center overflow-hidden"
+>
+  <section class="w-full flex justify-center items-center flex-col">
+    <app-button
+      class="text-3xl self-end my-4 mb-6"
+      [ngClass]="{
+        'self-end': sidebarService.isCollapsed(),
+        ' self-center': !sidebarService.isCollapsed()
+      }"
+      [icon]="sidebarService.isCollapsed() ? ICONS.LEFT : ICONS.RIGHT"
+      (clicked)="sidebarService.changeValue()"
+    />
+    <h3 class="text-lg flex items-center gap-2">
+      <i class="fa-solid fa-signature"></i>
+      <span
+        class="overflow-hidden whitespace-nowrap transition-all duration-300"
+        [ngClass]="{
+          ' opacity-100': sidebarService.isCollapsed(),
+          'opacity-0 hidden ': !sidebarService.isCollapsed()
+        }"
+      >
+        Firma Digital
+      </span>
+    </h3>
+  </section>
+
+  <nav class="flex flex-col gap-y-2 w-full">
     <app-link
-      [label]="'Firmar'"
-      [route]="PATH_ROUTES.DASHBOARD_VERIFY"
+      class="w-full"
+      [label]="'Validar'"
+      [route]="PATH_ROUTES.DASHBOARD_VALIDATE"
       [iconName]="ICONS.VALIDATE"
     />
     <app-link
+      class="w-full"
+      [label]="'Firmar'"
+      [route]="PATH_ROUTES.DASHBOARD_VERIFY"
+      [iconName]="ICONS.SIGNATURE"
+    />
+    <app-link
+      class="w-full"
       [label]="'Configuraciones'"
       [route]="PATH_ROUTES.DASHBOARD_PROFILE"
-      [iconName]="'fa-signature'"
+      [iconName]="ICONS.SETTING"
     />
-    <app-link [label]="'Salir'" [route]="PATH_ROUTES.LOGOUT" />
   </nav>
+
+  <app-link
+    class="w-full"
+    [label]="'Salir'"
+    [route]="PATH_ROUTES.LOGOUT"
+    [iconName]="ICONS.LOGOUT"
+  />
 </aside>
