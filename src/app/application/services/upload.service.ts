@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../models/api.enum';
-import { peyload_pdf } from '../models/signPdf';
+import { peyload_pdf } from '../models/interfaces/pdf.interfaces';
 
 @Injectable({
   providedIn: 'root',

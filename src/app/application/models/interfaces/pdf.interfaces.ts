@@ -11,3 +11,9 @@ export interface peyload_pdf {
   point?: point;
   image?: string;
 }
+
+export interface PdfResponse {
+  success: boolean;
+  message: string;
+  //   data?: PayloadPdf;
+}
