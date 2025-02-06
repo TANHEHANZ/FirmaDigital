@@ -18,7 +18,7 @@ import { NgClass } from '@angular/common';
       [routerLinkActiveOptions]="{ exact: true }"
       [attr.aria-current]="isActive() ? 'page' : null"
     >
-      <i [class]="'fa ' + iconName()"></i>
+      <i [class]="'fa ' + iconName()" class="text-xl"></i>
       @if(expand.isCollapsed()){
       <p>{{ label() }}</p>
       }

@@ -3,7 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @theme {
   --color-primary: #6ecde6;
-  --color-backgraud: #f0f0f2;
+  --color-backgraud: #ced4da;
+  --color-backgraud-intence: #f2f2f2;
   --color-secundary: #011c41;
   --color-uploaded: #4f46e5;
   --color-processing: #facc15;

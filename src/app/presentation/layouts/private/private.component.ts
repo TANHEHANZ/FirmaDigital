@@ -7,7 +7,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-private',
-  imports: [RouterOutlet, TopbarComponent, SidebarComponent, NgClass],
+  imports: [RouterOutlet, SidebarComponent, NgClass],
   template: `
     <main
       [ngClass]="{
@@ -20,7 +20,7 @@ import { NgClass } from '@angular/common';
       <section
         class=" row-span-2 flex flex-col z-10 shadow-md border-r  border-r-gray-300 "
       >
-        <app-topbar class="h-auto w-full z-50  p-1 shadow-md " />
+        <!-- <app-topbar class="h-auto w-full z-50  p-1 shadow-md " /> -->
         <router-outlet />
       </section>
     </main>
