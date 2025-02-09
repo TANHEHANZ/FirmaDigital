@@ -1,15 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UploadService } from './application/services/upload.service';
-
-import { PrivateComponent } from './presentation/layouts/private/private.component';
 import { peyload_pdf } from './application/models/interfaces/pdf.interfaces';
 
 @Component({
   selector: 'app-root',
-  imports: [PrivateComponent],
+  imports: [RouterOutlet],
   template: `
-    <app-private />
+    <router-outlet></router-outlet>
     <!-- <form>
       <input
         type="file"
