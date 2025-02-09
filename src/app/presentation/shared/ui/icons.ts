@@ -9,4 +9,5 @@ export const ICONS = {
   LOGOUT: 'fa-solid fa-arrow-right-from-bracket',
   LEFT: 'fa-solid fa-square-caret-left',
   RIGHT: 'fa-solid fa-square-caret-right',
+  GOOGLE: 'fa-brands fa-google',
 };
