@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ButtonComponent } from '../../shared/ui/button.component';
+import { ButtonPrimaryComponent } from '../../shared/ui/button/primary.component';
 import { ICONS } from '../../shared/ui/icons';
 @Component({
   selector: 'app-upload',
-  imports: [ButtonComponent],
+  imports: [ButtonPrimaryComponent],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css',
 })

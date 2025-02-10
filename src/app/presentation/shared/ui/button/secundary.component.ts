@@ -1,7 +1,7 @@
 import { Component, EventEmitter, input, Output, output } from '@angular/core';
 
 @Component({
-  selector: 'app-button',
+  selector: 'button-secundary',
   imports: [],
 
   template: `
@@ -20,7 +20,7 @@ import { Component, EventEmitter, input, Output, output } from '@angular/core';
     </button>
   `,
 })
-export class ButtonComponent {
+export class ButtonSecundaryComponent {
   label = input<string>();
   icon = input<string>();
   clicked = output<void>();

@@ -5,8 +5,7 @@
     <section class="flex flex-col w-[55%] gap-2 justify-center h-full">
       <h3 class="text-2xl font-bold">Conecte su dispositivo</h3>
       <p>Administra tu dispositivo criptográfico o Token</p>
-      <app-button
-        class="self-end my-4 mb-6 bg-uploaded text-white py-2 px-4 rounded-md hover:bg-uploaded/70 cursor-pointer"
+      <button-primary
         [icon]="ICONS.VALIDATE"
         (clicked)="Validate()"
         label="Validar Token"

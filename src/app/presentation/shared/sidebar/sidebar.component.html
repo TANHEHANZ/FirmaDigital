@@ -2,17 +2,20 @@
   class="h-screen py-8 px-4 flex flex-col gap-2 justify-between bg-backgraud-intence transition-all duration-300 w-full items-center overflow-hidden text-secundary"
 >
   <section class="w-full flex justify-center items-center flex-col">
-    <app-button
+    <button
       class="text-3xl self-end my-4 mb-6"
       [ngClass]="{
         'self-end': sidebarService.isCollapsed(),
         ' self-center': !sidebarService.isCollapsed()
       }"
-      [icon]="sidebarService.isCollapsed() ? ICONS.LEFT : ICONS.RIGHT"
-      (clicked)="sidebarService.changeValue()"
-    />
+      (click)="sidebarService.changeValue()"
+    >
+      <i [class]="sidebarService.isCollapsed() ? ICONS.LEFT : ICONS.RIGHT"></i>
+    </button>
     <h3 class="text-lg flex items-center gap-2">
-      <i class="fa-solid fa-signature"></i>
+      <!-- <i class="fa-solid fa-signature"></i> -->
+      <img alt="photo" src="huella.png" class="w-10 h-10 object-contain" />
+
       <span
         class="overflow-hidden whitespace-nowrap transition-all duration-300"
         [ngClass]="{
@@ -47,7 +50,7 @@
   </nav>
 
   <app-link
-    class="w-full"
+    class="w-full bg-primary text-white rounded-md hover:bg-primary/20"
     [label]="'Salir'"
     [route]="PATH_ROUTES.LOGOUT"
     [iconName]="ICONS.LOGOUT"
