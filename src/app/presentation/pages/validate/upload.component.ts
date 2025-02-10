@@ -9,6 +9,7 @@ import { ActiveService } from '../../../application/global/active.service';
 import { ConectService } from '../../../application/services/conect.service';
 import { TokenConnectedResponse } from '../../../application/models/interfaces/connected';
 import { tokenData } from '../../../application/models/mocks/tokenData';
+import { DrawerService } from '../../../application/global/drawer.service';
 
 @Component({
   selector: 'app-upload',
@@ -22,21 +23,23 @@ export class ValidateComponent {
   readonly active = inject(ActiveService);
   readonly viewContnt = inject(ActiveService);
   readonly conectToken = inject(ConectService);
+  readonly drawer = inject(DrawerService);
+
   ICONS = ICONS;
-  tokenData = tokenData;
+  tokenData: any;
   selectedToken: any;
   error: string = '';
   message: string = '';
-  // ngOnInit() {
-  //   this.conectToken.conectedToken().subscribe({
-  //     next: (data) => {
-  //       this.tokenData = data;
-  //     },
-  //     error: (e) => {
-  //       this.error = e;
-  //     },
-  //   });
-  // }
+  ngOnInit() {
+    this.conectToken.conectedToken().subscribe({
+      next: (data) => {
+        this.tokenData = data;
+      },
+      error: (e) => {
+        this.error = e;
+      },
+    });
+  }
   selectToken(token: any) {
     this.selectedToken = token;
     this.showToast(
@@ -46,6 +49,7 @@ export class ValidateComponent {
 
   Validate() {
     this.tokenData.datos.connected = true;
+    this.drawer.changeDrawer();
     this.showToast(
       `Se detecto el token: ${this.selectedToken.name} (${this.selectedToken.model})`,
       'Token detectado'

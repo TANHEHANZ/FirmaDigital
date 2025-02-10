@@ -24,6 +24,7 @@
   <div
     class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 row-span-1 relative"
   >
+    <input type="text" class="" placeholder="ingresa el ping" />
     <i
       [class]="ICONS.UPLOAD"
       class="bg-primary/20 text-primary p-4 rounded-full"
@@ -45,7 +46,8 @@
     tokenData?.datos?.tokens; track token.serial) {
     <ul
       [ngClass]="{
-        'border-2 bg-signed text-white': selectedToken === token
+        'border-2 border-signed  shadow-md text-signed ':
+          selectedToken === token
       }"
       class="border border-gray-300 rounded-xl p-4"
     >
