@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../models/api.enum';
-import { peyload_pdf } from '../models/interfaces/pdf.interfaces';
+import { FirmarPdfRequest } from '../models/interfaces/firmar/pdf';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class UploadService {
     });
   }
 
-  uploadFile(fileData: peyload_pdf): Observable<any> {
+  uploadFile(fileData: FirmarPdfRequest): Observable<any> {
     return this.http.post(
       `${this.API_URL}${API_ROUTES.UPLOAD_FILE_PDF}`,
       fileData

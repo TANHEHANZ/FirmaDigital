@@ -1,13 +1,23 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { UploadService } from './application/services/upload.service';
-import { FirmarPdfRequest } from './application/models/interfaces/firmar/pdf';
+import { FirmarPdfRequest } from '../../../../application/models/interfaces/firmar/pdf';
+import { UploadService } from '../../../../application/services/upload.service';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  template: ` <router-outlet></router-outlet> `,
-  styleUrl: './app.component.css',
+  selector: 'app-upload-file',
+  imports: [],
+  template: `
+    <form>
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        accept=".pdf,.jpg,.png"
+      />
+      <button type="button" (click)="onSubmit($event)">Subir archivo</button>
+      <p>
+        {{ pdf_reponse }}
+      </p>
+    </form>
+  `,
 })
 export class AppComponent {
   title = 'formJacubitus';
