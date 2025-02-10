@@ -20,7 +20,7 @@ import { NgClass } from '@angular/common';
     >
       <i [class]="'fa ' + iconName()" class="text-xl"></i>
       @if(expand.isCollapsed()){
-      <p>{{ label() }}</p>
+      <p class="text-black">{{ label() }}</p>
       }
     </a>
   `,

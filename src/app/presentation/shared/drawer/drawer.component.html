@@ -1,9 +1,14 @@
+<div
+  *ngIf="drawerService.isCollapsed()"
+  class="fixed inset-0 bg-gray-800/20 z-40"
+  (click)="drawerService.changeDrawer()"
+></div>
 <section
   [ngClass]="{
     'translate-x-0': drawerService.isCollapsed(),
     'translate-x-full': !drawerService.isCollapsed()
   }"
-  class="w-[400px] bg-white fixed top-0 right-0 h-[100dvh] z-50 shadow-md transition-transform duration-300"
+  class="w-[800px] bg-white fixed top-0 right-0 h-[100dvh] z-50 shadow-md transition-transform duration-300"
 >
   <header class="flex justify-between items-center">
     <h4 class="text-xl font-bold">{{ title() }}</h4>

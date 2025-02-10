@@ -27,9 +27,7 @@ import { DrawerComponent } from '../../shared/drawer/drawer.component';
       class="h-screen w-screen grid  grid-cols-[280px_1fr] grid-rows-[auto_1fr] transition-all delay-100"
     >
       <app-sidebar class=" h-full row-span-2 " />
-      <section
-        class=" row-span-2 flex flex-col z-10 shadow-md border-r  border-r-gray-300 "
-      >
+      <section class=" row-span-2 flex flex-col ">
         <p-toast></p-toast>
         <app-drawer></app-drawer>
         <router-outlet />
