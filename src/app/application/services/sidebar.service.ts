@@ -1,17 +1,18 @@
-import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject, retry } from 'rxjs';
-
+import { inject, Injectable, model, signal } from '@angular/core';
+import { LocalStorageService } from '../utils/local-storage.service';
+import { NAV } from '../constants/constants';
 @Injectable({
   providedIn: 'root',
 })
 export class SidebarService {
-  isCollapsed = signal<boolean>(false);
+  storage = inject(LocalStorageService);
+  isCollapsed = signal<boolean>(this.storage.getItem<boolean>(NAV) || false);
   changeValue() {
-    console.log('manejo' + this.isCollapsed());
-
-    this.isCollapsed.set(!this.isCollapsed());
+    const newState = !this.isCollapsed();
+    this.isCollapsed.set(newState);
+    localStorage.setItem(NAV, JSON.stringify(newState));
   }
   setSidebarState(state: boolean) {
-    this.isCollapsed.set(state);
+    localStorage.setItem(NAV, JSON.stringify(state));
   }
 }
