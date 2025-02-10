@@ -2,12 +2,15 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TopbarComponent } from '../../shared/topbar/topbar.component';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
-import { SidebarService } from '../../../application/services/sidebar.service';
+import { SidebarService } from '../../../application/global/sidebar.service';
 import { NgClass } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-private',
-  imports: [RouterOutlet, SidebarComponent, NgClass],
+  imports: [RouterOutlet, SidebarComponent, NgClass, ToastModule],
+  providers: [MessageService],
   template: `
     <main
       [ngClass]="{
@@ -20,7 +23,7 @@ import { NgClass } from '@angular/common';
       <section
         class=" row-span-2 flex flex-col z-10 shadow-md border-r  border-r-gray-300 "
       >
-    
+        <p-toast></p-toast>
         <router-outlet />
       </section>
     </main>

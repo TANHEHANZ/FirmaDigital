@@ -1,6 +1,6 @@
 import { Component, inject, input, Input } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
-import { SidebarService } from '../../../application/services/sidebar.service';
+import { SidebarService } from '../../../application/global/sidebar.service';
 import { NgClass } from '@angular/common';
 
 @Component({

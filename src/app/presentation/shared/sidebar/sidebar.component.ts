@@ -2,13 +2,12 @@ import { ICONS } from './../ui/icons';
 import { Component, inject } from '@angular/core';
 import { LinkComponent } from '../ui/link.component';
 import { PATH_ROUTES } from '../../../application/models/route.enum';
-import { SidebarService } from '../../../application/services/sidebar.service';
+import { SidebarService } from '../../../application/global/sidebar.service';
 import { NgClass } from '@angular/common';
-import { ButtonSecundaryComponent } from '../ui/button/secundary.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LinkComponent, NgClass, ButtonSecundaryComponent],
+  imports: [LinkComponent, NgClass],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {

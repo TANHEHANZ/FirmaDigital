@@ -54,7 +54,7 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       primeng:
-        specifier: ^19.0.5
+        specifier: ^19.0.6
         version: 19.0.6(tse2a2r5swbnbsjfimhj5x4exy)
       rxjs:
         specifier: ~7.8.0

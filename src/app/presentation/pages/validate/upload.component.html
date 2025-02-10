@@ -1,10 +1,15 @@
-<div class="grid grid-cols-3 grid-rows-4 gap-4 p-4 bg-backgraud h-screen">
+<p-toast></p-toast>
+<app-wrapper [title]="'Firmar Docunentos'">
   <div
-    class="bg-white rounded-md flex h-full items-center w-full overflow-hidden"
+    [ngClass]="{
+      'border-primary shadow-md': !tokenData?.datos?.connected,
+      'border-gray-300': tokenData?.datos?.connected
+    }"
+    class="rounded-xl flex items-center overflow-hidden p-4 gap-2 relative border-2 col-span-1 row-span-1"
   >
-    <img alt="photo" src="token.png" class="w-[35%] h-full object-contain" />
+    <img alt="photo" src="token.png" class="object-contain w-auto h-[8rem]" />
 
-    <section class="flex flex-col flex-1 gap-2 justify-center h-full p-2">
+    <section class="flex flex-col flex-1 gap-2 justify-center p-2">
       <h3 class="text-2xl font-bold">Conecte su dispositivo</h3>
       <p>Administra tu dispositivo criptográfico o Token</p>
       <button-primary
@@ -13,9 +18,49 @@
         label="Validar Token"
       />
     </section>
+    <p>{{ message }}</p>
   </div>
-  <div class="row-span-3 bg-white rounded-md col-start-1 row-start-2">
-    <h4>Tokens Detectados</h4>
+
+  <div
+    class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 row-span-1 relative"
+  >
+    <i
+      [class]="ICONS.UPLOAD"
+      class="bg-primary/20 text-primary p-4 rounded-full"
+    ></i>
+    <p class="text-xl font-medium">
+      <span class="text-primary">Haga clic aquí </span>
+      para cargar su archivo o arrástrelo
+    </p>
   </div>
-  <div class="bg-white col-span-2 row-span-4 rounded-md">Stepper</div>
-</div>
+  <div
+    class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 col-span-1 row-span-12"
+    [ngClass]="{
+      'border-primary shadow-md': tokenData?.datos?.connected,
+      'border-gray-300': !tokenData?.datos?.connected
+    }"
+  >
+    <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
+    @if (tokenData?.datos?.connected) { @for ( token of
+    tokenData?.datos?.tokens; track token.serial) {
+    <ul
+      [ngClass]="{
+        'border-2 bg-signed text-white': selectedToken === token
+      }"
+      class="border border-gray-300 rounded-xl p-4"
+    >
+      <li (click)="selectToken(token)">
+        <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
+        <p class="text-gray-500">Serial: {{ token.serial }}</p>
+      </li>
+    </ul>
+    } } @else {
+    <p>No se detectaron tokens.</p>
+    }
+  </div>
+  <div
+    class="bg-white col-span-2 row-span-12 rounded-xl border-2 border-gray-300 relative flex"
+  >
+    Elemento 4
+  </div>
+</app-wrapper>
