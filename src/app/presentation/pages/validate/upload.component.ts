@@ -40,7 +40,7 @@ export class ValidateComponent {
   error: string = '';
   message: string = '';
   ngOnInit() {
-    this.conectToken.conectedToken().subscribe({
+    this.conectToken.listToken().subscribe({
       next: (data) => {
         this.tokenData = data;
       },
@@ -54,9 +54,12 @@ export class ValidateComponent {
     this.showToast(
       `Se ha seleccionado el token: ${token.name} (${token.model})`
     );
+    if (this.selectToken.length > 0) {
+      this.openDrawer('Información del Token');
+    }
   }
-  openDrawer() {
-    this.drawer.changeTitle('Información del Token');
+  openDrawer(title?: string) {
+    this.drawer.changeTitle(title ? title : 'Información del Token');
     this.drawer.changeDrawer();
   }
   Validate() {

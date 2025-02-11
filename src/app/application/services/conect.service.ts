@@ -2,15 +2,19 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenConnectedResponse } from '../models/interfaces/connected';
+import { StatusResponse } from '../models/interfaces/status';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConectService {
-  private apiUrl = 'https://localhost:9000/api/token/connected';
-  response: TokenConnectedResponse | null = null;
+  private ULR_CONENCTED = 'https://localhost:9000/api/status';
   http = inject(HttpClient);
-  conectedToken(): Observable<TokenConnectedResponse> {
-    return this.http.get<TokenConnectedResponse>(this.apiUrl);
+  conectedToken(): Observable<StatusResponse> {
+    return this.http.get<StatusResponse>(this.ULR_CONENCTED);
+  }
+  private URL_LIST_TOKEN = 'https://localhost:9000/api/token/connected';
+  listToken(): Observable<TokenConnectedResponse> {
+    return this.http.get<TokenConnectedResponse>(this.URL_LIST_TOKEN);
   }
 }

@@ -46,15 +46,8 @@
       'border-gray-300': !tokenData?.datos?.connected
     }"
   >
-    <section class="w-full flex items-center justify-between">
-      <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
-      <button
-        (click)="openDrawer()"
-        class="bg-primary/20 text-primary w-12 h-12 rounded-full hover:bg-primary hover:text-white transition-all duration-300"
-      >
-        <i [class]="ICONS.SETTING"></i>
-      </button>
-    </section>
+    <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
+
     @if (tokenData?.datos?.connected) { @for ( token of
     tokenData?.datos?.tokens; track token.serial) {
     <ul
@@ -64,9 +57,17 @@
       }"
       class="border border-gray-300 rounded-xl p-4"
     >
-      <li (click)="selectToken(token)">
-        <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
-        <p class="text-gray-500">Serial: {{ token.serial }}</p>
+      <li (click)="selectToken(token)" class="flex justify-between">
+        <div>
+          <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
+          <p class="text-gray-500">Serial: {{ token.serial }}</p>
+        </div>
+        <button
+          (click)="selectToken(token)"
+          class="bg-primary/20 text-primary w-12 h-12 rounded-full hover:bg-primary hover:text-white transition-all duration-300 z-30"
+        >
+          <i [class]="ICONS.SETTING"></i>
+        </button>
       </li>
     </ul>
     } } @else {
