@@ -10,4 +10,5 @@ export const ICONS = {
   LEFT: 'fa-solid fa-square-caret-left',
   RIGHT: 'fa-solid fa-square-caret-right',
   GOOGLE: 'fa-brands fa-google',
+  CLOSE: 'fa-solid fa-xmark',
 };

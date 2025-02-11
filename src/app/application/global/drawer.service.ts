@@ -20,7 +20,9 @@ export class DrawerService {
     this.isCollapsed.set(newState);
     this.storage.setItem(DRAWER_KEY, newState);
   }
-
+  changeTitle(title: string) {
+    this.title.set(title);
+  }
   setSidebarState(state: boolean) {
     this.storage.setItem(DRAWER_KEY, state);
   }
