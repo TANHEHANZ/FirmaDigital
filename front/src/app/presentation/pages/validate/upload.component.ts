@@ -3,7 +3,7 @@ import { ButtonPrimaryComponent } from '../../shared/ui/button/primary.component
 import { ICONS } from '../../shared/ui/icons';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { NgClass } from '@angular/common';
+import { NgClass, NgFor } from '@angular/common';
 import { WrapperComponent } from '../../layouts/private/wrapper.component';
 import { ActiveService } from '../../../application/global/active.service';
 import { ConectService } from '../../../application/services/conect.service';
@@ -19,6 +19,7 @@ import { ProfileComponent } from '../profile/profile.component';
     ButtonPrimaryComponent,
     ToastModule,
     NgClass,
+    NgFor,
     WrapperComponent,
     DrawerComponent,
     ProfileComponent,
@@ -80,4 +81,23 @@ export class ValidateComponent {
       detail: message,
     });
   }
+
+  datos = [
+    {
+      nombre: 'LUIS FERNANDO ARGANDOÑA ESPADA',
+      fechaHora: '2024-12-03T14:17:47.000-04:00',
+      tipoDocumento: 'X509_CERTIFICATE',
+      id_token: '6567867533',
+      ip_equipo: '192.168.1.1',
+      entidad: 'Entidad Certificadora Publica ADSIB',
+    },
+    {
+      nombre: 'JUAN PÉREZ',
+      fechaHora: '2024-10-01T10:30:00.000-04:00',
+      tipoDocumento: 'PRIMARY_KEY',
+      id_token: '1234567890',
+      ip_equipo: '192.168.1.2',
+      entidad: 'ADSIB',
+    },
+  ];
 }
