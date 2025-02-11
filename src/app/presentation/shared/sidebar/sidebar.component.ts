@@ -4,10 +4,11 @@ import { LinkComponent } from '../ui/link.component';
 import { PATH_ROUTES } from '../../../application/models/route.enum';
 import { SidebarService } from '../../../application/global/sidebar.service';
 import { NgClass } from '@angular/common';
+import { WrapperlinkComponent } from './components/wrapperlink';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LinkComponent, NgClass],
+  imports: [LinkComponent, NgClass, WrapperlinkComponent],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {

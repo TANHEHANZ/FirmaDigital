@@ -1,5 +1,5 @@
 export const ICONS = {
-  VALIDATE: 'fa-solid fa-file-circle-check',
+  VALIDATE: 'fa-regular fa-folder',
   SIGNATURE: 'fa-solid fa-file-signature',
   FOLDER: 'fa-solid fa-folder-closed',
   FILTER: 'fa-solid fa-filter',
@@ -11,4 +11,5 @@ export const ICONS = {
   RIGHT: 'fa-solid fa-square-caret-right',
   GOOGLE: 'fa-brands fa-google',
   CLOSE: 'fa-solid fa-xmark',
+  SHIELD: 'fa-solid fa-shield-halved',
 };

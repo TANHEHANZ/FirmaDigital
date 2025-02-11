@@ -15,7 +15,7 @@ export const routes: Routes = [
     component: PrivateComponent,
     children: [
       {
-        path: 'validate',
+        path: 'firmar',
         component: ValidateComponent,
       },
       {

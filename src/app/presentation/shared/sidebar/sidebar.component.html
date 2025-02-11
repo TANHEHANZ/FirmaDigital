@@ -1,8 +1,8 @@
 <aside
-  class="h-screen py-8 px-4 flex flex-col gap-2 justify-between bg-white transition-all duration-300 w-full items-center overflow-hidden text-primary shadow-lg border-r-2 border-gray-300"
+  class="h-screen py-8 px-4 flex flex-col gap-2 bg-white transition-all duration-300 w-full overflow-hidden border-r border-gray-300"
 >
-  <section class="w-full flex justify-center items-center flex-col">
-    <button
+  <section class="w-full flex justify-center items-center flex-col my-4">
+    <!-- <button
       class="text-3xl self-end my-4 mb-6 text-black"
       [ngClass]="{
         'self-end': sidebarService.isCollapsed(),
@@ -11,7 +11,7 @@
       (click)="sidebarService.changeValue()"
     >
       <i [class]="sidebarService.isCollapsed() ? ICONS.LEFT : ICONS.RIGHT"></i>
-    </button>
+    </button> -->
     <h3 class="text-lg flex items-center gap-2 font-medium">
       <!-- <i class="fa-solid fa-signature"></i> -->
       <img alt="photo" src="huella.png" class="w-10 h-10 object-contain" />
@@ -27,32 +27,32 @@
       </span>
     </h3>
   </section>
-
-  <nav class="flex flex-col gap-y-2 w-full">
+  <app-wrapperlink [title]="'Gestionar Documentos'">
     <app-link
       class="w-full"
-      [label]="'Validar'"
-      [route]="PATH_ROUTES.DASHBOARD_VALIDATE"
+      [label]="'Firmar Documento'"
+      [route]="PATH_ROUTES.DASHBOARD_FIRMAR"
       [iconName]="ICONS.VALIDATE"
     />
     <app-link
       class="w-full"
-      [label]="'Firmar'"
+      [label]="'Documentos Firmados'"
       [route]="PATH_ROUTES.DASHBOARD_VERIFY"
-      [iconName]="ICONS.SIGNATURE"
+      [iconName]="ICONS.SHIELD"
+    />
+  </app-wrapperlink>
+  <app-wrapperlink [title]="'Configuración'">
+    <app-link
+      class="w-full"
+      [label]="'Perfil'"
+      [route]="PATH_ROUTES.DASHBOARD_PROFILE"
+      [iconName]="ICONS.MENU"
     />
     <app-link
       class="w-full"
-      [label]="'Configuraciones'"
-      [route]="PATH_ROUTES.DASHBOARD_PROFILE"
+      [label]="'Configuración'"
+      [route]="PATH_ROUTES.LOGOUT"
       [iconName]="ICONS.SETTING"
     />
-  </nav>
-
-  <app-link
-    class="w-full bg-primary text-white rounded-md hover:bg-primary/20"
-    [label]="'Salir'"
-    [route]="PATH_ROUTES.LOGOUT"
-    [iconName]="ICONS.LOGOUT"
-  />
+  </app-wrapperlink>
 </aside>
