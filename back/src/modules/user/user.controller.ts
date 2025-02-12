@@ -1,14 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import ManageResponse from "../../infraestrucure/response/api";
 import { Request, Response } from "express";
-import { ZodError } from "zod";
-import { userSchema } from "../../infraestrucure/DTO/user.dto";
 
 const prisma = new PrismaClient();
 
 export const userAll = async (req: Request, res: Response) => {
   try {
-    const userAll = await prisma.user.findMany();
+    const userAll = await prisma.user.findMany({
+      where: {
+        is_deleted: "FALSE",
+      },
+    });
     if (!userAll) {
       ManageResponse.notFound(res, "Error al obtener usuarios");
     }
@@ -42,5 +44,41 @@ export const createUser = async (
     } else {
       ManageResponse.serverError(res, "Error en el servidor", e);
     }
+  }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const update = await prisma.user.update({
+      data: req.body,
+      where: { id: id },
+    });
+    if (update) {
+      ManageResponse.success(res, "Usuario modificado exitosamente", update);
+    } else {
+      ManageResponse.notFound(res, "Usuario no modificado");
+    }
+  } catch (e) {
+    ManageResponse.serverError(res, "Error en el servidor", e);
+  }
+};
+
+export const deletedUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const deleted = await prisma.user.update({
+      where: { id: id },
+      data: {
+        is_deleted: "TRUE",
+      },
+    });
+    if (deleted) {
+      ManageResponse.success(res, "Usuario eliminado exitosamente", deleted);
+    } else {
+      ManageResponse.notFound(res, "error en eliminacion");
+    }
+  } catch (e) {
+    ManageResponse.serverError(res, "Error en el servidor", e);
   }
 };
