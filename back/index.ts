@@ -1,13 +1,15 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
+import router from "./src/routes";
 
 dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT;
-
-app.get("/", (request, response) => {
-  response.status(200).send("Hello World");
+app.use("/v1/api", router);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error("Internal Server Error:", err.message);
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
 app
