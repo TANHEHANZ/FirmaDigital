@@ -35,10 +35,13 @@ export const createUser = async (
     }
   } catch (e: any) {
     if (e.code === "P2002") {
-      res.status(400).json({
-        error: "Error de validación",
-        message: `El campo ${e.meta?.target} ya existe.`,
-      });
+      ManageResponse.customError(
+        res,
+        404,
+        "Error de validacion",
+        `El campo ${e.meta?.target} ya existe.`
+      );
+
       return;
     } else {
       ManageResponse.serverError(res, "Error en el servidor", e);
