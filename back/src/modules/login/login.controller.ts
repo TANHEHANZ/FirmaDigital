@@ -46,3 +46,17 @@ export const loginController = async (
     return;
   }
 };
+
+export const dataToken = (req: Request, res: Response) => {
+  try {
+    const token = req.headers?.authorization?.split(" ")[1] as string;
+    if (!token) {
+      ManageResponse.unauthorized(res, "Error , token no proporcionado ");
+    }
+
+    const decodedToken = jwt.verify(token, ACCESS_SECRET);
+    ManageResponse.success(res, "Token", decodedToken);
+  } catch (error) {
+    ManageResponse.serverError(res, "Error de servidor");
+  }
+};
