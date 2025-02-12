@@ -9,3 +9,5 @@ export const rolSchema = z.object({
   id_deleted: z.string().optional().default("FALSE"),
   isUpdate: z.string().optional().default("FALSE"),
 });
+
+export type RolDTO = z.infer<typeof rolSchema>;

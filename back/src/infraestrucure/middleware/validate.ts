@@ -11,7 +11,7 @@ export const validate =
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const e = fromError(error).message;
+        const e = fromError(error).details;
         ManageResponse.customError(res, 404, "Error de validacion", e);
         return;
       }

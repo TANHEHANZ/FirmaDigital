@@ -58,7 +58,7 @@ export const deletedRol = async (req: Request, res: Response) => {
     if (!deleted) {
       ManageResponse.notFound(res, "Error al eliminar el rol");
     }
-    ManageResponse.success(res, "Rol eliminado satisfactoriamente", deleted);
+    ManageResponse.success(res, "Rol eliminado satisfactoriamente");
   } catch (e) {
     ManageResponse.badRequest(res, "Error de servidor", e);
   }

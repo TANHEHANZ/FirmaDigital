@@ -74,7 +74,7 @@ export const deletedUser = async (req: Request, res: Response) => {
       },
     });
     if (deleted) {
-      ManageResponse.success(res, "Usuario eliminado exitosamente", deleted);
+      ManageResponse.success(res, "Usuario eliminado exitosamente");
     } else {
       ManageResponse.notFound(res, "error en eliminacion");
     }
