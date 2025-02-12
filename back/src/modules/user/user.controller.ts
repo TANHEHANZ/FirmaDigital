@@ -10,15 +10,11 @@ export const userAll = async (req: Request, res: Response) => {
   try {
     const userAll = await prisma.user.findMany();
     if (!userAll) {
-      return ManageResponse.notFound(res, "Error al obtener usuarios");
+      ManageResponse.notFound(res, "Error al obtener usuarios");
     }
-    return ManageResponse.success(
-      res,
-      "Usuarios obtenidos exitosamente",
-      userAll
-    );
+    ManageResponse.success(res, "Usuarios obtenidos exitosamente", userAll);
   } catch (e) {
-    return ManageResponse.badRequest(res, "Error de servidor", e);
+    ManageResponse.badRequest(res, "Error de servidor", e);
   }
 };
 
