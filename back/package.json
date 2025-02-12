@@ -13,6 +13,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-jwt": "^8.5.1",
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0"
   },

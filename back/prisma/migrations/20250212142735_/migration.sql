@@ -15,6 +15,7 @@ CREATE TABLE "User" (
     "isUpdate" TEXT NOT NULL DEFAULT 'FALSE',
     "idRol" TEXT NOT NULL,
     "idUnidad" TEXT NOT NULL,
+    "refresh_token" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -118,7 +119,13 @@ ALTER TABLE "User" ADD CONSTRAINT "User_idRol_fkey" FOREIGN KEY ("idRol") REFERE
 ALTER TABLE "User" ADD CONSTRAINT "User_idUnidad_fkey" FOREIGN KEY ("idUnidad") REFERENCES "Unidad"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Firmar" ADD CONSTRAINT "Firmar_idToken_fkey" FOREIGN KEY ("idToken") REFERENCES "Token"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Firmar" ADD CONSTRAINT "Firmar_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Firmar" ADD CONSTRAINT "Firmar_idDocumento_fkey" FOREIGN KEY ("idDocumento") REFERENCES "Documento"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Token" ADD CONSTRAINT "Token_id_certificado_fkey" FOREIGN KEY ("id_certificado") REFERENCES "Certificado"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

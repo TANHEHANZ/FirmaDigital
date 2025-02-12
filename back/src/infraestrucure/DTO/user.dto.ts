@@ -19,6 +19,7 @@ export const userSchema = z.object({
   }),
   idRol: z.string().min(1, "El rol es obligatorio"),
   idUnidad: z.string().min(1, "La unidad es obligatoria"),
+  refresh_token: z.string().optional(),
   is_active: z.string().optional().default("FALSE"),
   is_deleted: z.string().optional().default("FALSE"),
   isUpdate: z.string().optional().default("FALSE"),
