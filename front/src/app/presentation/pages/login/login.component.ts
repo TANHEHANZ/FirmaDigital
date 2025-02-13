@@ -29,6 +29,8 @@ export class LoginComponent {
   ICONS = ICONS;
   router = inject(Router);
   logout() {
+
+    
     this.router.navigate([PATH_ROUTES.DASHBOARD_FIRMAR]);
   }
 

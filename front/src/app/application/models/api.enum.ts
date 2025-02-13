@@ -5,3 +5,9 @@ export enum API_ROUTES {
   DATA_TOKEN = BASE + 'token/data',
   UPLOAD_FILE_PDF = BASE + 'token/firmar_pdf',
 }
+
+
+export enum API {
+  BASE= "/v1/api/",
+  LOGIN = BASE +"login"
+}
