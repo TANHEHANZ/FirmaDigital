@@ -1,20 +1,54 @@
 <section
-  class="w-screen h-screen flex justify-center items-center flex-col gap-2"
+  class="w-screen h-screen grid grid-cols-2 justify-center items-center gap-2 bg-white"
 >
   <div
-    class="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#e0e7ff_40%,#4f46e5_100%)]"
-  ></div>
-  <img alt="photo" src="huella.png" class="w-24 h-24 object-contain" />
-  <h1 class="font-bold text-7xl">
-    Sistema de <span class="italic">Firmas</span> Digitales
-  </h1>
-  <p class="font-bold">Integrado con Jacubitus</p>
-  <p class="font-bold text-2xl text-gray-600">
-    Seguridad y eficiencia en cada documento
-  </p>
-  <button-primary
-    label="Inicar sectión"
-    [icon]="ICONS.GOOGLE"
-    (clicked)="logout()"
-  />
+    class="bg-grid h-full flex justify-center items-center relative shadow-lg border-r border-gray-300"
+  >
+    <p class="w-56 h-56 bg-primary absolute blur-xl rounded-full"></p>
+
+    <section
+      class="isolate w-[80%] h-[80%] rounded-xl bg-white/60 shadow-lg ring-2 ring-black/5 p-8 flex justify-center items-start flex-col"
+    >
+      <img
+        src="TokenConected.png"
+        alt="Token"
+        class="w-1/2 aspect-auto mx-auto"
+      />
+      <p class="bg-primary text-white px-2 py-1 rounded-md">¡Importante!</p>
+      <h2 class="text-4xl w-2/3 font-medium">
+        <span class="block"
+          >Necesitas un <span class="text-primary">token</span> y</span
+        >
+        <span class="block"
+          >tener instalado <span class="text-primary">Jacubitus</span>.</span
+        >
+      </h2>
+    </section>
+  </div>
+  <section
+    class="h-full flex flex-col justify-center items-center text-center relative gap-2"
+  >
+    <h1 class="font-bold text-4xl">Sistema de Firmas Digitales</h1>
+
+    <p
+      class="font-medium bg-primary text-white absolute top-8 left-8 px-2 py-1 rounded-md"
+    >
+      Integrado con Jacubitus
+    </p>
+    <form class="w-1/2 flex justify-center items-center flex-col gap-2">
+      <div class="flex flex-col gap-1 w-full my-2 items-start">
+        <label for="" class="block">Email</label>
+        <input type="text" class="border flex-1 rounded-md p-1 px-2 w-full" />
+      </div>
+      <div class="flex flex-col gap-1 w-full my-2 items-start">
+        <label for="" class="block">Contraseña</label>
+        <input type="text" class="border flex-1 rounded-md p-1 px-2 w-full" />
+      </div>
+      <p class="self-end my-2">¿Has olvidado tu contraseña?</p>
+      <section class="flex gap-2">
+        <button-secundary label="Crear cuenta" (clicked)="logout()" />
+        <button-primary label="Iniciar secion" (clicked)="logout()" />
+      </section>
+    </form>
+  </section>
 </section>

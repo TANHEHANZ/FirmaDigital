@@ -16,5 +16,17 @@ body {
   font-family: "Montserrat", sans-serif;
   font-weight: 300;
 }
+@layer utilities {
+  .bg-grid {
+    background-color: #3061bd;
+    opacity: 1;
+    background-image: radial-gradient(
+      #444cf7 0.35000000000000003px,
+      #e6ecf3 0.35000000000000003px
+    );
+    background-size: 7px 7px;
+    backdrop-filter: blur(10px);
+  }
+}
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");

@@ -2,27 +2,23 @@ import { NgIf } from '@angular/common';
 import { Component, EventEmitter, input, Output, output } from '@angular/core';
 
 @Component({
-  selector: 'button-primary',
+  selector: 'Basic-input',
   imports: [NgIf],
 
   template: `
-    <button
-      (click)="onClick()"
-      class="bg-uploaded text-white  rounded-md flex gap-2 justify-center items-center h-12 overflow-hidden  hover:bg-uploaded/80 duration-300 transition-all cursor-pointer z-50 shadow-md border border-gray-300"
-    >
+    <div class="flex flex-col gap-1 w-full my-2 items-start">
+      <label for="" class="block"> {{ label() }} </label>
+      <input type="text" class="border flex-1 rounded-md p-1 px-2 w-full" />
       <label
         *ngIf="icon()"
         class=" flex  justify-center items-center h-full bg-white text-black px-4 "
       >
         <i [class]="icon()"></i>
       </label>
-      <label class=" px-8 font-medium">
-        {{ label() }}
-      </label>
-    </button>
+    </div>
   `,
 })
-export class ButtonPrimaryComponent {
+export class BasicInputComponent {
   label = input<string>();
   icon = input<string>();
   clicked = output<void>();
