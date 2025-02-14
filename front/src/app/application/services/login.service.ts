@@ -3,17 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API } from '../models/api.enum';
 import { res } from '../models/api.response';
+import { loginPeyload } from '../models/interfaces/api/login';
 
+export interface res_data {
+  accessToken: string;
+  refreshToken: string;
+}
 @Injectable({
   providedIn: 'root',
 })
+export class LoginService {
+  private URL = 'http://localhost:3000' + API.LOGIN;
 
-
-export class ConectService {
-  private URL = 'https://localhost:3000'+API.LOGIN;
   http = inject(HttpClient);
-  login(): Observable<res> {
-    return this.http.get<res>(this.URL);
+  login(data: loginPeyload): Observable<res<res_data>> {
+    return this.http.post<res<res_data>>(this.URL, data);
   }
-
 }

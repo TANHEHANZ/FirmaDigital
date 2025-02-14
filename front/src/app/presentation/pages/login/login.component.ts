@@ -12,6 +12,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
+import {
+  LoginService,
+  res_data,
+} from '../../../application/services/login.service';
+import { res } from '../../../application/models/api.response';
 
 @Component({
   selector: 'app-login',
@@ -28,10 +33,10 @@ import { NgClass, NgIf } from '@angular/common';
 export class LoginComponent {
   ICONS = ICONS;
   router = inject(Router);
-  logout() {
+  loginService = inject(LoginService);
 
-    
-    this.router.navigate([PATH_ROUTES.DASHBOARD_FIRMAR]);
+  logout() {
+    this.sendData();
   }
 
   form = signal<FormGroup>(
@@ -59,5 +64,17 @@ export class LoginComponent {
       return validator && validator['required'];
     }
     return false;
+  }
+
+  sendData() {
+    this.loginService.login(this.form().value).subscribe((data) => ({
+      next: (response: res<res_data>) => {
+        alert('Inicio de sesión exitoso:' + response);
+      },
+      error: (error: any) => {
+        console.error('Error en el login:', error.error);
+        alert(error.error.message || 'Error desconocido');
+      },
+    }));
   }
 }
