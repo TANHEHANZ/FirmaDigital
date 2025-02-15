@@ -17,7 +17,9 @@ import {
   res_data,
 } from '../../../application/services/login.service';
 import { res } from '../../../application/models/api.response';
-
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-login',
   imports: [
@@ -26,15 +28,18 @@ import { res } from '../../../application/models/api.response';
     ReactiveFormsModule,
     NgClass,
     NgIf,
+    Toast,
+    ButtonModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
+  providers: [MessageService],
 })
 export class LoginComponent {
   ICONS = ICONS;
-  router = inject(Router);
-  loginService = inject(LoginService);
-
+  readonly router = inject(Router);
+  readonly loginService = inject(LoginService);
+  readonly messageService = inject(MessageService);
   logout() {
     this.sendData();
   }
@@ -67,14 +72,25 @@ export class LoginComponent {
   }
 
   sendData() {
-    this.loginService.login(this.form().value).subscribe((data) => ({
+    this.loginService.login(this.form().value).subscribe({
       next: (response: res<res_data>) => {
-        alert('Inicio de sesión exitoso:' + response);
+        console.log(response);
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: response.message,
+          life: 3000,
+        });
       },
       error: (error: any) => {
-        console.error('Error en el login:', error.error);
-        alert(error.error.message || 'Error desconocido');
+        this.messageService.add({
+          severity: 'error', // 'error' en lugar de 'danger' (PrimeNG usa 'error')
+          summary: 'Error',
+          detail: error.error?.message || 'Ocurrió un error inesperado',
+          life: 3000,
+        });
       },
-    }));
+    });
   }
 }
