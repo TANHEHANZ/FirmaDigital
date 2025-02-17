@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { LoginInformacionComponent } from './components/information.component';
-import { AuthStateService } from '../../../application/global/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { RouterOutlet } from '@angular/router';
@@ -26,7 +25,4 @@ import { RouterOutlet } from '@angular/router';
     </main>
   `,
 })
-export class LoginComponent {
-  private authStateService = inject(AuthStateService);
-  isLogin = this.authStateService.isLogin;
-}
+export class LoginComponent {}

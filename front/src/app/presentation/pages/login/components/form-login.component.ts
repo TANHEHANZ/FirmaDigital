@@ -9,13 +9,12 @@ import { MessageService } from 'primeng/api';
 import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
 import { ButtonSecundaryComponent } from '../../../shared/ui/button/secundary.component';
 import {
-  LoginService,
+  AuthService,
   res_data,
 } from '../../../../application/services/login.service';
 import { res } from '../../../../application/models/api.response';
 import { CustomInputComponent } from '../../../shared/ui/input.component';
 import { Toast } from 'primeng/toast';
-import { AuthStateService } from '../../../../application/global/auth.service';
 import { Router } from '@angular/router';
 import { PATH_ROUTES } from '../../../../application/models/route.enum';
 
@@ -64,7 +63,7 @@ import { PATH_ROUTES } from '../../../../application/models/route.enum';
   providers: [MessageService],
 })
 export class FormLoginComponent {
-  readonly loginService = inject(LoginService);
+  readonly loginService = inject(AuthService);
   readonly messageService = inject(MessageService);
   private router = inject(Router);
   visible = output();

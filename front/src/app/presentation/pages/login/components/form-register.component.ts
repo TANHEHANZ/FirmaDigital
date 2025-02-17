@@ -1,5 +1,5 @@
 import { Toast } from 'primeng/toast';
-import { Component, EventEmitter, inject, output, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CustomInputComponent } from '../../../shared/ui/input.component';
 import { ButtonSecundaryComponent } from '../../../shared/ui/button/secundary.component';
 import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
@@ -10,11 +10,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { AuthStateService } from '../../../../application/global/auth.service';
 import { Router } from '@angular/router';
-import { LoginService } from '../../../../application/services/login.service';
+import { AuthService } from '../../../../application/services/login.service';
 import { CustomSelectComponent } from '../../../shared/ui/select.component';
 import { PATH_ROUTES } from '../../../../application/models/route.enum';
+import {
+  ACCESS_TOKEN,
+  REFRESH__TOKEN,
+} from '../../../../application/constants/CONSTANTS';
 
 @Component({
   selector: 'form-register',
@@ -89,7 +92,7 @@ import { PATH_ROUTES } from '../../../../application/models/route.enum';
   ],
 })
 export class FormRegisterComponent {
-  private loginService = inject(LoginService);
+  private loginService = inject(AuthService);
   readonly messageService = inject(MessageService);
   private router = inject(Router);
   visibleform() {
@@ -149,13 +152,18 @@ export class FormRegisterComponent {
       })
       .subscribe({
         next: (response) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: response.message,
-            life: 3000,
-          });
-          this.router.navigate([PATH_ROUTES.LOGOUT]);
+          if (response.status === 200 && response.data) {
+            localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
+            localStorage.setItem(REFRESH__TOKEN, response.data.refreshToken);
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: response.message,
+              life: 3000,
+            });
+            this.router.navigate([PATH_ROUTES.LOGOUT]);
+          }
         },
         error: (error: any) => {
           this.messageService.add({
