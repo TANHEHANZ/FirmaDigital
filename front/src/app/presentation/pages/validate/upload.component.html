@@ -1,28 +1,66 @@
-<p-toast></p-toast>
 <app-wrapper [title]="'Firmar Docunentos'">
+  <p-toast></p-toast>
   <div
-    [ngClass]="{
-      'border-primary shadow-md': !tokenData?.datos?.connected,
-      'border-gray-300': tokenData?.datos?.connected
-    }"
-    class="rounded-xl flex items-center overflow-hidden p-4 gap-2 relative border-2 col-span-1 row-span-1"
+    class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto transition-all duration-500 ease-in-out grow-1"
   >
-    <img alt="photo" src="token.png" class="object-contain w-auto h-[8rem]" />
+    <div
+      [ngClass]="{
+        'border-primary ': !tokenData?.datos?.connected,
+        'opacity-0 delay-500 -translate-y-[8rem] ': tokenData?.datos?.connected
+      }"
+      class="rounded-xl flex items-center overflow-hidden h-[12rem] p-4 gap-2 relative border-2 col-span-1 row-span-1 transition-all duration-300 ease-in-out"
+    >
+      <img alt="photo" src="token.png" class="object-contain w-auto h-[70%]" />
 
-    <section class="flex flex-col flex-1 gap-2 justify-center p-2">
-      <h3 class="text-2xl font-bold">Conecte su dispositivo</h3>
-      <p>Administra tu dispositivo criptográfico o Token</p>
-      <button-primary
-        [icon]="ICONS.VALIDATE"
-        (clicked)="Validate()"
-        label="Validar Token"
-      />
-    </section>
-    <p>{{ message }}</p>
+      <section class="flex flex-col flex-1 gap-2 justify-center p-2">
+        <h3 class="text-2xl font-bold">Conecte su dispositivo</h3>
+        <p>Administra tu dispositivo criptográfico o Token</p>
+        <button-primary
+          [icon]="ICONS.VALIDATE"
+          (clicked)="Validate()"
+          label="Validar Token"
+        />
+      </section>
+    </div>
+    <article
+      class="transition-all duration-800 ease-in-out h-full"
+      [ngClass]="{
+        'border-primary -translate-y-[12rem]  ': tokenData?.datos?.connected,
+        'border-gray-300 ': !tokenData?.datos?.connected
+      }"
+    >
+      <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
+
+      @if (tokenData?.datos?.connected) { @for ( token of
+      tokenData?.datos?.tokens; track token.serial) {
+      <ul
+        [ngClass]="{
+          'border-2 border-signed  shadow-md text-signed ':
+            selectedToken === token
+        }"
+        class="border border-gray-300 rounded-xl p-4"
+      >
+        <li (click)="selectToken(token)" class="flex justify-between">
+          <div>
+            <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
+            <p class="text-gray-500">Serial: {{ token.serial }}</p>
+          </div>
+          <button
+            (click)="selectToken(token)"
+            class="bg-primary/20 text-primary w-12 h-12 rounded-full hover:bg-primary hover:text-white transition-all duration-300 z-30"
+          >
+            <i [class]="ICONS.SETTING"></i>
+          </button>
+        </li>
+      </ul>
+      } } @else {
+      <img alt="photo" src="404-error.png" class="object-contain h-1/2" />
+      <p class="text-center">No se detectaron tokens</p>
+      }
+    </article>
   </div>
-
   <div
-    class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2   row-span-13 relative"
+    class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-full grow-2"
   >
     <input type="text" class="" placeholder="ingresa el ping" />
     <i
@@ -34,41 +72,4 @@
       para cargar su archivo o arrástrelo
     </p>
   </div>
-  <div
-    class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 col-span-1 row-span-12 relative  overflow-auto"
-    [ngClass]="{
-      'border-primary shadow-md': tokenData?.datos?.connected,
-      'border-gray-300': !tokenData?.datos?.connected
-    }"
-  >
-    <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
-
-    @if (tokenData?.datos?.connected) { @for ( token of
-    tokenData?.datos?.tokens; track token.serial) {
-    <ul
-      [ngClass]="{
-        'border-2 border-signed  shadow-md text-signed ':
-          selectedToken === token
-      }"
-      class="border border-gray-300 rounded-xl p-4"
-    >
-      <li (click)="selectToken(token)" class="flex justify-between">
-        <div>
-          <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
-          <p class="text-gray-500">Serial: {{ token.serial }}</p>
-        </div>
-        <button
-          (click)="selectToken(token)"
-          class="bg-primary/20 text-primary w-12 h-12 rounded-full hover:bg-primary hover:text-white transition-all duration-300 z-30"
-        >
-          <i [class]="ICONS.SETTING"></i>
-        </button>
-      </li>
-    </ul>
-    } } @else {
-    <img alt="photo" src="404-error.png" class="object-contain h-1/2" />
-    <p class="text-center">No se detectaron tokens</p>
-    }
-  </div>
-
 </app-wrapper>

@@ -27,8 +27,6 @@ export class ValidateComponent {
   ICONS = ICONS;
   tokenData: TokenConnectedResponse | null = null;
   selectedToken: any;
-  error: string = '';
-  message: string = '';
   ngOnInit() {}
   tokenConected() {
     this.conectToken.listToken().subscribe({
@@ -66,37 +64,16 @@ export class ValidateComponent {
 
   selectToken(token: any) {
     this.selectedToken = token;
-    this.showToast(
-      `Se ha seleccionado el token: ${token.name} (${token.model})`
-    );
-    if (this.selectToken.length > 0) {
-      this.openDrawer('Información del Token');
-    }
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Token seleccionado',
+      detail: this.selectedToken.name,
+      life: 3000,
+    });
+    return;
   }
-  openDrawer(title?: string) {
-    this.drawer.changeTitle(title ? title : 'Información del Token');
-    this.drawer.changeDrawer();
-  }
+
   Validate() {
     this.tokenConected();
   }
-
-  showToast(message: string, title?: string, acion?: string) {
-    this.toast.add({
-      severity: acion ? acion : 'success',
-      summary: title ? title : 'ESTADOS',
-      detail: message,
-    });
-  }
 }
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-upload',
-//   imports: [],
-//   template: 'Firmar',
-// })
-// export class ValidateComponent {}
-
-// verificar el prblema de rendimiento
