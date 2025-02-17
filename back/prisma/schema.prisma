@@ -28,7 +28,7 @@ model User {
 
 enum TypeUser {
   Juridica
-  natural
+  Natural
 }
 
 model Rol {

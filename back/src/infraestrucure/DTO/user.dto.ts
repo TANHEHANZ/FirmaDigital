@@ -30,7 +30,7 @@ export const userSchema = z.object({
       message: "La contraseña debe contener al menos un carácter especial",
     }),
 
-  tipo_user: z.enum(["Juridica", "natural"], {
+  tipo_user: z.enum(["Juridica", "Natural"], {
     errorMap: () => ({
       message: "El tipo de usuario debe ser 'Juridica' o 'natural'",
     }),
