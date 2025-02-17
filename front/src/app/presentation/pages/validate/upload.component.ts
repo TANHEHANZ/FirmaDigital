@@ -41,6 +41,7 @@ export class ValidateComponent {
             detail: data.mensaje,
             life: 3000,
           });
+          return;
         }
         this.messageService.add({
           severity: 'error',
@@ -48,6 +49,7 @@ export class ValidateComponent {
           detail: 'No se encontro Tokens',
           life: 3000,
         });
+        return;
       },
       error: (e) => {
         console.log(e);
