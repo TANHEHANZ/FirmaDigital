@@ -7,37 +7,29 @@ import { NgStyle } from '@angular/common';
 import { AuthStateService } from '../../../application/global/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ButtonModule,
-    LoginInformacionComponent,
-    FormLoginComponent,
-    FormRegisterComponent,
-    NgStyle,
-  ],
+  imports: [ButtonModule, LoginInformacionComponent, ToastModule, RouterOutlet],
   providers: [MessageService],
   template: `
-    <section class="w-screen h-screen grid grid-cols-2 bg-white">
+    <p-toast position="bottom-right"></p-toast>
+    <main class="grid grid-cols-2 relative">
       <login-informacion />
-
-      <div class="relative w-full h-full overflow-hidden  ">
-        <div
-          class="flex h-full transition-transform duration-300 ease-in-out "
-          [ngStyle]="{
-            transform: isLogin ? 'translateX(0%) ' : 'translateX(-100%) '
-          }"
+      <section class="relative">
+        <p
+          class="font-medium bg-primary text-white absolute top-8 left-8 px-2 py-1 rounded-md"
         >
-          <form-login class="w-full  " />
-          <form-register class="w-full  " />
-        </div>
-      </div>
-    </section>
+          Integrado con Jacubitus
+        </p>
+        <router-outlet />
+      </section>
+    </main>
   `,
 })
 export class LoginComponent {
   private authStateService = inject(AuthStateService);
-  isLogin = this.authStateService.isLogin();
+  isLogin = this.authStateService.isLogin;
 }

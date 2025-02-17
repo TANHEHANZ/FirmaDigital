@@ -13,7 +13,6 @@ import { MessageService } from 'primeng/api';
     <p-toast position="bottom-right"></p-toast>
     <router-outlet></router-outlet>
   `,
-  styleUrl: './app.component.css',
   providers: [MessageService],
 })
 export class AppComponent {

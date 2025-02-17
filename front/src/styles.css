@@ -30,3 +30,28 @@ body {
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+::view-transition-old(root) {
+  animation: fadeOut 0.5s forwards;
+}
+
+::view-transition-new(root) {
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -11,10 +11,13 @@ import {
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { AuthStateService } from '../../../../application/global/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'form-register',
   template: `
+    <p-toast position="bottom-right"></p-toast>
+
     <section
       class="flex flex-col justify-center items-center text-center gap-2 w-[50dvw] h-full"
     >
@@ -67,13 +70,15 @@ import { AuthStateService } from '../../../../application/global/auth.service';
     CustomInputComponent,
     ReactiveFormsModule,
     ButtonSecundaryComponent,
+    Toast,
   ],
 })
 export class FormRegisterComponent {
   private authStateService = inject(AuthStateService);
-
+  readonly messageService = inject(MessageService);
+  private router = inject(Router);
   visibleform() {
-    this.authStateService.toggleForm();
+    this.router.navigate(['/login']);
   }
   form = new FormGroup({
     name: new FormControl('', [
@@ -109,10 +114,14 @@ export class FormRegisterComponent {
   });
 
   register() {
-    this.authStateService.showMessage(
-      'error',
-      'Error',
-      'Por favor, corrige los errores en el formulario.'
-    );
+    if (this.form.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, corrige los errores en el formulario.',
+        life: 3000,
+      });
+      return;
+    }
   }
 }

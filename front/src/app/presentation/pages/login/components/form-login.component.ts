@@ -15,6 +15,8 @@ import {
 import { res } from '../../../../application/models/api.response';
 import { CustomInputComponent } from '../../../shared/ui/input.component';
 import { Toast } from 'primeng/toast';
+import { AuthStateService } from '../../../../application/global/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'form-login',
@@ -32,11 +34,7 @@ import { Toast } from 'primeng/toast';
       class="h-full flex flex-col justify-center items-center text-center relative gap-2 w-[50dvw]"
     >
       <h1 class="font-bold text-4xl">Sistema de Firmas Digitales</h1>
-      <p
-        class="font-medium bg-primary text-white absolute top-8 left-8 px-2 py-1 rounded-md"
-      >
-        Integrado con Jacubitus
-      </p>
+
       <form
         class="w-1/2 flex justify-center items-center flex-col gap-2"
         [formGroup]="form"
@@ -67,6 +65,7 @@ import { Toast } from 'primeng/toast';
 export class FormLoginComponent {
   readonly loginService = inject(LoginService);
   readonly messageService = inject(MessageService);
+  private router = inject(Router);
   visible = output();
   form = new FormGroup({
     email: new FormControl('', [
@@ -128,6 +127,6 @@ export class FormLoginComponent {
   }
 
   register() {
-    this.visible.emit();
+    this.router.navigate(['/login/register']);
   }
 }
