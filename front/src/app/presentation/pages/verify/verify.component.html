@@ -1,1 +1,24 @@
-<p>verify works!</p>
+<div class="overflow-x-auto w-full">
+    <table class="bg-white border border-gray-300 rounded-lg shadow-md">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="py-2 px-4 border-b text-left">Nombre</th>
+          <th class="py-2 px-4 border-b text-left">Fecha-Hora</th>
+          <th class="py-2 px-4 border-b text-left">Tipo Documento</th>
+          <th class="py-2 px-4 border-b text-left">ID Token</th>
+          <th class="py-2 px-4 border-b text-left">IP Equipo</th>
+          <th class="py-2 px-4 border-b text-left">Entidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dato of datos" class="hover:bg-gray-100">
+          <td class="py-2 px-4 border-b">{{ dato.nombre }}</td>
+          <td class="py-2 px-4 border-b">{{ dato.fechaHora }}</td>
+          <td class="py-2 px-4 border-b">{{ dato.tipoDocumento }}</td>
+          <td class="py-2 px-4 border-b">{{ dato.id_token }}</td>
+          <td class="py-2 px-4 border-b">{{ dato.ip_equipo }}</td>
+          <td class="py-2 px-4 border-b">{{ dato.entidad }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

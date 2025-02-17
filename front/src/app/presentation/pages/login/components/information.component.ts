@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
 
 @Component({
   selector: 'login-informacion',
-  imports: [],
+  imports: [ButtonPrimaryComponent],
   template: `
     <div
       class="bg-grid h-screen flex justify-center items-center relative shadow-lg border-r border-gray-300"
@@ -26,8 +27,21 @@ import { Component } from '@angular/core';
             >tener instalado <span class="text-primary">Jacubitus</span>.</span
           >
         </h2>
+        <button
+          (click)="instalar()"
+          class="text-primary/70 underline font-semibold  cursor-pointer hover:text-primary"
+        >
+          <p>Instalar Jacubitus</p>
+        </button>
       </section>
     </div>
   `,
 })
-export class LoginInformacionComponent {}
+export class LoginInformacionComponent {
+  instalar() {
+    window.open(
+      'https://firmadigital.bo/herramientas/jacobitus-escritorio/',
+      '_blank'
+    );
+  }
+}
