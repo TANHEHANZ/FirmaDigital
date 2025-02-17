@@ -1,9 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { LoginInformacionComponent } from './components/information.component';
-import { FormLoginComponent } from './components/form-login.component';
-import { FormRegisterComponent } from './components/form-register.component';
-import { NgStyle } from '@angular/common';
 import { AuthStateService } from '../../../application/global/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
