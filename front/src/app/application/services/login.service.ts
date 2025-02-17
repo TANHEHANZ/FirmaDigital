@@ -13,10 +13,14 @@ export interface res_data {
   providedIn: 'root',
 })
 export class LoginService {
-  private URL = 'http://localhost:3000' + API.LOGIN;
+  private URL_LOGIN = 'http://localhost:3000' + API.LOGIN;
 
   http = inject(HttpClient);
   login(data: loginPeyload): Observable<res<any>> {
-    return this.http.post<res<any>>(this.URL, data);
+    return this.http.post<res<any>>(this.URL_LOGIN, data);
   }
+register (){
+  
+}
+
 }

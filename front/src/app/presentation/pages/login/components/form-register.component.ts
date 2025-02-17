@@ -12,6 +12,7 @@ import {
 import { MessageService } from 'primeng/api';
 import { AuthStateService } from '../../../../application/global/auth.service';
 import { Router } from '@angular/router';
+import { LoginService } from '../../../../application/services/login.service';
 
 @Component({
   selector: 'form-register',
@@ -21,15 +22,25 @@ import { Router } from '@angular/router';
     <section
       class="flex flex-col justify-center items-center text-center gap-2 w-[50dvw] h-full"
     >
-      <h1 class="font-bold text-4xl">Registro</h1>
+      <h1 class="font-bold text-4xl">Formulario de registro</h1>
       <form [formGroup]="form" class="w-1/2">
-        <custom-input
+       <div class="flex gap-2">
+       <custom-input
           class="w-full"
           label="Nombre"
           type="text"
           [control]="form.controls.name"
         />
+      
         <custom-input
+          class="w-full"
+          label="Tipo Persona"
+          type="text"
+          [control]="form.controls.tipo_user"
+        />
+       </div>
+       <div class="flex gap-2">
+       <custom-input
           class="w-full"
           label="Ci"
           type="text"
@@ -37,16 +48,12 @@ import { Router } from '@angular/router';
         />
         <custom-input
           class="w-full"
-          label="Tipo Persona"
-          type="text"
-          [control]="form.controls.tipo_user"
-        />
-        <custom-input
-          class="w-full"
           label="Unidad"
           type="text"
           [control]="form.controls.idUnidad"
         />
+       </div>
+     
         <custom-input
           class="w-full"
           label="Email"
@@ -74,7 +81,7 @@ import { Router } from '@angular/router';
   ],
 })
 export class FormRegisterComponent {
-  private authStateService = inject(AuthStateService);
+  private loginService = inject(LoginService);
   readonly messageService = inject(MessageService);
   private router = inject(Router);
   visibleform() {
@@ -115,6 +122,7 @@ export class FormRegisterComponent {
 
   register() {
     if (this.form.invalid) {
+this.loginService.register()
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -124,4 +132,9 @@ export class FormRegisterComponent {
       return;
     }
   }
+
+
+  
+
+
 }

@@ -19,9 +19,9 @@ import { NgClass, NgIf } from '@angular/common';
         <span *ngIf="isRequired()" class="text-red-500">*</span>
       </label>
       <input
-        [id]="id"
+        [id]="controlName"
         [type]="type"
-        class="border flex-1 rounded-md p-1 px-2 w-full outline-none"
+        class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300"
         [ngClass]="getValidationClass()"
         [formControl]="control"
         (blur)="onTouched()"
@@ -46,6 +46,9 @@ export class CustomInputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() type: string = 'text';
   @Input() control: FormControl = new FormControl();
+  
+  // Usar el nombre del control como id
+  @Input() controlName: string = '';
 
   id = Math.random().toString(36).substr(2, 9);
 
@@ -77,13 +80,9 @@ export class CustomInputComponent implements ControlValueAccessor {
     if (this.control.hasError('required')) return 'Este campo es obligatorio.';
     if (this.control.hasError('email')) return 'Ingrese un email válido.';
     if (this.control.hasError('minlength'))
-      return `Mínimo ${
-        this.control.getError('minlength').requiredLength
-      } caracteres.`;
+      return `Mínimo ${this.control.getError('minlength').requiredLength} caracteres.`;
     if (this.control.hasError('maxlength'))
-      return `Máximo ${
-        this.control.getError('maxlength').requiredLength
-      } caracteres.`;
+      return `Máximo ${this.control.getError('maxlength').requiredLength} caracteres.`;
     if (this.control.hasError('pattern')) {
       if (this.control.errors?.['pattern'].requiredPattern.includes('[A-Z]'))
         return 'Debe contener al menos una letra mayúscula.';
