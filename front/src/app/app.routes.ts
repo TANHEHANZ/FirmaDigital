@@ -6,6 +6,8 @@ import { LoginComponent } from './presentation/pages/login/login.component';
 import { PrivateComponent } from './presentation/layouts/private/private.component';
 import { FormRegisterComponent } from './presentation/pages/login/components/form-register.component';
 import { FormLoginComponent } from './presentation/pages/login/components/form-login.component';
+import { TokenComponent } from './presentation/pages/token/token.component';
+import { ConfigurationComponent } from './presentation/pages/configuration/configuration.component';
 
 export const routes: Routes = [
   {
@@ -29,8 +31,16 @@ export const routes: Routes = [
         component: VerifyComponent,
       },
       {
-        path: 'profile',
+        path: 'token',
+        component: TokenComponent,
+      },
+      {
+        path: 'users',
         component: ProfileComponent,
+      },
+      {
+        path: 'configuration',
+        component: ConfigurationComponent,
       },
     ],
   },

@@ -11,7 +11,7 @@ export class SidebarService {
 
   constructor() {
     if (typeof window !== 'undefined') {
-      this.isCollapsed.set(this.storage.getItem<boolean>(NAV_KEY) || false);
+      this.isCollapsed.set(this.storage.getItem<boolean>(NAV_KEY) || true);
     }
   }
 

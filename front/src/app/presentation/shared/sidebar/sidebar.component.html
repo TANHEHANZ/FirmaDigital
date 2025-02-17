@@ -1,21 +1,9 @@
 <aside
   class="h-screen py-8 px-4 flex flex-col gap-4 bg-white transition-all duration-300 w-full overflow-hidden border-r border-gray-300"
 >
-  <button
-    class="text-xl absolute border border-primary p-2 rounded-full w-10 h-10 flex justify-center items-center hover:bg-primary hover:text-white transition-all duration-300"
-    [ngClass]="{
-      'self-end': sidebarService.isCollapsed(),
-      ' self-center': !sidebarService.isCollapsed()
-    }"
-    (click)="sidebarService.changeValue()"
-  >
-    <i [class]="sidebarService.isCollapsed() ? ICONS.LEFT : ICONS.RIGHT"></i>
-  </button>
   <h3
     class="text-lg flex items-center gap-2 font-medium my-14 w-full justify-center"
   >
-    <img alt="photo" src="huella.png" class="w-10 h-10 object-contain" />
-
     <span
       class="overflow-hidden whitespace-nowrap transition-all duration-300"
       [ngClass]="{
@@ -45,22 +33,28 @@
     <app-link
       class="w-full"
       [label]="'Token de Firma'"
-      [route]="PATH_ROUTES.DASHBOARD_PROFILE"
+      [route]="PATH_ROUTES.DASHBOARD_TOKEN"
       [iconName]="ICONS.TOKEN"
     />
   </app-wrapperlink>
   <app-wrapperlink [title]="'Configuración'">
     <app-link
-      class="w-full"
-      [label]="'Perfil'"
-      [route]="PATH_ROUTES.DASHBOARD_PROFILE"
-      [iconName]="ICONS.USER"
+    class="w-full"
+    [label]="'Perfil'"
+    [route]="PATH_ROUTES.DASHBOARD_USERS"
+    [iconName]="ICONS.USER"
     />
     <app-link
       class="w-full"
       [label]="'Configuración'"
-      [route]="PATH_ROUTES.LOGOUT"
+      [route]="PATH_ROUTES.DASHBOARD_CONFIGURATION"
       [iconName]="ICONS.SETTING"
+    />
+    <app-link
+      class="w-full"
+      [label]="'Cerrar Secion'"
+      [route]="PATH_ROUTES.LOGOUT"
+      [iconName]="ICONS.LOGOUT"
     />
   </app-wrapperlink>
 </aside>

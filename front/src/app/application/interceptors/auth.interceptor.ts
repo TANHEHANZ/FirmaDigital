@@ -3,7 +3,6 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
-  HTTP_INTERCEPTORS,
   HttpErrorResponse,
 } from '@angular/common/http';
 
@@ -11,7 +10,7 @@ import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/login.service';
 
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export class AuthInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -48,9 +47,3 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 }
-
-export const authInterceptorProvider = {
-  provide: HTTP_INTERCEPTORS,
-  useClass: AuthInterceptor,
-  multi: true,
-};
