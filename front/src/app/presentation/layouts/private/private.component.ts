@@ -21,8 +21,7 @@ import { MessageService } from 'primeng/api';
     >
       <app-sidebar class=" h-full row-span-2 " />
       <section class=" row-span-2 flex flex-col ">
-        <p-toast></p-toast>
-
+        <p-toast position="bottom-right"></p-toast>
         <router-outlet />
       </section>
     </main>

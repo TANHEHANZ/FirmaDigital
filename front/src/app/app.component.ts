@@ -2,12 +2,19 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UploadService } from './application/services/upload.service';
 import { FirmarPdfRequest } from './application/models/interfaces/firmar/pdf';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet],
-  template: ` <router-outlet></router-outlet> `,
+  imports: [RouterOutlet, ToastModule],
+  template: `
+    <p-toast position="bottom-right"></p-toast>
+    <router-outlet></router-outlet>
+  `,
   styleUrl: './app.component.css',
+  providers: [MessageService],
 })
 export class AppComponent {
   title = 'formJacubitus';

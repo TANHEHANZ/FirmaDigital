@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -27,10 +27,9 @@ import { Toast } from 'primeng/toast';
     Toast,
   ],
   template: `
-    <p-toast></p-toast>
-
+    <p-toast position="bottom-right"></p-toast>
     <section
-      class="h-screen flex flex-col justify-center items-center text-center relative gap-2"
+      class="h-full flex flex-col justify-center items-center text-center relative gap-2 w-[50dvw]"
     >
       <h1 class="font-bold text-4xl">Sistema de Firmas Digitales</h1>
       <p
@@ -68,7 +67,7 @@ import { Toast } from 'primeng/toast';
 export class FormLoginComponent {
   readonly loginService = inject(LoginService);
   readonly messageService = inject(MessageService);
-
+  visible = output();
   form = new FormGroup({
     email: new FormControl('', [
       Validators.email,
@@ -128,5 +127,7 @@ export class FormLoginComponent {
       });
   }
 
-  register() {}
+  register() {
+    this.visible.emit();
+  }
 }
