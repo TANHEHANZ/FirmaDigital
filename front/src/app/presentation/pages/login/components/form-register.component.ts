@@ -13,6 +13,8 @@ import { MessageService } from 'primeng/api';
 import { AuthStateService } from '../../../../application/global/auth.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../../application/services/login.service';
+import { CustomSelectComponent } from '../../../shared/ui/select.component';
+import { PATH_ROUTES } from '../../../../application/models/route.enum';
 
 @Component({
   selector: 'form-register',
@@ -20,40 +22,45 @@ import { LoginService } from '../../../../application/services/login.service';
     <p-toast position="bottom-right"></p-toast>
 
     <section
-      class="flex flex-col justify-center items-center text-center gap-2 w-[50dvw] h-full"
+      class=" flex flex-col  justify-center items-center gap-2 w-[50dvw] h-full "
     >
-      <h1 class="font-bold text-4xl">Formulario de registro</h1>
-      <form [formGroup]="form" class="w-1/2">
-       <div class="flex gap-2">
-       <custom-input
+      <h1 class="font-bold text-4xl  my-4 ">Formulario de registro</h1>
+      <form
+        [formGroup]="form"
+        class="w-[70%] grid grid-cols-2 justify-center items-end  gap-2"
+      >
+        <custom-input
           class="w-full"
           label="Nombre"
           type="text"
           [control]="form.controls.name"
         />
-      
-        <custom-input
+        <custom-select
           class="w-full"
-          label="Tipo Persona"
-          type="text"
+          label="Seleccione una opción"
           [control]="form.controls.tipo_user"
+          [options]="[
+            { label: 'Juridica', value: 'Juridica' },
+            { label: 'Natural', value: 'Natural' }
+          ]"
         />
-       </div>
-       <div class="flex gap-2">
-       <custom-input
+
+        <custom-input
           class="w-full"
           label="Ci"
           type="text"
           [control]="form.controls.ci"
         />
-        <custom-input
+        <custom-select
           class="w-full"
-          label="Unidad"
-          type="text"
+          label="Seleccione la Unidad al que pertenece"
           [control]="form.controls.idUnidad"
+          [options]="[
+            { label: 'unidad 1', value: '1' },
+            { label: 'unidad 1', value: '2' }
+          ]"
         />
-       </div>
-     
+
         <custom-input
           class="w-full"
           label="Email"
@@ -78,6 +85,7 @@ import { LoginService } from '../../../../application/services/login.service';
     ReactiveFormsModule,
     ButtonSecundaryComponent,
     Toast,
+    CustomSelectComponent,
   ],
 })
 export class FormRegisterComponent {
@@ -109,20 +117,18 @@ export class FormRegisterComponent {
       Validators.pattern(/[\W_]/),
     ]),
     ci: new FormControl('', [
-      Validators.email,
       Validators.required,
       Validators.minLength(7),
       Validators.maxLength(10),
       Validators.pattern(/^\d+$/),
     ]),
     tipo_user: new FormControl('', [Validators.required]),
-    idRol: new FormControl('', [Validators.required]),
     idUnidad: new FormControl('', [Validators.required]),
   });
 
   register() {
+    console.log(this.form.value);
     if (this.form.invalid) {
-this.loginService.register()
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -131,10 +137,34 @@ this.loginService.register()
       });
       return;
     }
+    this.loginService
+      .register({
+        email: this.form.value.email ?? '',
+        password: this.form.value.password ?? '',
+        ci: this.form.value.ci ?? '',
+        name: this.form.value.name ?? '',
+        idRol: '1',
+        idUnidad: this.form.value.idUnidad ?? '',
+        tipo_user: 'Natural',
+      })
+      .subscribe({
+        next: (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: response.message,
+            life: 3000,
+          });
+          this.router.navigate([PATH_ROUTES.LOGOUT]);
+        },
+        error: (error: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error?.message || 'Ocurrió un error inesperado',
+            life: 3000,
+          });
+        },
+      });
   }
-
-
-  
-
-
 }

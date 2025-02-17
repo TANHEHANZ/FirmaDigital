@@ -17,6 +17,7 @@ import { CustomInputComponent } from '../../../shared/ui/input.component';
 import { Toast } from 'primeng/toast';
 import { AuthStateService } from '../../../../application/global/auth.service';
 import { Router } from '@angular/router';
+import { PATH_ROUTES } from '../../../../application/models/route.enum';
 
 @Component({
   selector: 'form-login',
@@ -114,6 +115,7 @@ export class FormLoginComponent {
             detail: response.message,
             life: 3000,
           });
+          this.router.navigate([PATH_ROUTES.DASHBOARD_FIRMAR]);
         },
         error: (error: any) => {
           this.messageService.add({

@@ -6,26 +6,29 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'custom-input',
+  selector: 'custom-select',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf],
+  imports: [ReactiveFormsModule, NgClass, NgIf, NgFor],
   template: `
-    <div class="flex flex-col gap-1 my-2 items-start w-full flex-1  ">
+    <div class="flex flex-col gap-1 my-2 items-start w-full flex-1">
       <label [for]="id" class="block">
         {{ label }}
         <span *ngIf="isRequired()" class="text-red-500">*</span>
       </label>
-      <input
+      <select
         [id]="controlName"
-        [type]="type"
         class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300"
         [ngClass]="getValidationClass()"
         [formControl]="control"
         (blur)="onTouched()"
-      />
+      >
+        <option *ngFor="let option of options" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
       <p
         *ngIf="control.invalid && control.touched"
         class="text-red-500 text-sm"
@@ -37,17 +40,16 @@ import { NgClass, NgIf } from '@angular/common';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomInputComponent),
+      useExisting: forwardRef(() => CustomSelectComponent),
       multi: true,
     },
   ],
 })
-export class CustomInputComponent implements ControlValueAccessor {
+export class CustomSelectComponent implements ControlValueAccessor {
   @Input() label: string = '';
-  @Input() type: string = 'text';
   @Input() control: FormControl = new FormControl();
-
   @Input() controlName: string = '';
+  @Input() options: { label: string; value: any }[] = [];
 
   id = Math.random().toString(36).substr(2, 9);
 
@@ -64,6 +66,7 @@ export class CustomInputComponent implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
+
   isRequired(): boolean {
     return this.control?.hasValidator(Validators.required) ?? false;
   }
@@ -77,25 +80,6 @@ export class CustomInputComponent implements ControlValueAccessor {
 
   getErrorMessage(): string {
     if (this.control.hasError('required')) return 'Este campo es obligatorio.';
-    if (this.control.hasError('email')) return 'Ingrese un email válido.';
-    if (this.control.hasError('minlength'))
-      return `Mínimo ${
-        this.control.getError('minlength').requiredLength
-      } caracteres.`;
-    if (this.control.hasError('maxlength'))
-      return `Máximo ${
-        this.control.getError('maxlength').requiredLength
-      } caracteres.`;
-    if (this.control.hasError('pattern')) {
-      if (this.control.errors?.['pattern'].requiredPattern.includes('[A-Z]'))
-        return 'Debe contener al menos una letra mayúscula.';
-      if (this.control.errors?.['pattern'].requiredPattern.includes('[a-z]'))
-        return 'Debe contener al menos una letra minúscula.';
-      if (this.control.errors?.['pattern'].requiredPattern.includes('[0-9]'))
-        return 'Debe contener al menos un número.';
-      if (this.control.errors?.['pattern'].requiredPattern.includes('[\\W_]'))
-        return 'Debe contener al menos un carácter especial.';
-    }
     return '';
   }
 }

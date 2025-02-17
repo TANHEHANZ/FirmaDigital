@@ -6,8 +6,8 @@ export enum API_ROUTES {
   UPLOAD_FILE_PDF = BASE + 'token/firmar_pdf',
 }
 
-
 export enum API {
-  BASE= "/v1/api/",
-  LOGIN = BASE +"login"
+  BASE = '/v1/api/',
+  LOGIN = BASE + 'login',
+  REGISTER = BASE + 'user',
 }
