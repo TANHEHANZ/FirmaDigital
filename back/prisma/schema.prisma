@@ -24,7 +24,6 @@ model User {
   rol           Rol      @relation(fields: [idRol], references: [id])
   unidad        Unidad   @relation(fields: [idUnidad], references: [id])
   Firmar        Firmar[]
-  Token         Token[]
 }
 
 enum TypeUser {
@@ -33,15 +32,29 @@ enum TypeUser {
 }
 
 model Token {
-  id          String   @id @default(cuid())
-  modelo      String   @db.VarChar(100)
-  serial      String   @unique
-  usuario_id  String
-  is_active   String   @default("TRUE")
-  is_deleted  String   @default("FALSE")
-  isUpdate    String   @default("FALSE")
-  propietario User     @relation(fields: [usuario_id], references: [id])
-  Firmar      Firmar[]
+  id                  String      @id @default(cuid())
+  tipo                String      @db.VarChar(100)
+  id_token_provedor   String
+  ci_titual           String      @db.VarChar(10)
+  email_titular       String
+  descripcion_titular String
+  id_certificado      String
+  Certificado         Certificado @relation(fields: [id_certificado], references: [id])
+  is_active           String      @default("FALSE")
+  is_deleted          String      @default("FALSE")
+  isUpdate            String      @default("FALSE")
+  Firmar              Firmar[]
+  // User                User?       @relation(fields: [userId], references: [id])
+  // userId              String?
+}
+
+model Certificado {
+  id               String   @id @default(cuid())
+  tipo_certificado String
+  desde            DateTime
+  hasta            DateTime
+  emisor           String
+  Token            Token[]
 }
 
 model Documento {
@@ -71,7 +84,6 @@ model Firmar {
   idUser      String
   idDocumento String
   idToken     String
-  validado    String    @default("FALSE")
   User        User      @relation(fields: [idUser], references: [id])
   Documento   Documento @relation(fields: [idDocumento], references: [id])
   Token       Token     @relation(fields: [idToken], references: [id])
