@@ -20,7 +20,7 @@ import { MessageService } from 'primeng/api';
       class="h-screen w-screen grid  grid-cols-[280px_1fr] grid-rows-[auto_1fr] transition-all delay-100"
     >
       <app-sidebar class=" h-full row-span-2 " />
-      <section class=" row-span-2 flex flex-col ">
+      <section class=" row-span-2 flex flex-col h-full ">
         <p-toast position="bottom-right"></p-toast>
         <router-outlet />
       </section>
