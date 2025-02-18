@@ -1,9 +1,11 @@
-<app-wrapper [title]="'Firmar Docunentos'">
+<section class="p-8 h-full">
+  <h1 class="text-3xl font-bold my-8">Firmar Docunentos</h1>
   <p-toast></p-toast>
-  <div
-    class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto transition-all duration-500 ease-in-out grow-1"
-  >
+  <article class="flex gap-4 h-full">
     <div
+      class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto transition-all duration-500 ease-in-out w-[35%]"
+    >
+      <!-- <div
       [ngClass]="{
         'border-primary ': !tokenData?.datos?.connected,
         'opacity-0 delay-500 -translate-y-[8rem] ': tokenData?.datos?.connected
@@ -21,55 +23,56 @@
           label="Validar Token"
         />
       </section>
-    </div>
-    <article
-      class="transition-all duration-800 ease-in-out h-full"
-      [ngClass]="{
-        'border-primary -translate-y-[12rem]  ': tokenData?.datos?.connected,
-        'border-gray-300 ': !tokenData?.datos?.connected
-      }"
-    >
-      <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
-
-      @if (tokenData?.datos?.connected) { @for ( token of
-      tokenData?.datos?.tokens; track token.serial) {
-      <ul
+    </div> -->
+      <article
+        class="transition-all duration-800 ease-in-out h-full w-full"
         [ngClass]="{
-          'border-2 border-signed  shadow-md text-signed ':
-            selectedToken === token
+          'border-primary   ': tokenData?.datos?.connected,
+          'border-gray-300 ': !tokenData?.datos?.connected
         }"
-        class="border border-gray-300 rounded-xl p-4"
       >
-        <li (click)="selectToken(token)" class="flex justify-between">
-          <div>
-            <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
-            <p class="text-gray-500">Serial: {{ token.serial }}</p>
-          </div>
-          <button
-            (click)="selectToken(token)"
-            class="bg-primary/20 text-primary w-12 h-12 rounded-full hover:bg-primary hover:text-white transition-all duration-300 z-30"
-          >
-            <i [class]="ICONS.SETTING"></i>
-          </button>
-        </li>
-      </ul>
-      } } @else {
-      <img alt="photo" src="404-error.png" class="object-contain h-1/2" />
-      <p class="text-center">No se detectaron tokens</p>
-      }
-    </article>
-  </div>
-  <div
-    class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-full grow-2"
-  >
-    <input type="text" class="" placeholder="ingresa el ping" />
-    <i
-      [class]="ICONS.UPLOAD"
-      class="bg-primary/20 text-primary p-4 rounded-full"
-    ></i>
-    <p class="text-xl font-medium">
-      <span class="text-primary">Haga clic aquí </span>
-      para cargar su archivo o arrástrelo
-    </p>
-  </div>
-</app-wrapper>
+        <h4 class="font-bold text-2xl my-2">Tokens Detectados</h4>
+
+        @if (tokenData?.datos?.connected) { @for ( token of
+        tokenData?.datos?.tokens; track token.serial) {
+        <ul
+          [ngClass]="{
+            'border-2 border-signed  shadow-md text-signed ':
+              selectedToken === token
+          }"
+          class="border border-gray-300 rounded-xl p-4"
+        >
+          <li (click)="selectToken(token)" class="flex justify-between">
+            <div>
+              <p class="font-medium">{{ token.name }} ({{ token.model }})</p>
+              <p class="text-gray-500">Serial: {{ token.serial }}</p>
+            </div>
+            <button
+              (click)="selectToken(token)"
+              class="bg-primary/20 text-primary w-12 h-12 rounded-full hover:bg-primary hover:text-white transition-all duration-300 z-30"
+            >
+              <i [class]="ICONS.SETTING"></i>
+            </button>
+          </li>
+        </ul>
+        } } @else {
+        <img alt="photo" src="404-error.png" class="object-contain h-1/2" />
+        <p class="text-center">No se detectaron tokens</p>
+        }
+      </article>
+    </div>
+    <div
+      class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-[60%]"
+    >
+      <input type="text" class="" placeholder="ingresa el ping" />
+      <i
+        [class]="ICONS.UPLOAD"
+        class="bg-primary/20 text-primary p-4 rounded-full"
+      ></i>
+      <p class="text-xl font-medium">
+        <span class="text-primary">Haga clic aquí </span>
+        para cargar su archivo o arrástrelo
+      </p>
+    </div>
+  </article>
+</section>
