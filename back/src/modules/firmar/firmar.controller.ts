@@ -8,15 +8,30 @@ export const signedDocuments = async (req: Request, res: Response) => {
     const signed = await prisma.firmar.findMany({
       include: {
         Documento: true,
-        User: true,
-        Token: true,
+        User: {
+          select: {
+            email: true,
+            name: true,
+            ci: true,
+            tipo_user: true,
+          },
+        },
+        Token: {
+          include: {
+            Certificado: true,
+          },
+        },
       },
     });
     if (!signed) {
       ManageResponse.notFound(res, "Error el obtener los documentos firmados");
       return;
     }
-    ManageResponse.success(res, "Documentos firmados obtenidos correctamente"),
+    ManageResponse.success(
+      res,
+      "Documentos firmados obtenidos correctamente",
+      signed
+    ),
       signed;
   } catch (error) {
     ManageResponse.serverError(res, "Error en el servidor", error);
@@ -94,17 +109,27 @@ export const uploadAndSignDocument = async (
         idToken: token.id,
       },
       include: {
-        User: true,
+        Documento: true,
+        User: {
+          select: {
+            email: true,
+            name: true,
+            ci: true,
+            tipo_user: true,
+          },
+        },
+        Token: {
+          include: {
+            Certificado: true,
+          },
+        },
       },
     });
     ManageResponse.success(
       res,
       "Documento y token almacenado de forma correcta",
-      {
-        document,
-        token,
-        firmar,
-      }
+
+      firmar
     );
   } catch (error) {
     ManageResponse.serverError(res, "Error del servidor", error);
