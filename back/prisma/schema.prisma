@@ -15,7 +15,7 @@ model User {
   password      String
   fecha         DateTime @default(now())
   tipo_user     TypeUser
-  is_active     String   @default("FALSE")
+  is_active     String   @default("TRUE")
   is_deleted    String   @default("FALSE")
   isUpdate      String   @default("FALSE")
   idRol         String
@@ -24,11 +24,57 @@ model User {
   rol           Rol      @relation(fields: [idRol], references: [id])
   unidad        Unidad   @relation(fields: [idUnidad], references: [id])
   Firmar        Firmar[]
+  Token         Token[]
 }
 
 enum TypeUser {
   Juridica
   Natural
+}
+
+model Token {
+  id          String   @id @default(cuid())
+  modelo      String   @db.VarChar(100)
+  serial      String   @unique
+  usuario_id  String
+  is_active   String   @default("TRUE")
+  is_deleted  String   @default("FALSE")
+  isUpdate    String   @default("FALSE")
+  propietario User     @relation(fields: [usuario_id], references: [id])
+  Firmar      Firmar[]
+}
+
+model Documento {
+  id                 String          @id @default(cuid())
+  nombre             String          @db.VarChar(255)
+  tipo_documento     String          @db.VarChar(500)
+  documento_blob     String          @db.Text
+  estado             EstadoDocumento @default(Activo)
+  fecha_creacion     DateTime        @default(now())
+  fecha_modificacion DateTime?
+  fecha_eliminacion  DateTime?
+  Firmar             Firmar[]
+  is_deleted         String          @default("FALSE")
+  isUpdate           String          @default("FALSE")
+}
+
+enum EstadoDocumento {
+  Activo
+  Modificado
+  Eliminado
+  Remplazado
+}
+
+model Firmar {
+  id          String    @id @default(cuid())
+  fecha       DateTime  @default(now())
+  idUser      String
+  idDocumento String
+  idToken     String
+  validado    String    @default("FALSE")
+  User        User      @relation(fields: [idUser], references: [id])
+  Documento   Documento @relation(fields: [idDocumento], references: [id])
+  Token       Token     @relation(fields: [idToken], references: [id])
 }
 
 model Rol {
@@ -47,54 +93,4 @@ model Unidad {
   is_deleted String @default("FALSE")
   isUpdate   String @default("FALSE")
   User       User[]
-}
-
-model Firmar {
-  id          String    @id @default(cuid())
-  fecha       DateTime  @default(now())
-  idUser      String
-  idDocumento String
-  idToken     String
-  validado    String    @default("FALSE")
-  is_active   String    @default("FALSE")
-  is_deleted  String    @default("FALSE")
-  isUpdate    String    @default("FALSE")
-  Token       Token     @relation(fields: [idToken], references: [id])
-  User        User      @relation(fields: [idUser], references: [id])
-  Documento   Documento @relation(fields: [idDocumento], references: [id])
-}
-
-model Documento {
-  id             String   @id @default(cuid())
-  nombre         String   @unique
-  tipo_documento String   @db.VarChar(500)
-  documento_blob String   @db.Text
-  is_active      String   @default("FALSE")
-  is_deleted     String   @default("FALSE")
-  isUpdate       String   @default("FALSE")
-  Firmar         Firmar[]
-}
-
-model Token {
-  id                  String      @id @default(cuid())
-  tipo                String      @db.VarChar(100)
-  id_token_provedor   String
-  ci_titual           String      @db.VarChar(10)
-  email_titular       String
-  descripcion_titular String
-  id_certificado      String
-  Certificado         Certificado @relation(fields: [id_certificado], references: [id])
-  is_active           String      @default("FALSE")
-  is_deleted          String      @default("FALSE")
-  isUpdate            String      @default("FALSE")
-  Firmar              Firmar[]
-}
-
-model Certificado {
-  id               String   @id @default(cuid())
-  tipo_certificado String
-  desde            DateTime
-  hasta            DateTime
-  emisor           String
-  Token            Token[]
 }

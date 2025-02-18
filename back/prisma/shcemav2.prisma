@@ -1,3 +1,12 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
 model User {
     id            String   @id @default(cuid())
     email         String   @unique
@@ -6,7 +15,7 @@ model User {
     password      String
     fecha         DateTime @default(now())
     tipo_user     TypeUser
-    is_active     String   @default("FALSE")
+    is_active     String   @default("TRUE")
     is_deleted    String   @default("FALSE")
     isUpdate      String   @default("FALSE")
     idRol         String
@@ -15,32 +24,38 @@ model User {
     rol           Rol      @relation(fields: [idRol], references: [id])
     unidad        Unidad   @relation(fields: [idUnidad], references: [id])
     Firmar        Firmar[]
-    Token         Token[] // Un usuario puede tener múltiples tokens (dispositivos)
+    Token         Token[]
+}
+
+enum TypeUser {
+    Juridica
+    Natural
 }
 
 model Token {
     id          String   @id @default(cuid())
-    modelo      String   @db.VarChar(100) // Modelo del dispositivo de firma
+    modelo      String   @db.VarChar(100)
     serial      String   @unique
     usuario_id  String
     is_active   String   @default("TRUE")
     is_deleted  String   @default("FALSE")
     isUpdate    String   @default("FALSE")
     propietario User     @relation(fields: [usuario_id], references: [id])
-    Firmar      Firmar[] // Registro de firmas realizadas con este token
+    Firmar      Firmar[]
 }
 
 model Documento {
-    id                 String               @id @default(cuid())
-    nombre             String               @db.VarChar(255)
-    tipo_documento     String               @db.VarChar(500)
-    documento_blob     String               @db.Text
-    estado             EstadoDocumento      @default(Activo)
-    fecha_creacion     DateTime             @default(now())
+    id                 String          @id @default(cuid())
+    nombre             String          @db.VarChar(255)
+    tipo_documento     String          @db.VarChar(500)
+    documento_blob     String          @db.Text
+    estado             EstadoDocumento @default(Activo)
+    fecha_creacion     DateTime        @default(now())
     fecha_modificacion DateTime?
     fecha_eliminacion  DateTime?
     Firmar             Firmar[]
-    Historial          HistorialDocumento[]
+    is_deleted         String          @default("FALSE")
+    isUpdate           String          @default("FALSE")
 }
 
 enum EstadoDocumento {
@@ -56,25 +71,26 @@ model Firmar {
     idUser      String
     idDocumento String
     idToken     String
-    validado    Boolean   @default(false)
+    validado    String    @default("FALSE")
     User        User      @relation(fields: [idUser], references: [id])
     Documento   Documento @relation(fields: [idDocumento], references: [id])
     Token       Token     @relation(fields: [idToken], references: [id])
 }
 
-model HistorialDocumento {
-    id              String          @id @default(cuid())
-    idDocumento     String
-    accion          AccionDocumento
-    fecha           DateTime        @default(now())
-    nuevo_documento String? // Si el documento fue reemplazado, referencia al nuevo ID
-    Documento       Documento       @relation(fields: [idDocumento], references: [id])
+model Rol {
+    id         String @id @default(cuid())
+    tipo       String @unique @db.VarChar(100)
+    is_active  String @default("FALSE")
+    is_deleted String @default("FALSE")
+    isUpdate   String @default("FALSE")
+    User       User[]
 }
 
-enum AccionDocumento {
-    Creado
-    Modificado
-    Firmado
-    Eliminado
-    Remplazado
+model Unidad {
+    id         String @id @default(cuid())
+    unidad     String @unique @db.VarChar(100)
+    is_active  String @default("FALSE")
+    is_deleted String @default("FALSE")
+    isUpdate   String @default("FALSE")
+    User       User[]
 }
