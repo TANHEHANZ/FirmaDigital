@@ -135,3 +135,196 @@ export const uploadAndSignDocument = async (
     ManageResponse.serverError(res, "Error del servidor", error);
   }
 };
+
+export const UpdateDocument = async (req: Request, res: Response) => {
+  const id_fileUpdate = req.params.id;
+  const {
+    idUser,
+    tipo,
+    id_token_provedor,
+    ci_titual,
+    email_titular,
+    descripcion_titular,
+    tipo_certificado,
+    desde,
+    hasta,
+    emisor,
+    estado,
+    nombre,
+    tipo_documento,
+    documento_blob,
+    id_historial,
+  } = req.body;
+  try {
+    if (estado === "Modificado") {
+      const updateFile = await prisma.documento.update({
+        where: { id: id_fileUpdate },
+        data: {
+          nombre,
+          tipo_documento,
+          estado: "Modificado",
+          isUpdate: "TRUE",
+        },
+      });
+      ManageResponse.success(res, "El documento a sido modificado", updateFile);
+      return;
+    }
+    if (estado === "Remplazado") {
+      try {
+        const document = await prisma.documento.create({
+          data: {
+            nombre,
+            tipo_documento,
+            documento_blob,
+            estado: "Remplazado",
+            id_historial: id_fileUpdate,
+          },
+        });
+        if (!document) {
+          ManageResponse.notFound(
+            res,
+            "Error no se pudo registrar el documento"
+          );
+          return;
+        }
+        const certificado = await prisma.certificado.create({
+          data: {
+            tipo_certificado,
+            desde,
+            hasta,
+            emisor,
+          },
+        });
+        if (!certificado) {
+          ManageResponse.notFound(
+            res,
+            "Error no se pudo guardar el certificado del token"
+          );
+          return;
+        }
+        const token = await prisma.token.create({
+          data: {
+            tipo,
+            id_token_provedor,
+            ci_titual,
+            email_titular,
+            descripcion_titular,
+            id_certificado: certificado.id,
+          },
+          include: {
+            Certificado: true,
+          },
+        });
+        if (!token) {
+          ManageResponse.notFound(res, "Error no se pudo gardar el token");
+        }
+        const firmar = await prisma.firmar.create({
+          data: {
+            idUser: idUser,
+            idDocumento: document.id,
+            idToken: token.id,
+          },
+          include: {
+            Documento: true,
+            User: {
+              select: {
+                email: true,
+                name: true,
+                ci: true,
+                tipo_user: true,
+              },
+            },
+            Token: {
+              include: {
+                Certificado: true,
+              },
+            },
+          },
+        });
+        ManageResponse.success(
+          res,
+          "Documento y token almacenado de forma correcta",
+          firmar
+        );
+        return;
+      } catch (error) {
+        ManageResponse.serverError(
+          res,
+          "Error del servidor al editar el documento",
+          error
+        );
+      }
+      return;
+    }
+  } catch (error) {
+    ManageResponse.serverError(res, "Error del servidor", error);
+  }
+};
+
+export const historyDocument = async (req: Request, res: Response) => {
+  const document_id = req.params.id;
+
+  try {
+    const principal = await prisma.firmar.findMany({
+      where: {
+        Documento: {
+          id: document_id,
+        },
+      },
+      include: {
+        Documento: true,
+        User: {
+          select: {
+            email: true,
+            name: true,
+            ci: true,
+            tipo_user: true,
+          },
+        },
+        Token: {
+          include: {
+            Certificado: true,
+          },
+        },
+      },
+    });
+    if (!principal) {
+      ManageResponse.notFound(res, "Error no se pudo obtener el historial");
+      return;
+    }
+
+    const history = await prisma.firmar.findMany({
+      where: {
+        Documento: {
+          id_historial: document_id,
+        },
+      },
+      include: {
+        Documento: true,
+        User: {
+          select: {
+            email: true,
+            name: true,
+            ci: true,
+            tipo_user: true,
+          },
+        },
+        Token: {
+          include: {
+            Certificado: true,
+          },
+        },
+      },
+    });
+    if (!history) {
+      ManageResponse.notFound(res, "Error no se pudo obtener el historial");
+    }
+    ManageResponse.success(
+      res,
+      "Historial del documento obtenida exitosamente",
+      { history, principal }
+    );
+  } catch (error) {
+    ManageResponse.serverError(res, "Error del servidor", error);
+  }
+};

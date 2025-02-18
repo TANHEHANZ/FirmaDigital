@@ -64,6 +64,7 @@ model Documento {
   documento_blob     String          @db.Text
   estado             EstadoDocumento @default(Activo)
   fecha_creacion     DateTime        @default(now())
+  id_historial       String? // aca podemos registrar el id al documento que se editara 
   fecha_modificacion DateTime?
   fecha_eliminacion  DateTime?
   Firmar             Firmar[]
@@ -73,9 +74,9 @@ model Documento {
 
 enum EstadoDocumento {
   Activo
-  Modificado
-  Eliminado
-  Remplazado
+  Modificado // Datis normales modificados
+  Eliminado // eliminamos de forma logica todos los registros relacionados a el documentos
+  Remplazado // seria como poner una nueva version del documento 
 }
 
 model Firmar {
