@@ -45,6 +45,7 @@ export class UploadValidateComponent {
   readonly messageService = inject(MessageService);
   ICONS = ICONS;
   tokenDetectado = false;
+
   tokenConected() {
     this.conectToken.getListToken().subscribe({
       next: (data) => {

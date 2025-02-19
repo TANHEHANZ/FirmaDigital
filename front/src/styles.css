@@ -59,7 +59,7 @@ body {
 
 
 .alarmaCard {
-  animation: vibrate 5s;
+  animation: vibrate 5  s;
 }
 
 @keyframes vibrate {

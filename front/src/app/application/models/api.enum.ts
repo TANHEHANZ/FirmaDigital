@@ -11,4 +11,5 @@ export enum API {
   LOGIN = BASE + 'login',
   REGISTER = BASE + 'user',
   REFRESH__TOKEN = BASE + LOGIN + '/refresh',
+  SIGNED = BASE + '/signed',
 }
