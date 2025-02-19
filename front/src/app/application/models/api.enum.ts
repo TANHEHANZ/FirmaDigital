@@ -10,6 +10,6 @@ export enum API {
   BASE = '/v1/api/',
   LOGIN = BASE + 'login',
   REGISTER = BASE + 'user',
-  REFRESH__TOKEN = BASE + LOGIN + '/refresh',
+  REFRESH__TOKEN = LOGIN + '/refresh',
   SIGNED = BASE + '/signed',
 }

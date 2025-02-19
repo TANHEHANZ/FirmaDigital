@@ -153,8 +153,8 @@ export class FormRegisterComponent {
       .subscribe({
         next: (response) => {
           if (response.status === 200 && response.data) {
-            localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
-            localStorage.setItem(REFRESH__TOKEN, response.data.refreshToken);
+            localStorage.setItem(ACCESS_TOKEN, response.data[0].accessToken);
+            localStorage.setItem(REFRESH__TOKEN, response.data[0].refreshToken);
 
             this.messageService.add({
               severity: 'success',

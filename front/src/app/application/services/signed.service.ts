@@ -9,8 +9,8 @@ import { responceSigned } from '../models/interfaces/api/signed';
   providedIn: 'root',
 })
 export class SignedService {
-  http = inject(HttpClient);
-  private URL_DOCUMENTS_SIGNED = 'http://localhost:3000' + API.REFRESH__TOKEN;
+  private http = inject(HttpClient);
+  private URL_DOCUMENTS_SIGNED = 'http://localhost:3000' + API.SIGNED;
 
   docuemntsSigned(): Observable<res<responceSigned>> {
     return this.http.get<res<responceSigned>>(this.URL_DOCUMENTS_SIGNED);

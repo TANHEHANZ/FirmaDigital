@@ -28,10 +28,10 @@ export class AuthInterceptor {
             .refreshToken(this.authService.getRefreshToken())
             .pipe(
               switchMap((res) => {
-                this.authService.setAccessToken(res.data.accessToken);
+                this.authService.setAccessToken(res.data[0].accessToken);
                 const newAuthReq = req.clone({
                   setHeaders: {
-                    Authorization: `Bearer ${res.data.accessToken}`,
+                    Authorization: `Bearer ${res.data[0].accessToken}`,
                   },
                 });
                 return next.handle(newAuthReq);

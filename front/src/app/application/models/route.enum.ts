@@ -1,7 +1,7 @@
 export enum PATH_ROUTES {
   BASE = '/dashboard/',
   DASHBOARD_FIRMAR = BASE + 'firmar',
-  DASHBOARD_VERIFY = BASE + 'verify',
+  DASHBOARD_SIGNED = BASE + 'document-signed',
   DASHBOARD_TOKEN = BASE + 'token',
   DASHBOARD_USERS = BASE + 'users',
   DASHBOARD_CONFIGURATION = BASE + 'configuration',

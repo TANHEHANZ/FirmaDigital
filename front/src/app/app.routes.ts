@@ -8,6 +8,7 @@ import { FormRegisterComponent } from './presentation/pages/login/components/for
 import { FormLoginComponent } from './presentation/pages/login/components/form-login.component';
 import { TokenComponent } from './presentation/pages/token/token.component';
 import { ConfigurationComponent } from './presentation/pages/configuration/configuration.component';
+import { SignedComponent } from './presentation/pages/document/signed/signed.component';
 
 export const routes: Routes = [
   {
@@ -27,8 +28,8 @@ export const routes: Routes = [
         component: ValidateComponent,
       },
       {
-        path: 'verify',
-        component: VerifyComponent,
+        path: 'document-signed',
+        component: SignedComponent,
       },
       {
         path: 'token',
