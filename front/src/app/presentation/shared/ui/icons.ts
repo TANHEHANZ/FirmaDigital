@@ -14,6 +14,7 @@ export const ICONS = {
   SHIELD: 'fa-solid fa-shield-halved',
   TOKEN: 'fa-brands fa-usb',
   USER: 'fa-regular fa-user',
+  EYE: 'fa-solid fa-eye',
+  EYE_SLASH: 'fa-solid fa-eye-slash',
 };
-
 // <i class=""></i>

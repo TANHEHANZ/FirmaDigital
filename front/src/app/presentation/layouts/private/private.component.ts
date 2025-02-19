@@ -12,16 +12,9 @@ import { MessageService } from 'primeng/api';
   imports: [RouterOutlet, SidebarComponent, NgClass, ToastModule],
   providers: [MessageService],
   template: `
-    <main
-      [ngClass]="{
-        ' grid-cols-[280px_1fr]': isCollapsed(),
-        ' grid-cols-[100px_1fr]': !isCollapsed()
-      }"
-      class="h-screen w-screen grid  grid-cols-[280px_1fr] grid-rows-[auto_1fr] transition-all delay-100"
-    >
-      <app-sidebar class=" h-full row-span-2 " />
-      <section class=" row-span-2 flex flex-col h-full ">
-        <p-toast position="bottom-right"></p-toast>
+    <main class="h-screen w-screen flex transition-all delay-100">
+      <app-sidebar />
+      <section class="w-full h-full ">
         <router-outlet />
       </section>
     </main>

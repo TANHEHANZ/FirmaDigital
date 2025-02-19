@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../models/api.enum';
 import { FirmarPdfRequest } from '../models/interfaces/firmar/pdf';
+import { TokenDataRequest } from '../models/interfaces/validate.token';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,10 @@ export class UploadService {
     return this.http.get(`${this.API_URL}${API_ROUTES.LIST_TOKEN}`);
   }
 
-  dataToken(token: string): Observable<any> {
+  dataToken(data: any): Observable<any> {
     return this.http.post(`${this.API_URL}${API_ROUTES.DATA_TOKEN}`, {
-      token,
+      slot: data.slot,
+      pin: data.pin,
     });
   }
 

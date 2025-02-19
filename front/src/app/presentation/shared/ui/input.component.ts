@@ -1,19 +1,20 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, Output, signal } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   FormControl,
-  ReactiveFormsModule,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
+import { ICONS } from './icons';
 
 @Component({
   selector: 'custom-input',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass, NgIf],
   template: `
-    <div class="flex flex-col gap-1 my-2 items-start w-full flex-1  ">
+    <div class="flex flex-col gap-1 my-2 items-start w-full flex-1">
       <label [for]="id" class="block">
         {{ label }}
         <span *ngIf="isRequired()" class="text-red-500">*</span>
@@ -24,8 +25,15 @@ import { NgClass, NgIf } from '@angular/common';
         class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300"
         [ngClass]="getValidationClass()"
         [formControl]="control"
+        [disabled]="_isDisabled"
         (blur)="onTouched()"
       />
+      <button *ngIf="type === 'password'" (click)="onClick()">
+        <i
+          [class]="isPassword ? ICONS.EYE : ICONS.EYE_SLASH"
+          class="text-xl"
+        ></i>
+      </button>
       <p
         *ngIf="control.invalid && control.touched"
         class="text-red-500 text-sm"
@@ -45,11 +53,17 @@ import { NgClass, NgIf } from '@angular/common';
 export class CustomInputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() type: string = 'text';
+  @Input() _isDisabled: boolean = false; // Este es el estado de deshabilitado
   @Input() control: FormControl = new FormControl();
 
   @Input() controlName: string = '';
+  ICONS = ICONS;
+  id = Math.random().toString(36).substring(2, 9);
+  isPassword = false;
 
-  id = Math.random().toString(36).substr(2, 9);
+  onClick() {
+    this.isPassword = !this.isPassword;
+  }
 
   onTouched: () => void = () => {};
 
@@ -64,6 +78,7 @@ export class CustomInputComponent implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
+
   isRequired(): boolean {
     return this.control?.hasValidator(Validators.required) ?? false;
   }
