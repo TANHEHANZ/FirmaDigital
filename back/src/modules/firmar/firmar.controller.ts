@@ -125,10 +125,15 @@ export const uploadAndSignDocument = async (
         },
       },
     });
+    if (!firmar) {
+      ManageResponse.notFound(
+        res,
+        "Error no se pudo gardar todos los datos de la firma"
+      );
+    }
     ManageResponse.success(
       res,
       "Documento y token almacenado de forma correcta",
-
       firmar
     );
   } catch (error) {
@@ -327,4 +332,21 @@ export const historyDocument = async (req: Request, res: Response) => {
   } catch (error) {
     ManageResponse.serverError(res, "Error del servidor", error);
   }
+};
+
+export const uploadFile = async (req: Request, res: Response) => {
+  const { nombre, tipo_documento, documento_blob, estado } = req.body;
+  const document = await prisma.documento.create({
+    data: {
+      nombre,
+      tipo_documento,
+      documento_blob,
+      estado: "Activo",
+    },
+  });
+  ManageResponse.success(
+    res,
+    "Documentoalmacenado de forma correcta",
+    document
+  );
 };
