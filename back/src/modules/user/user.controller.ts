@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import ManageResponse from "../../infraestrucure/response/api";
-import { Request, Response } from "express";
-
+import { Request, response, Response } from "express";
+import fetch from "node-fetch";
 const prisma = new PrismaClient();
 
 export const userAll = async (req: Request, res: Response) => {
@@ -80,5 +80,31 @@ export const deletedUser = async (req: Request, res: Response) => {
     }
   } catch (e) {
     ManageResponse.serverError(res, "Error en el servidor", e);
+  }
+};
+
+export const infoUser = async (req: Request, res: Response) => {
+  const CI = req.params.ci;
+  const consulta = await fetch(
+    "https://appgamc.cochabamba.bo/transparencia/servicio/busqueda_empleados.php",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `dato=${CI}&tipo=D`,
+    }
+  );
+  const data = (await consulta.json()) as any;
+  if (data && data.status) {
+    res.json({
+      status: 200,
+      message: data.message || "datos traidos correctamente",
+      data: data.data ? data.data : [],
+    });
+  } else {
+    res.status(500).json({
+      status: false,
+      message: "Error al traer los datos",
+      data: [],
+    });
   }
 };

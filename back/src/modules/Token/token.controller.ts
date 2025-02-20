@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import ManageResponse from "../../infraestrucure/response/api";
+import { TokenDTO } from "../../infraestrucure/DTO/token.dto";
 const prisma = new PrismaClient();
 
 export const TokenAll = async (req: Request, res: Response) => {
@@ -43,6 +44,50 @@ export const Token = async (req: Request, res: Response) => {
 
 export const createToken = async (req: Request, res: Response) => {
   try {
+    const {
+      // idUser,
+      tipo,
+      id_token_provedor,
+      ci_titual,
+      email_titular,
+      descripcion_titular,
+      tipo_certificado,
+      desde,
+      hasta,
+      emisor,
+    } = req.body as TokenDTO;
+    const certificado = await prisma.certificado.create({
+      data: {
+        tipo_certificado,
+        desde,
+        hasta,
+        emisor,
+      },
+    });
+    if (!certificado) {
+      ManageResponse.notFound(
+        res,
+        "Error no se pudo guardar el certificado del token"
+      );
+      return;
+    }
+    const token = await prisma.token.create({
+      data: {
+        tipo,
+        id_token_provedor,
+        ci_titual,
+        email_titular,
+        descripcion_titular,
+        id_certificado: certificado.id,
+      },
+      include: {
+        Certificado: true,
+      },
+    });
+    if (!token) {
+      ManageResponse.notFound(res, "Error no se pudo gardar el token");
+    }
+
     const register = await prisma.token.create({
       data: req.body,
     });

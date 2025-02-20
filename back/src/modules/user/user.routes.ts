@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createUser,
   deletedUser,
+  infoUser,
   updateUser,
   userAll,
 } from "./user.controller";
@@ -12,6 +13,7 @@ const userRouter = Router();
 
 userRouter.get("/", userAll);
 userRouter.post("/", validate(userSchema), createUser);
+userRouter.post("/info/:ci", infoUser);
 userRouter.put("/:id", validate(userSchema), updateUser);
 userRouter.delete("/:id", deletedUser);
 export default userRouter;
