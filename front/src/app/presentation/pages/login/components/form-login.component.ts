@@ -17,6 +17,7 @@ import { CustomInputComponent } from '../../../shared/ui/input.component';
 import { Toast } from 'primeng/toast';
 import { Router } from '@angular/router';
 import { PATH_ROUTES } from '../../../../application/models/route.enum';
+import { ICONS } from '../../../shared/ui/icons';
 
 @Component({
   selector: 'form-login',
@@ -54,8 +55,11 @@ import { PATH_ROUTES } from '../../../../application/models/route.enum';
 
         <p class="self-end my-2">¿Has olvidado tu contraseña?</p>
         <section class="flex gap-2">
-          <button-secundary label="Crear cuenta" (clicked)="register()" />
-          <button-primary label="Iniciar sesión" (clicked)="logout()" />
+          <button-primary
+            label="Iniciar sesión"
+            (clicked)="logout()"
+            [icon]="ICONS.LOGOUT"
+          />
         </section>
       </form>
     </section>
@@ -66,6 +70,7 @@ export class FormLoginComponent {
   readonly loginService = inject(AuthService);
   readonly messageService = inject(MessageService);
   private router = inject(Router);
+  ICONS = ICONS;
   visible = output();
   form = new FormGroup({
     email: new FormControl('', [

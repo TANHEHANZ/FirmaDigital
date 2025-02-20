@@ -1,7 +1,7 @@
 export const ICONS = {
-  VALIDATE: 'fa-regular fa-folder',
+  VALIDATE: 'fa-solid fa-check',
   SIGNATURE: 'fa-solid fa-file-signature',
-  FOLDER: 'fa-solid fa-folder-closed',
+  FOLDER: 'fa-regular fa-folder-open',
   FILTER: 'fa-solid fa-filter',
   UPLOAD: 'fa-solid fa-cloud-arrow-up',
   MENU: 'fa-solid fa-bars-staggered',
@@ -18,3 +18,4 @@ export const ICONS = {
   EYE_SLASH: 'fa-solid fa-eye-slash',
 };
 // <i class=""></i>
+// <i class=""></i><i class="n"></i>

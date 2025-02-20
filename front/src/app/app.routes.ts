@@ -6,9 +6,10 @@ import { FormRegisterComponent } from './presentation/pages/login/components/for
 import { FormLoginComponent } from './presentation/pages/login/components/form-login.component';
 import { TokenComponent } from './presentation/pages/token/token.component';
 import { ConfigurationComponent } from './presentation/pages/configuration/configuration.component';
-import { SignedComponent } from './presentation/pages/document/signed/signed.component';
 import { AuthGuard } from './application/guards/auth.guard';
 import { ValidateComponent } from './presentation/pages/validate/validate.component';
+import { SignedComponent } from './presentation/pages/signed/signed.component';
+import { SignedFileComponent } from './presentation/pages/document/signedFile/signed.component';
 
 export const routes: Routes = [
   {
@@ -30,7 +31,7 @@ export const routes: Routes = [
       },
       {
         path: 'document-signed',
-        component: SignedComponent,
+        component: SignedFileComponent,
       },
       {
         path: 'validar-documentos',

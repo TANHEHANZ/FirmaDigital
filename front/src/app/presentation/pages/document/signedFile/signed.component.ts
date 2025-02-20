@@ -9,7 +9,7 @@ import { responceSigned } from '../../../../application/models/interfaces/api/si
   imports: [Toast, CommonModule],
   templateUrl: './signed.component.html',
 })
-export class SignedComponent implements OnInit {
+export class SignedFileComponent implements OnInit {
   signedService = inject(SignedService);
   data: responceSigned[] = [];
   ngOnInit(): void {
