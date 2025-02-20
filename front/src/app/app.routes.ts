@@ -9,6 +9,7 @@ import { FormLoginComponent } from './presentation/pages/login/components/form-l
 import { TokenComponent } from './presentation/pages/token/token.component';
 import { ConfigurationComponent } from './presentation/pages/configuration/configuration.component';
 import { SignedComponent } from './presentation/pages/document/signed/signed.component';
+import { AuthGuard } from './application/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: PrivateComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'firmar',

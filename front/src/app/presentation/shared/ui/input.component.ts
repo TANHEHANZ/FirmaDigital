@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef, Output, signal } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -19,21 +19,28 @@ import { ICONS } from './icons';
         {{ label }}
         <span *ngIf="isRequired()" class="text-red-500">*</span>
       </label>
-      <input
-        [id]="controlName"
-        [type]="type"
-        class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300"
-        [ngClass]="getValidationClass()"
-        [formControl]="control"
-        [disabled]="_isDisabled"
-        (blur)="onTouched()"
-      />
-      <button *ngIf="type === 'password'" (click)="onClick()">
-        <i
-          [class]="isPassword ? ICONS.EYE : ICONS.EYE_SLASH"
-          class="text-xl"
-        ></i>
-      </button>
+      <div class="relative w-full">
+        <input
+          [id]="controlName"
+          [type]="isPassword ? 'text' : type"
+          class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300 pr-10"
+          [ngClass]="getValidationClass()"
+          [formControl]="control"
+          [disabled]="_isDisabled"
+          (blur)="onTouched()"
+        />
+        <button
+          *ngIf="type === 'password'"
+          type="button"
+          (click)="togglePassword()"
+          class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+        >
+          <i
+            [class]="isPassword ? ICONS.EYE : ICONS.EYE_SLASH"
+            class="text-xl"
+          ></i>
+        </button>
+      </div>
       <p
         *ngIf="control.invalid && control.touched"
         class="text-red-500 text-sm"
@@ -53,15 +60,15 @@ import { ICONS } from './icons';
 export class CustomInputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() type: string = 'text';
-  @Input() _isDisabled: boolean = false; // Este es el estado de deshabilitado
+  @Input() _isDisabled: boolean = false;
   @Input() control: FormControl = new FormControl();
-
   @Input() controlName: string = '';
+
   ICONS = ICONS;
   id = Math.random().toString(36).substring(2, 9);
   isPassword = false;
 
-  onClick() {
+  togglePassword() {
     this.isPassword = !this.isPassword;
   }
 

@@ -20,7 +20,10 @@ export class SignedComponent implements OnInit {
   signed() {
     this.signedService.docuemntsSigned().subscribe({
       next: (response) => {
-        this.data = response.data;
+        const data = Array.isArray(response.data)
+          ? response.data[0]
+          : response.data;
+        // this.data = data;
         console.log(this.data);
       },
 

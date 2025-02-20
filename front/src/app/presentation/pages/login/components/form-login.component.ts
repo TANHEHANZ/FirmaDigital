@@ -117,10 +117,11 @@ export class FormLoginComponent {
           this.router.navigate([PATH_ROUTES.DASHBOARD_FIRMAR]);
         },
         error: (error: any) => {
+          console.log(error);
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.error?.message || 'Ocurrió un error inesperado',
+            detail: error.error?.message,
             life: 3000,
           });
         },

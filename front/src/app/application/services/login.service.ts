@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { API } from '../models/api.enum';
 import { res } from '../models/api.response';
 import { loginPeyload, RegisterPeyload } from '../models/interfaces/api/login';
@@ -26,15 +26,31 @@ export class AuthService {
   ) {}
 
   login(data: loginPeyload): Observable<res<res_data>> {
-    return this.http.post<res<res_data>>(this.URL_LOGIN, data);
+    return this.http.post<res<res_data>>(this.URL_LOGIN, data).pipe(
+      tap((response) => {
+        const data = Array.isArray(response.data)
+          ? response.data[0]
+          : response.data;
+        this.setAccessToken(data.accessToken);
+        this.setRefreshToken(data.refreshToken);
+      })
+    );
   }
 
   register(data: RegisterPeyload): Observable<res<any>> {
     return this.http.post<res<any>>(this.URL_REGISTER, data);
   }
-
   refreshToken(refreshToken: string): Observable<res<res_data>> {
-    return this.http.post<res<res_data>>(this.URL_REFRESH, { refreshToken });
+    return this.http
+      .post<res<res_data>>(this.URL_REFRESH, { refreshToken })
+      .pipe(
+        tap((response) => {
+          const data = Array.isArray(response.data)
+            ? response.data[0]
+            : response.data;
+          this.setAccessToken(data.accessToken);
+        })
+      );
   }
 
   getAccessToken(): string {
@@ -51,6 +67,11 @@ export class AuthService {
 
   setRefreshToken(refreshToken: string): void {
     this.localStorage.setItem(REFRESH__TOKEN, refreshToken);
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getAccessToken();
+    return !!token; // Retorna `true` si hay un token válido
   }
 
   logout(): void {
