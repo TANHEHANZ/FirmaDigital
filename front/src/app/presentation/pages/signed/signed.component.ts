@@ -1,14 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { ButtonPrimaryComponent } from '../../shared/ui/button/primary.component';
 import { ICONS } from '../../shared/ui/icons';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { NgClass } from '@angular/common';
 import { ActiveService } from '../../../application/global/active.service';
-import { ConectService } from '../../../application/services/conect.service';
-import { TokenConnectedResponse } from '../../../application/models/interfaces/connected';
 import { DrawerService } from '../../../application/global/drawer.service';
-import { CustomInputComponent } from '../../shared/ui/input.component';
 import {
   FormControl,
   FormGroup,
@@ -28,10 +23,10 @@ import { UploadFile } from './components/uplodad.file.component';
     UploadValidateComponent,
     UploadFile,
   ],
-  templateUrl: './upload.component.html',
+  templateUrl: './signed.component.html',
   providers: [MessageService],
 })
-export class ValidateComponent {
+export class SignedComponent {
   readonly toast = inject(MessageService);
   readonly active = inject(ActiveService);
   readonly viewContnt = inject(ActiveService);

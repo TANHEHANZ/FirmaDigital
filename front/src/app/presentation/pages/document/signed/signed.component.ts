@@ -6,7 +6,7 @@ import { responceSigned } from '../../../../application/models/interfaces/api/si
 
 @Component({
   selector: 'app-signed',
-  imports: [NgFor, Toast, CommonModule],
+  imports: [Toast, CommonModule],
   templateUrl: './signed.component.html',
 })
 export class SignedComponent implements OnInit {
@@ -20,11 +20,7 @@ export class SignedComponent implements OnInit {
   signed() {
     this.signedService.docuemntsSigned().subscribe({
       next: (response) => {
-        const data = Array.isArray(response.data)
-          ? response.data[0]
-          : response.data;
-        // this.data = data;
-        console.log(this.data);
+        this.data = response.data as responceSigned[];
       },
 
       error: (err) => {

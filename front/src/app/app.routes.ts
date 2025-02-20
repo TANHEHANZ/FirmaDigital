@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { ValidateComponent } from './presentation/pages/validate/upload.component';
-import { VerifyComponent } from './presentation/pages/verify/verify.component';
 import { ProfileComponent } from './presentation/pages/profile/profile.component';
 import { LoginComponent } from './presentation/pages/login/login.component';
 import { PrivateComponent } from './presentation/layouts/private/private.component';
@@ -10,6 +8,7 @@ import { TokenComponent } from './presentation/pages/token/token.component';
 import { ConfigurationComponent } from './presentation/pages/configuration/configuration.component';
 import { SignedComponent } from './presentation/pages/document/signed/signed.component';
 import { AuthGuard } from './application/guards/auth.guard';
+import { ValidateComponent } from './presentation/pages/validate/validate.component';
 
 export const routes: Routes = [
   {
@@ -27,11 +26,15 @@ export const routes: Routes = [
     children: [
       {
         path: 'firmar',
-        component: ValidateComponent,
+        component: SignedComponent,
       },
       {
         path: 'document-signed',
         component: SignedComponent,
+      },
+      {
+        path: 'validar-documentos',
+        component: ValidateComponent,
       },
       {
         path: 'token',

@@ -3,9 +3,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-token',
   imports: [],
-  templateUrl: './token.component.html',
-  styleUrl: './token.component.css'
+  template: './token.component.html',
 })
-export class TokenComponent {
-
-}
+export class TokenComponent {}

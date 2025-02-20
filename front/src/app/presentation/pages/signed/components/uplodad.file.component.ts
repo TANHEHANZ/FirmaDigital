@@ -76,7 +76,7 @@ export class UploadFile {
   clear() {
     this.fileName.set('');
   }
-  // Evento cuando el usuario suelta un archivo en el área
+
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -86,7 +86,6 @@ export class UploadFile {
       const file = event.dataTransfer.files[0];
       this.fileName.set(file.name);
       console.log('Archivo arrastrado:', file);
-      // Aquí podrías enviar el archivo a tu backend o procesarlo
     }
   }
 
