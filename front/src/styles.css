@@ -75,3 +75,70 @@ body {
   90% { transform: rotate(0deg); }
   100% { transform: rotate(-1deg); }
 }
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px); 
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-in-out;
+}
+.ping {
+  position: relative;
+
+}
+
+.ping::before {
+  position: absolute;
+top: 0 ;
+left: 0;
+  width: 100%;
+  height: 100%;
+  content: "";
+  background-color: #444df741;
+  border-radius: 50%; /* Esto lo hace circular */
+z-index: -1;
+  animation: ping 0.8s ease-in-out infinite both;
+}
+
+ @-webkit-keyframes ping {
+  0% {
+    -webkit-transform: scale(0.2);
+            transform: scale(0.2);
+    opacity: 0.8;
+  }
+  80% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: scale(2.2);
+            transform: scale(2.2);
+    opacity: 0;
+  }
+}
+@keyframes ping {
+  0% {
+    -webkit-transform: scale(0.2);
+            transform: scale(0.2);
+    opacity: 0.8;
+  }
+  80% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: scale(2.2);
+            transform: scale(2.2);
+    opacity: 0;
+  }
+}

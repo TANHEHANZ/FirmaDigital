@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FirmarPdfRequest } from '../../../../application/models/interfaces/firmar/pdf';
 import { UploadService } from '../../../../application/services/upload.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-upload-file',
-  imports: [],
+  imports: [CommonModule],
   template: `
     <form>
       <input
@@ -13,6 +14,7 @@ import { UploadService } from '../../../../application/services/upload.service';
         accept=".pdf,.jpg,.png"
       />
       <button type="button" (click)="onSubmit($event)">Subir archivo</button>
+
       <p>
         {{ pdf_reponse }}
       </p>
