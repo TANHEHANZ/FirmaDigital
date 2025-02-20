@@ -1,1 +1,46 @@
-<p>users works!</p>
+<section class="flex justify-center items-start flex-col h-full p-8">
+  <h1 class="text-2xl font-bold my-2">Administrar usuarios</h1>
+  <section class="w-full">
+    <p-toast></p-toast>
+    <section class="flex justify-between w-full gap-8">
+      <user-filter></user-filter>
+      <button-primary
+        (clicked)="openmodal()"
+        label="Registrar usuario"
+      ></button-primary>
+    </section>
+    @if(modalSwich === true){
+    <modal>
+      <form-register></form-register>
+    </modal>
+
+    }
+    <section class="border border-gray-300 rounded-md min-h-[70vh]">
+      <table class="w-full">
+        <thead class="text-sm border-b border-gray-300">
+          <tr class="">
+            <th class="font-light py-2">Nombre</th>
+            <th class="font-light py-2">Ci</th>
+            <th class="font-light py-2">Email</th>
+            <th class="font-light py-2">Unidad</th>
+            <th class="font-light py-2">Token</th>
+            <th class="font-light py-2">Estado</th>
+            <th class="font-light py-2">Rol</th>
+            <th class="font-light py-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngFor="let dato of datos" class="hover:bg-gray-100">
+            <td class="py-2 px-4 border-b">{{ dato.nombre }}</td>
+            <td class="py-2 px-4 border-b">{{ dato.fechaHora }}</td>
+            <td class="py-2 px-4 border-b">{{ dato.tipoDocumento }}</td>
+            <td class="py-2 px-4 border-b">{{ dato.id_token }}</td>
+            <td class="py-2 px-4 border-b">{{ dato.ip_equipo }}</td>
+            <td class="py-2 px-4 border-b">{{ dato.entidad }}</td>
+          </tr> -->
+        </tbody>
+      </table>
+    </section>
+  </section>
+</section>
+<!-- 3755754 -->

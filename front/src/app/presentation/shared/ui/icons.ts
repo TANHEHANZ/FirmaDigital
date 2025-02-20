@@ -13,7 +13,7 @@ export const ICONS = {
   CLOSE: 'fa-solid fa-xmark',
   SHIELD: 'fa-solid fa-shield-halved',
   TOKEN: 'fa-brands fa-usb',
-  USER: 'fa-regular fa-user',
+  USER: 'fa-solid fa-users',
   EYE: 'fa-solid fa-eye',
   EYE_SLASH: 'fa-solid fa-eye-slash',
 };

@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/api';
   imports: [RouterOutlet, SidebarComponent, NgClass, ToastModule],
   providers: [MessageService],
   template: `
-    <main class="h-screen w-screen flex transition-all delay-100">
+    <main class="h-screen w-full flex transition-all delay-100">
       <app-sidebar />
       <section class="w-full h-full ">
         <router-outlet />

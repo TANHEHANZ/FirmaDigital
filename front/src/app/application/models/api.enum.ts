@@ -9,6 +9,7 @@ export enum API_ROUTES {
 export enum API {
   BASE = '/v1/api/',
   LOGIN = BASE + 'login',
+  SERVICE_EXTERNAL = BASE + 'user/info',
   REGISTER = BASE + 'user',
   REFRESH__TOKEN = LOGIN + '/refresh',
   SIGNED = BASE + '/signed',
