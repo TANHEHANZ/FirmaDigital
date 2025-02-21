@@ -42,9 +42,9 @@ import { ICONS } from '../../../shared/ui/icons';
       >
         <custom-input
           class="w-full"
-          label="Email"
+          label="CI"
           type="text"
-          [control]="form.controls.email"
+          [control]="form.controls.ci"
         ></custom-input>
         <custom-input
           class="w-full"
@@ -73,8 +73,7 @@ export class FormLoginComponent {
   ICONS = ICONS;
   visible = output();
   form = new FormGroup({
-    email: new FormControl('', [
-      Validators.email,
+    ci: new FormControl('', [
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(100),
@@ -83,10 +82,6 @@ export class FormLoginComponent {
       Validators.required,
       Validators.minLength(7),
       Validators.maxLength(150),
-      Validators.pattern(/[A-Z]/),
-      Validators.pattern(/[a-z]/),
-      Validators.pattern(/[0-9]/),
-      Validators.pattern(/[\W_]/),
     ]),
   });
 
@@ -107,7 +102,7 @@ export class FormLoginComponent {
 
     this.loginService
       .login({
-        email: this.form.value.email ?? '',
+        ci: this.form.value.ci ?? '',
         password: this.form.value.password ?? '',
       })
       .subscribe({

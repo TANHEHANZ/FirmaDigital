@@ -1,5 +1,5 @@
 export interface loginPeyload {
-  email: string;
+  ci: string;
   password: string;
 }
 export interface RegisterPeyload {
