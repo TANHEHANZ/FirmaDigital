@@ -69,13 +69,14 @@ import { ICONS } from '../../../shared/ui/icons';
                 { label: 'Juridica', value: 'Juridica' },
                 { label: 'Natural', value: 'Natural' }
               ]"
+              [control]="form.controls.tipo_persona"
             />
 
             <custom-input
               class="w-full"
               label="Contraseña"
               type="text"
-              [control]="form.controls.ci"
+              [control]="form.controls.password"
             />
             <custom-select
               label="Estado usuario:"
@@ -83,13 +84,14 @@ import { ICONS } from '../../../shared/ui/icons';
                 { label: 'Activo', value: 'Activo' },
                 { label: 'Bloqueado', value: 'Bloqueado' }
               ]"
+              [control]="form.controls.estado_user"
             />
           </section>
           <button-secundary
             class="self-end mt-4"
             [icon]="ICONS.SAVE"
             label="Registrar usuario"
-            (clicked)="validar()"
+            (clicked)="registerUser()"
           />
         </section>
         }
@@ -121,31 +123,25 @@ import { ICONS } from '../../../shared/ui/icons';
   ],
 })
 export class FormRegisterComponent {
-  private loginService = inject(AuthService);
   private userService = inject(UserService);
   readonly messageService = inject(MessageService);
   ICONS = ICONS;
   private router = inject(Router);
   informacion: any;
-  visibleform() {
-    this.router.navigate(['/login']);
-  }
+
   form = new FormGroup({
     ci: new FormControl('', [
       Validators.required,
       Validators.minLength(7),
       Validators.maxLength(9),
     ]),
-    nombre: new FormControl('', [
-      Validators.required,
-      Validators.minLength(7),
-      Validators.maxLength(9),
-    ]),
+    nombre: new FormControl('', [Validators.required]),
     institucion: new FormControl('', [Validators.required]),
     unidad: new FormControl('', [Validators.required]),
     cargo: new FormControl('', [Validators.required]),
     tipo_persona: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
+    estado_user: new FormControl('', [Validators.required]),
   });
   validar() {
     this.userService.infoUsre(this.form.value.ci ?? '').subscribe({
@@ -166,6 +162,7 @@ export class FormRegisterComponent {
           institucion: this.informacion.institucion || '',
           unidad: this.informacion.unidad || '',
           cargo: this.informacion.cargo || '',
+          password: this.informacion.ci || '',
         });
       },
       error: (err) => {
@@ -177,5 +174,19 @@ export class FormRegisterComponent {
         });
       },
     });
+  }
+
+  registerUser() {
+    console.log(this.form.value);
+
+    if (this.form.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, corrige los errores en el formulario.',
+        life: 3000,
+      });
+      return;
+    }
   }
 }
