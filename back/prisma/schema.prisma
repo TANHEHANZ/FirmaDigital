@@ -8,22 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String   @db.VarChar(150)
-  ci            String   @unique @db.VarChar(10)
-  password      String
-  fecha         DateTime @default(now())
-  tipo_user     TypeUser
-  is_active     String   @default("TRUE")
-  is_deleted    String   @default("FALSE")
-  isUpdate      String   @default("FALSE")
-  idRol         String
-  idUnidad      String
-  refresh_token String?
-  rol           Rol      @relation(fields: [idRol], references: [id])
-  unidad        Unidad   @relation(fields: [idUnidad], references: [id])
-  Firmar        Firmar[]
+  id             String   @id @default(cuid())
+  name           String   @db.VarChar(150)
+  ci             String   @unique @db.VarChar(10) // inicio de secion por ci 
+  password       String
+  fecha_creacion DateTime @default(now())
+  tipo_user      TypeUser
+  is_active      String   @default("TRUE")
+  is_deleted     String   @default("FALSE")
+  isUpdate       String   @default("FALSE")
+  idRol          String
+  unidad         String
+  institucion    String
+  cargo          String
+  refresh_token  String?
+  rol            Rol      @relation(fields: [idRol], references: [id])
+  Firmar         Firmar[]
 }
 
 enum TypeUser {
@@ -97,11 +97,11 @@ model Rol {
   User       User[]
 }
 
-model Unidad {
-  id         String @id @default(cuid())
-  unidad     String @unique @db.VarChar(100)
-  is_active  String @default("FALSE")
-  is_deleted String @default("FALSE")
-  isUpdate   String @default("FALSE")
-  User       User[]
-}
+// model Unidad {
+//   id         String @id @default(cuid())
+//   unidad     String @unique @db.VarChar(100)
+//   is_active  String @default("FALSE")
+//   is_deleted String @default("FALSE")
+//   isUpdate   String @default("FALSE")
+
+// }

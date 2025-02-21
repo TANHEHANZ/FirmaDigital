@@ -6,7 +6,7 @@ export const userSchema = z.object({
     .min(3, { message: "El nombre debe tener al menos 3 caracteres" })
     .max(150, { message: "El nombre no puede superar los 150 caracteres" }),
 
-  email: z.string().email({ message: "Debe ser un email válido" }),
+  // email: z.string().email({ message: "Debe ser un email válido" }),
 
   ci: z
     .string()
@@ -36,11 +36,14 @@ export const userSchema = z.object({
     }),
   }),
 
-  idRol: z.string().min(1, { message: "El rol es obligatorio" }),
-  idUnidad: z.string().min(1, { message: "La unidad es obligatoria" }),
-
+  unidad: z.string().min(1, { message: "La unidad es obligatoria" }),
+  institucion: z
+    .string()
+    .min(1, { message: "el institucion campo son obligatorios" }),
+  cargo: z.string().min(1, { message: "el cargo campo son obligatorios" }),
   refresh_token: z.string().optional(),
 
+  idRol: z.string().min(1, { message: "El rol es obligatorio" }),
   is_active: z.literal("FALSE").readonly().default("FALSE"),
   is_deleted: z.literal("FALSE").readonly().default("FALSE"),
   isUpdate: z.literal("FALSE").readonly().default("FALSE"),
