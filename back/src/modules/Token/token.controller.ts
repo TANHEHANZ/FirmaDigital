@@ -12,6 +12,22 @@ export const TokenAll = async (req: Request, res: Response) => {
         estado_token: state,
         NOT: { estado_token: "ELIMINADO" },
       },
+      omit: { id_certificado: true, id_user_create: true },
+      include: {
+        User: {
+          omit: { idRol: true, password: true, refresh_token: true, id: true },
+        },
+        Certificado: {
+          include: {
+            Emisor: { select: { entidad: true } },
+            titular: {
+              omit: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
     });
     if (!tokens) {
       ManageResponse.notFound(res, "Lista de tokens no obtenidas");
