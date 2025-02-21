@@ -12,6 +12,7 @@ import { responceSigned } from '../../../../application/models/interfaces/api/si
 export class SignedFileComponent implements OnInit {
   signedService = inject(SignedService);
   data: responceSigned[] = [];
+  pdfUrl: string | null = null;
   ngOnInit(): void {
     this.signed();
   }
