@@ -12,10 +12,10 @@ export const loginController = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { email, password } = req.body;
+  const { ci, password } = req.body;
   try {
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { ci },
     });
 
     if (!existingUser || existingUser.password !== password) {
@@ -24,7 +24,7 @@ export const loginController = async (
     }
 
     const accessToken = jwt.sign(
-      { userId: existingUser.id, email: existingUser.email },
+      { userId: existingUser.id, ci: existingUser.ci },
       ACCESS_SECRET,
       { expiresIn: "1h" }
     );

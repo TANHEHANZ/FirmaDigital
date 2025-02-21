@@ -26,18 +26,22 @@ export const createUser = async (
 ): Promise<void> => {
   try {
     const create = await prisma.user.create({ data: req.body });
-    if (create) {
-      ManageResponse.success(res, "Usuario creado exitosamente", create);
-    } else {
+    if (!create) {
       ManageResponse.notFound(res, "Usuario No creado");
     }
+    console.log(req.body);
+
+    ManageResponse.success(res, "Usuario creado exitosamente", create);
   } catch (e: any) {
+    console.log(req.body);
+    console.log(e);
+
     if (e.code === "P2002") {
       ManageResponse.customError(
         res,
         404,
         "Error de validacion",
-        `El campo ${e.meta?.target} ya existe.`
+        `El usuario con  ${e.meta?.target} ya existe.`
       );
 
       return;

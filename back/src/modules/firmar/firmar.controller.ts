@@ -10,7 +10,6 @@ export const signedDocuments = async (req: Request, res: Response) => {
         Documento: true,
         User: {
           select: {
-            email: true,
             name: true,
             ci: true,
             tipo_user: true,
@@ -112,7 +111,6 @@ export const uploadAndSignDocument = async (
         Documento: true,
         User: {
           select: {
-            email: true,
             name: true,
             ci: true,
             tipo_user: true,
@@ -233,7 +231,6 @@ export const UpdateDocument = async (req: Request, res: Response) => {
             Documento: true,
             User: {
               select: {
-                email: true,
                 name: true,
                 ci: true,
                 tipo_user: true,
@@ -280,7 +277,6 @@ export const historyDocument = async (req: Request, res: Response) => {
         Documento: true,
         User: {
           select: {
-            email: true,
             name: true,
             ci: true,
             tipo_user: true,
@@ -308,7 +304,6 @@ export const historyDocument = async (req: Request, res: Response) => {
         Documento: true,
         User: {
           select: {
-            email: true,
             name: true,
             ci: true,
             tipo_user: true,

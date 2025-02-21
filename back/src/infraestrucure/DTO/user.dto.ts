@@ -16,19 +16,19 @@ export const userSchema = z.object({
 
   password: z
     .string()
-    .min(7, { message: "La contraseña debe tener al menos 7 caracteres" })
-    .regex(/[A-Z]/, {
-      message: "La contraseña debe contener al menos una mayúscula",
-    })
-    .regex(/[a-z]/, {
-      message: "La contraseña debe contener al menos una minúscula",
-    })
-    .regex(/[0-9]/, {
-      message: "La contraseña debe contener al menos un número",
-    })
-    .regex(/[\W_]/, {
-      message: "La contraseña debe contener al menos un carácter especial",
-    }),
+    .min(7, { message: "La contraseña debe tener al menos 7 caracteres" }),
+  // .regex(/[A-Z]/, {
+  //   message: "La contraseña debe contener al menos una mayúscula",
+  // })
+  // .regex(/[a-z]/, {
+  //   message: "La contraseña debe contener al menos una minúscula",
+  // })
+  // .regex(/[0-9]/, {
+  //   message: "La contraseña debe contener al menos un número",
+  // })
+  // .regex(/[\W_]/, {
+  //   message: "La contraseña debe contener al menos un carácter especial",
+  // }),
 
   tipo_user: z.enum(["Juridica", "Natural"], {
     errorMap: () => ({
@@ -44,7 +44,7 @@ export const userSchema = z.object({
   refresh_token: z.string().optional(),
 
   idRol: z.string().min(1, { message: "El rol es obligatorio" }),
-  is_active: z.literal("FALSE").readonly().default("FALSE"),
+  is_active: z.string().default("TRUE"),
   is_deleted: z.literal("FALSE").readonly().default("FALSE"),
   isUpdate: z.literal("FALSE").readonly().default("FALSE"),
 });
