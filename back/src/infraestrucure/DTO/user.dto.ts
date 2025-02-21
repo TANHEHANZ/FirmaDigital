@@ -28,9 +28,7 @@ export const userSchema = z.object({
   refresh_token: z.string().optional(),
 
   idRol: z.string().min(1, { message: "El rol es obligatorio" }),
-  is_active: z.string().default("TRUE"),
-  is_deleted: z.literal("FALSE").readonly().default("FALSE"),
-  isUpdate: z.literal("FALSE").readonly().default("FALSE"),
+  estado_user: z.enum(["ACTIVO", "ELIMINADO", "EDITADO"]),
 });
 
 export type UserDTO = z.infer<typeof userSchema>;

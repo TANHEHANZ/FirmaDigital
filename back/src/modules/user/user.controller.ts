@@ -2,17 +2,21 @@ import { PrismaClient } from "@prisma/client";
 import ManageResponse from "../../infraestrucure/response/api";
 import { Request, response, Response } from "express";
 import fetch from "node-fetch";
+import { state } from "../../infraestrucure/interface/state";
 const prisma = new PrismaClient();
 
 export const userAll = async (req: Request, res: Response) => {
+  const state = req.params.state as state;
   try {
     const userAll = await prisma.user.findMany({
       where: {
-        is_deleted: "FALSE",
+        estado_user: state,
+        NOT: {
+          estado_user: "ELIMINADO",
+        },
       },
       omit: {
-        is_deleted: true,
-        isUpdate: true,
+        estado_user: true,
         password: true,
         refresh_token: true,
       },
@@ -87,7 +91,7 @@ export const deletedUser = async (req: Request, res: Response) => {
     const deleted = await prisma.user.update({
       where: { id: id },
       data: {
-        is_deleted: "TRUE",
+        estado_user: "ELIMINADO",
       },
     });
     if (deleted) {

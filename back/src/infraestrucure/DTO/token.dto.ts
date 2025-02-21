@@ -1,21 +1,25 @@
 import z from "zod";
 
 export const schemaToken = z.object({
-  // modelo: z
-  //   .string()
-  //   .min(5, "debes ingresar como minimo 5 caracteres")
-  //   .max(100, "debes ingresar como maximo 100 caracteres"),
-  // serial: z.string().min(5, "debes ingresar como minimo 5 caracteres"),
-  // usuario_id: z.string(),
-  tipo: z.string(),
-  id_token_provedor: z.string(),
-  ci_titual: z.string(),
-  email_titular: z.string(),
-  descripcion_titular: z.string(),
+  cantidad_certificados: z.number(),
+  cantidad_priv_key: z.number(),
+  alias: z.string(),
+  tipo_token: z.string(),
+  token_id: z.string(),
+  validate_certificado: z.boolean(),
   id_user_create: z.string(),
+  estado_token: z.enum(["ACTIVO", "ELIMINADO", "EDITADO"]),
+
   tipo_certificado: z.string(),
+  id_certificado_token: z.string(),
   desde: z.string(),
   hasta: z.string(),
-  emisor: z.string(),
+
+  entidad: z.string(),
+
+  ci: z.string(),
+  descripcion: z.string(),
+  email: z.string(),
+  nombre: z.string(),
 });
 export type TokenDTO = z.infer<typeof schemaToken>;

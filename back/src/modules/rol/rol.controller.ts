@@ -1,12 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import ManageResponse from "../../infraestrucure/response/api";
+import { state } from "../../infraestrucure/interface/state";
 const prisma = new PrismaClient();
 
 export const rolAll = async (req: Request, res: Response) => {
+  const state = req.params.state as state;
+
   try {
     const rol = await prisma.rol.findMany({
-      where: { is_deleted: "FALSE" },
+      where: {
+        estado_rol: state,
+        NOT: {
+          estado_rol: "ELIMINADO",
+        },
+      },
     });
     if (!rol) {
       ManageResponse.notFound(res, "Error al obtener roles");
@@ -52,7 +60,7 @@ export const deletedRol = async (req: Request, res: Response) => {
     const deleted = await prisma.rol.update({
       where: { id: id },
       data: {
-        is_deleted: "TRUE",
+        estado_rol: "ELIMINADO",
       },
     });
     if (!deleted) {

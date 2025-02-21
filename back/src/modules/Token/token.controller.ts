@@ -2,13 +2,15 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import ManageResponse from "../../infraestrucure/response/api";
 import { TokenDTO } from "../../infraestrucure/DTO/token.dto";
+import { state } from "../../infraestrucure/interface/state";
 const prisma = new PrismaClient();
-
 export const TokenAll = async (req: Request, res: Response) => {
+  const state = req.params.state as state;
   try {
     const tokens = await prisma.token.findMany({
       where: {
-        is_deleted: "FALSE",
+        estado_token: state,
+        NOT: { estado_token: "ELIMINADO" },
       },
     });
     if (!tokens) {
@@ -29,7 +31,7 @@ export const Token = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const token = await prisma.token.findUnique({
-      where: { id: id },
+      where: { id: id, NOT: { estado_token: "ELIMINADO" } },
     });
     if (!token) {
       ManageResponse.notFound(res, " token no obtenido");
@@ -43,13 +45,69 @@ export const Token = async (req: Request, res: Response) => {
 
 export const createToken = async (req: Request, res: Response) => {
   try {
-    const { tipo_certificado, desde, hasta, emisor } = req.body as TokenDTO;
+    const {
+      alias,
+      cantidad_certificados,
+      cantidad_priv_key,
+      id_user_create,
+      tipo_token,
+      token_id,
+      validate_certificado,
+      ci,
+      descripcion,
+      desde,
+      email,
+      entidad,
+      estado_token,
+      hasta,
+      id_certificado_token,
+      nombre,
+      tipo_certificado,
+    } = req.body as TokenDTO;
+    if (!validate_certificado) {
+      ManageResponse.notFound(res, "Error token sin certificado");
+      return;
+    }
+    const emisorSertificado = await prisma.emisorCertificado.create({
+      data: {
+        entidad,
+      },
+    });
+    if (!emisorSertificado) {
+      ManageResponse.notFound(
+        res,
+        "Error no se pudo guardar el emisor del  certificado del token"
+      );
+      return;
+    }
+    const titular = await prisma.titularCertificado.create({
+      data: {
+        ci,
+        descripcion,
+        email,
+        nombre,
+      },
+    });
+    if (!titular) {
+      ManageResponse.notFound(
+        res,
+        "Error no se pudo guardar el titular del  certificado del token"
+      );
+      return;
+    }
+
     const certificado = await prisma.certificado.create({
       data: {
         tipo_certificado,
+        id_certificado_token,
         desde,
         hasta,
-        emisor,
+        id_emisor: emisorSertificado.id,
+        id_titular: titular.id,
+      },
+      include: {
+        Emisor: true,
+        titular: true,
       },
     });
     if (!certificado) {
@@ -61,30 +119,34 @@ export const createToken = async (req: Request, res: Response) => {
     }
     const token = await prisma.token.create({
       data: {
-        ...req.body,
+        cantidad_certificados,
+        cantidad_priv_key,
+        alias,
+        tipo_token,
+        token_id,
+        validate_certificado,
+        id_user_create,
+        estado_token,
         id_certificado: certificado.id,
       },
       include: {
-        Certificado: true,
+        Certificado: {
+          include: {
+            Emisor: true,
+            titular: true,
+          },
+        },
       },
     });
+    console.log(token);
     if (!token) {
       ManageResponse.notFound(res, "Error no se pudo gardar el token");
-    }
-
-    const register = await prisma.token.create({
-      data: req.body,
-    });
-    if (!register) {
-      ManageResponse.notFound(res, "No se pudo registrar de forma correcta ");
       return;
     }
-    ManageResponse.success(
-      res,
-      "Token registrado de forma exitosamente",
-      register
-    );
+    ManageResponse.success(res, "Token alamencenado de forma correcta", token);
   } catch (error) {
+    console.log(error);
+
     ManageResponse.serverError(res, "Error en el servidor ", error);
   }
 };
@@ -119,7 +181,7 @@ export const deletedToken = async (req: Request, res: Response) => {
         id: id,
       },
       data: {
-        is_deleted: "TRUE",
+        estado_token: "ELIMINADO",
       },
     });
 

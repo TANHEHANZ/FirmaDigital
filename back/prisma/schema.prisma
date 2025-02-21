@@ -52,11 +52,13 @@ model Token {
 }
 
 model Certificado {
-  id                   String            @id @default(cuid())
+  id                   String             @id @default(cuid())
   tipo_certificado     String
   id_certificado_token String
   id_emisor            String
-  Emisor               EmisorCertificado @relation(fields: [id_emisor], references: [id])
+  Emisor               EmisorCertificado  @relation(fields: [id_emisor], references: [id])
+  id_titular           String
+  titular              TitularCertificado @relation(fields: [id_titular], references: [id])
   desde                DateTime
   hasta                DateTime
   Token                Token[]
@@ -69,11 +71,12 @@ model EmisorCertificado {
 }
 
 model TitularCertificado {
-  id          String  @id @default(cuid())
+  id          String        @id @default(cuid())
   ci          String
   descripcion String?
   email       String?
   nombre      String?
+  Certificado Certificado[]
 }
 
 model Documento {

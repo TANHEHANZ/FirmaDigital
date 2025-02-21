@@ -58,7 +58,6 @@ export const uploadAndSignDocument = async (
         nombre,
         tipo_documento,
         documento_blob,
-        estado: "Activo",
       },
     });
     if (!document) {
@@ -67,10 +66,7 @@ export const uploadAndSignDocument = async (
     }
     const certificado = await prisma.certificado.create({
       data: {
-        tipo_certificado,
-        desde,
-        hasta,
-        emisor,
+        ...req.body,
       },
     });
     if (!certificado) {
@@ -153,10 +149,7 @@ export const UpdateDocument = async (req: Request, res: Response) => {
       const updateFile = await prisma.documento.update({
         where: { id: id_fileUpdate },
         data: {
-          nombre,
-          tipo_documento,
-          estado: "Modificado",
-          isUpdate: "TRUE",
+          ...req.body,
         },
       });
       ManageResponse.success(res, "El documento a sido modificado", updateFile);
@@ -169,7 +162,6 @@ export const UpdateDocument = async (req: Request, res: Response) => {
             nombre,
             tipo_documento,
             documento_blob,
-            estado: "Remplazado",
             id_historial: id_fileUpdate,
           },
         });
@@ -182,10 +174,7 @@ export const UpdateDocument = async (req: Request, res: Response) => {
         }
         const certificado = await prisma.certificado.create({
           data: {
-            tipo_certificado,
-            desde,
-            hasta,
-            emisor,
+            ...req.body,
           },
         });
         if (!certificado) {
@@ -295,7 +284,7 @@ export const uploadFile = async (req: Request, res: Response) => {
       nombre,
       tipo_documento,
       documento_blob,
-      estado: "Activo",
+      // estado: "Activo",
     },
   });
   ManageResponse.success(
