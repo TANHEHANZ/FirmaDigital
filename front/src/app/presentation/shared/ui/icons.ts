@@ -17,6 +17,8 @@ export const ICONS = {
   EYE: 'fa-solid fa-eye',
   EYE_SLASH: 'fa-solid fa-eye-slash',
   SAVE: 'fa-solid fa-floppy-disk',
+  STATUS: 'fa-regular fa-circle-dot',
+  MENU_VERTICAL: 'fa-solid fa-ellipsis-vertical',
 };
 // <i class=""></i>
 // <i class=""></i><i class="n"></i>

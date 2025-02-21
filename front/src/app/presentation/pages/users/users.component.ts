@@ -7,6 +7,7 @@ import { SwichService } from '../../../application/global/swich.service';
 import { CustomInputComponent } from '../../shared/ui/input.component';
 import { CustomSelectComponent } from '../../shared/ui/select.component';
 import { UserFilerComponet } from './components/filters.component';
+import { UserTable } from './components/table.component';
 
 @Component({
   selector: 'app-users',
@@ -16,6 +17,7 @@ import { UserFilerComponet } from './components/filters.component';
     ModalComponent,
     ButtonPrimaryComponent,
     UserFilerComponet,
+    UserTable,
   ],
   templateUrl: './users.component.html',
 })

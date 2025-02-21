@@ -23,4 +23,8 @@ export class UserService {
   register(data: RegisterPeyload): Observable<res<any>> {
     return this.http.post<res<any>>(this.URL_REGISTER, data);
   }
+
+  getAllUser(): Observable<any> {
+    return this.http.get<any>(this.URL_REGISTER);
+  }
 }
