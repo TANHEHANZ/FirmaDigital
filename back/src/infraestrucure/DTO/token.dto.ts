@@ -12,7 +12,7 @@ export const schemaToken = z.object({
   ci_titual: z.string(),
   email_titular: z.string(),
   descripcion_titular: z.string(),
-
+  id_user_create: z.string(),
   tipo_certificado: z.string(),
   desde: z.string(),
   hasta: z.string(),

@@ -9,7 +9,6 @@ export const TokenAll = async (req: Request, res: Response) => {
     const tokens = await prisma.token.findMany({
       where: {
         is_deleted: "FALSE",
-        is_active: "TRUE",
       },
     });
     if (!tokens) {
@@ -44,18 +43,7 @@ export const Token = async (req: Request, res: Response) => {
 
 export const createToken = async (req: Request, res: Response) => {
   try {
-    const {
-      // idUser,
-      tipo,
-      id_token_provedor,
-      ci_titual,
-      email_titular,
-      descripcion_titular,
-      tipo_certificado,
-      desde,
-      hasta,
-      emisor,
-    } = req.body as TokenDTO;
+    const { tipo_certificado, desde, hasta, emisor } = req.body as TokenDTO;
     const certificado = await prisma.certificado.create({
       data: {
         tipo_certificado,
@@ -73,11 +61,7 @@ export const createToken = async (req: Request, res: Response) => {
     }
     const token = await prisma.token.create({
       data: {
-        tipo,
-        id_token_provedor,
-        ci_titual,
-        email_titular,
-        descripcion_titular,
+        ...req.body,
         id_certificado: certificado.id,
       },
       include: {

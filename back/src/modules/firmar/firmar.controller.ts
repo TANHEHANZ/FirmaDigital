@@ -15,11 +15,6 @@ export const signedDocuments = async (req: Request, res: Response) => {
             tipo_user: true,
           },
         },
-        Token: {
-          include: {
-            Certificado: true,
-          },
-        },
       },
     });
     if (!signed) {
@@ -85,27 +80,27 @@ export const uploadAndSignDocument = async (
       );
       return;
     }
-    const token = await prisma.token.create({
-      data: {
-        tipo,
-        id_token_provedor,
-        ci_titual,
-        email_titular,
-        descripcion_titular,
-        id_certificado: certificado.id,
-      },
-      include: {
-        Certificado: true,
-      },
-    });
-    if (!token) {
-      ManageResponse.notFound(res, "Error no se pudo gardar el token");
-    }
+    // const token = await prisma.token.create({
+    //   data: {
+    //     tipo,
+    //     id_token_provedor,
+    //     ci_titual,
+    //     email_titular,
+    //     descripcion_titular,
+    //     id_certificado: certificado.id,
+    //   },
+    //   include: {
+    //     Certificado: true,
+    //   },
+    // });
+    // if (!token) {
+    //   ManageResponse.notFound(res, "Error no se pudo gardar el token");
+    // }
     const firmar = await prisma.firmar.create({
       data: {
         idUser: idUser,
         idDocumento: document.id,
-        idToken: token.id,
+        // idToken: token.id,
       },
       include: {
         Documento: true,
@@ -114,11 +109,6 @@ export const uploadAndSignDocument = async (
             name: true,
             ci: true,
             tipo_user: true,
-          },
-        },
-        Token: {
-          include: {
-            Certificado: true,
           },
         },
       },
@@ -205,27 +195,11 @@ export const UpdateDocument = async (req: Request, res: Response) => {
           );
           return;
         }
-        const token = await prisma.token.create({
-          data: {
-            tipo,
-            id_token_provedor,
-            ci_titual,
-            email_titular,
-            descripcion_titular,
-            id_certificado: certificado.id,
-          },
-          include: {
-            Certificado: true,
-          },
-        });
-        if (!token) {
-          ManageResponse.notFound(res, "Error no se pudo gardar el token");
-        }
+
         const firmar = await prisma.firmar.create({
           data: {
             idUser: idUser,
             idDocumento: document.id,
-            idToken: token.id,
           },
           include: {
             Documento: true,
@@ -234,11 +208,6 @@ export const UpdateDocument = async (req: Request, res: Response) => {
                 name: true,
                 ci: true,
                 tipo_user: true,
-              },
-            },
-            Token: {
-              include: {
-                Certificado: true,
               },
             },
           },
@@ -282,11 +251,6 @@ export const historyDocument = async (req: Request, res: Response) => {
             tipo_user: true,
           },
         },
-        Token: {
-          include: {
-            Certificado: true,
-          },
-        },
       },
     });
     if (!principal) {
@@ -307,11 +271,6 @@ export const historyDocument = async (req: Request, res: Response) => {
             name: true,
             ci: true,
             tipo_user: true,
-          },
-        },
-        Token: {
-          include: {
-            Certificado: true,
           },
         },
       },

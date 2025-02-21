@@ -14,9 +14,7 @@ model User {
   password       String
   fecha_creacion DateTime @default(now())
   tipo_user      TypeUser
-  is_active      String   @default("TRUE")
-  is_deleted     String   @default("FALSE")
-  isUpdate       String   @default("FALSE")
+  estado_user    Status   @default(ACTIVO)
   idRol          String
   unidad         String
   institucion    String
@@ -24,6 +22,13 @@ model User {
   refresh_token  String?
   rol            Rol      @relation(fields: [idRol], references: [id])
   Firmar         Firmar[]
+  Token          Token[]
+}
+
+enum Status {
+  ACTIVO
+  ELIMINADO
+  EDITADO
 }
 
 enum TypeUser {
@@ -32,27 +37,43 @@ enum TypeUser {
 }
 
 model Token {
-  id                  String      @id @default(cuid())
-  tipo                String      @db.VarChar(100)
-  id_token_provedor   String
-  ci_titual           String      @db.VarChar(10)
-  email_titular       String
-  descripcion_titular String
-  id_certificado      String
-  Certificado         Certificado @relation(fields: [id_certificado], references: [id])
-  is_active           String      @default("FALSE")
-  is_deleted          String      @default("FALSE")
-  isUpdate            String      @default("FALSE")
-  Firmar              Firmar[]
+  id                    String       @id @default(cuid())
+  cantidad_certificados Int
+  cantidad_priv_key     Int
+  alias                 String       @db.VarChar(100)
+  tipo_token            String       @db.VarChar(100) //si es privado o que tipo de clave
+  token_id              String
+  validate_certificado  Boolean // si tiene podremos registrar el certificado 
+  id_certificado        String?
+  Certificado           Certificado? @relation(fields: [id_certificado], references: [id])
+  id_user_create        String
+  User                  User         @relation(fields: [id_user_create], references: [id])
+  estado_token          Status       @default(ACTIVO)
 }
 
 model Certificado {
-  id               String   @id @default(cuid())
-  tipo_certificado String
-  desde            DateTime
-  hasta            DateTime
-  emisor           String
-  Token            Token[]
+  id                   String            @id @default(cuid())
+  tipo_certificado     String
+  id_certificado_token String
+  id_emisor            String
+  Emisor               EmisorCertificado @relation(fields: [id_emisor], references: [id])
+  desde                DateTime
+  hasta                DateTime
+  Token                Token[]
+}
+
+model EmisorCertificado {
+  id          String        @id @default(cuid())
+  entidad     String
+  Certificado Certificado[]
+}
+
+model TitularCertificado {
+  id          String  @id @default(cuid())
+  ci          String
+  descripcion String?
+  email       String?
+  nombre      String?
 }
 
 model Documento {
@@ -60,21 +81,19 @@ model Documento {
   nombre             String          @db.VarChar(255)
   tipo_documento     String          @db.VarChar(500)
   documento_blob     String          @db.Text
-  estado             EstadoDocumento @default(Activo)
+  estado             EstadoDocumento @default(ACTIVO)
   fecha_creacion     DateTime        @default(now())
   id_historial       String? // aca podemos registrar el id al documento que se editara 
   fecha_modificacion DateTime?
   fecha_eliminacion  DateTime?
   Firmar             Firmar[]
-  is_deleted         String          @default("FALSE")
-  isUpdate           String          @default("FALSE")
 }
 
 enum EstadoDocumento {
-  Activo
-  Modificado // Datis normales modificados
-  Eliminado // eliminamos de forma logica todos los registros relacionados a el documentos
-  Remplazado // seria como poner una nueva version del documento 
+  ACTIVO
+  MODIFICADO // Datis normales modificados
+  ELIMINADO // eliminamos de forma logica todos los registros relacionados a el documentos
+  REMPLAZADO // seria como poner una nueva version del documento 
 }
 
 model Firmar {
@@ -82,26 +101,13 @@ model Firmar {
   fecha       DateTime  @default(now())
   idUser      String
   idDocumento String
-  idToken     String
   User        User      @relation(fields: [idUser], references: [id])
   Documento   Documento @relation(fields: [idDocumento], references: [id])
-  Token       Token     @relation(fields: [idToken], references: [id])
 }
 
 model Rol {
   id         String @id @default(cuid())
   tipo       String @unique @db.VarChar(100)
-  is_active  String @default("FALSE")
-  is_deleted String @default("FALSE")
-  isUpdate   String @default("FALSE")
+  estado_rol Status @default(ACTIVO)
   User       User[]
 }
-
-// model Unidad {
-//   id         String @id @default(cuid())
-//   unidad     String @unique @db.VarChar(100)
-//   is_active  String @default("FALSE")
-//   is_deleted String @default("FALSE")
-//   isUpdate   String @default("FALSE")
-
-// }
