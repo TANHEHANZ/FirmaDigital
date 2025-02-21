@@ -10,6 +10,19 @@ export const userAll = async (req: Request, res: Response) => {
       where: {
         is_deleted: "FALSE",
       },
+      omit: {
+        is_deleted: true,
+        isUpdate: true,
+        password: true,
+        refresh_token: true,
+      },
+      include: {
+        rol: {
+          select: {
+            tipo: true,
+          },
+        },
+      },
     });
     if (!userAll) {
       ManageResponse.notFound(res, "Error al obtener usuarios");
@@ -89,6 +102,7 @@ export const deletedUser = async (req: Request, res: Response) => {
 
 export const infoUser = async (req: Request, res: Response) => {
   const CI = req.params.ci;
+
   const consulta = await fetch(
     "https://appgamc.cochabamba.bo/transparencia/servicio/busqueda_empleados.php",
     {
@@ -107,7 +121,7 @@ export const infoUser = async (req: Request, res: Response) => {
   } else {
     res.status(500).json({
       status: false,
-      message: "Error al traer los datos",
+      message: "Debe proporcionar un CI valido",
       data: [],
     });
   }
