@@ -20,7 +20,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
       </label>
       <select
         [id]="controlName"
-        class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300"
+        class="border flex-1 rounded-md p-1.5 px-2 w-full outline-none border-gray-300"
         [ngClass]="getValidationClass()"
         [formControl]="control"
         (blur)="onTouched()"

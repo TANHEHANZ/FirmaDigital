@@ -5,12 +5,7 @@ import { CustomInputComponent } from '../../../shared/ui/input.component';
   selector: 'form-token',
   imports: [CustomInputComponent],
   template: `<Form>
-    <!-- <custom-input
-      class="w-full"
-      label="Tipo"
-      type="text"
-      [control]="form.controls.email"
-    /> -->
+    <custom-input class="w-full" label="Tipo" type="text" />
   </Form>`,
 })
 export class FormTokenComponet {}
