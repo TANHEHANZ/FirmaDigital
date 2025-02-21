@@ -16,6 +16,7 @@ import { CustomSelectComponent } from '../../../shared/ui/select.component';
 import { UserService } from '../../../../application/services/user.service';
 import { CommonModule } from '@angular/common';
 import { ICONS } from '../../../shared/ui/icons';
+import { SwichService } from '../../../../application/global/swich.service';
 
 @Component({
   selector: 'form-register',
@@ -27,17 +28,26 @@ import { ICONS } from '../../../shared/ui/icons';
     >
       <section class="flex flex-col justify-center items-center gap-2">
         <div class=" flex justify-center items-end  gap-2  w-full">
-          <custom-input label="Ci" type="text" [control]="form.controls.ci" />
-          <button-primary label="Buscar Usuario" (clicked)="validar()" />
+          <custom-input
+            label="Ci"
+            type="text"
+            [control]="form.controls.ci"
+            class=" w-[50%]"
+          />
+          <button-primary
+            label="Buscar Usuario"
+            (clicked)="validar()"
+            class="w-[50%]"
+          />
         </div>
         @if(informacion ){
         <section class=" flex w-full flex-col justify-center items-center">
-          <section class=" grid grid-cols-2 gap-2">
+          <section class=" grid grid-cols-3 gap-2">
             <custom-input
               class="w-full"
               label="Nombre"
               type="text"
-              [control]="form.controls.nombre"
+              [control]="form.controls.name"
             />
             <custom-input
               class="w-full"
@@ -69,7 +79,7 @@ import { ICONS } from '../../../shared/ui/icons';
                 { label: 'Juridica', value: 'Juridica' },
                 { label: 'Natural', value: 'Natural' }
               ]"
-              [control]="form.controls.tipo_persona"
+              [control]="form.controls.tipo_user"
             />
 
             <custom-input
@@ -81,10 +91,10 @@ import { ICONS } from '../../../shared/ui/icons';
             <custom-select
               label="Estado usuario:"
               [options]="[
-                { label: 'Activo', value: 'Activo' },
-                { label: 'Bloqueado', value: 'Bloqueado' }
+                { label: 'Activo', value: 'TRUE' },
+                { label: 'Bloqueado', value: 'FALSE' }
               ]"
-              [control]="form.controls.estado_user"
+              [control]="form.controls.is_active"
             />
           </section>
           <button-secundary
@@ -125,6 +135,8 @@ import { ICONS } from '../../../shared/ui/icons';
 export class FormRegisterComponent {
   private userService = inject(UserService);
   readonly messageService = inject(MessageService);
+  modalS = inject(SwichService);
+
   ICONS = ICONS;
   private router = inject(Router);
   informacion: any;
@@ -135,15 +147,24 @@ export class FormRegisterComponent {
       Validators.minLength(7),
       Validators.maxLength(9),
     ]),
-    nombre: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
     institucion: new FormControl('', [Validators.required]),
     unidad: new FormControl('', [Validators.required]),
     cargo: new FormControl('', [Validators.required]),
-    tipo_persona: new FormControl('', [Validators.required]),
+    tipo_user: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
-    estado_user: new FormControl('', [Validators.required]),
+    is_active: new FormControl('', [Validators.required]),
   });
   validar() {
+    if (!this.form.value.ci) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'El campo CI no puede estar vacio.',
+        life: 3000,
+      });
+      return;
+    }
     this.userService.infoUsre(this.form.value.ci ?? '').subscribe({
       next: (response) => {
         if (response.status === 200 && response.data) {
@@ -157,7 +178,7 @@ export class FormRegisterComponent {
         this.informacion = response.data[0];
         console.log(this.informacion);
         this.form.patchValue({
-          nombre: this.informacion.empleado || 'no se hallo el nombre',
+          name: this.informacion.empleado || 'no se hallo el name',
           ci: this.informacion.ci || '',
           institucion: this.informacion.institucion || '',
           unidad: this.informacion.unidad || '',
@@ -166,10 +187,13 @@ export class FormRegisterComponent {
         });
       },
       error: (err) => {
+        console.log(err);
+
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: err.message,
+          detail: err.error?.message || 'Ocurrió un error inesperado',
+
           life: 3000,
         });
       },
@@ -178,15 +202,48 @@ export class FormRegisterComponent {
 
   registerUser() {
     console.log(this.form.value);
-
     if (this.form.invalid) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Por favor, corrige los errores en el formulario.',
+        detail:
+          'Por favor, llene todos los campos o coriga los erroes del formulario .',
         life: 3000,
       });
       return;
     }
+    this.userService
+      .register({
+        password: this.form.value.password ?? '',
+        ci: this.form.value.ci ?? '',
+        name: this.form.value.name ?? '',
+        idRol: 'cm7eioao30000uoi0u812gr6z',
+        tipo_user: this.form.value.tipo_user ?? '',
+        is_active: this.form.value.is_active ?? '',
+        cargo: this.form.value.cargo ?? '',
+        institucion: this.form.value.institucion ?? '',
+        unidad: this.form.value.unidad ?? '',
+      })
+      .subscribe({
+        next: (response) => {
+          if (response.status === 200 && response.data) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: response.message,
+              life: 3000,
+            });
+          }
+          this.modalS.$modal.emit(false);
+        },
+        error: (error: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error?.errors || 'Ocurrió un error inesperado',
+            life: 3000,
+          });
+        },
+      });
   }
 }

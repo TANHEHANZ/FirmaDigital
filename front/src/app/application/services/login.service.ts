@@ -17,7 +17,6 @@ export interface res_data {
 })
 export class AuthService {
   private URL_LOGIN = 'http://localhost:3000' + API.LOGIN;
-  private URL_REGISTER = 'http://localhost:3000' + API.REGISTER;
   private URL_REFRESH = 'http://localhost:3000' + API.REFRESH__TOKEN;
 
   constructor(
@@ -37,9 +36,6 @@ export class AuthService {
     );
   }
 
-  register(data: RegisterPeyload): Observable<res<any>> {
-    return this.http.post<res<any>>(this.URL_REGISTER, data);
-  }
   refreshToken(refreshToken: string): Observable<res<res_data>> {
     return this.http
       .post<res<res_data>>(this.URL_REFRESH, { refreshToken })

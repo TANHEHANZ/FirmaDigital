@@ -3,11 +3,13 @@ export interface loginPeyload {
   password: string;
 }
 export interface RegisterPeyload {
+  is_active: string;
   name: string;
   password: string;
-  email: string;
   ci: string;
-  tipo_user: 'Juridica' | 'Natural';
+  institucion: string;
+  unidad: string;
+  cargo: string;
+  tipo_user: string;
   idRol: string | null;
-  idUnidad: string;
 }
