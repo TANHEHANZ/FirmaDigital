@@ -16,6 +16,7 @@ export const ICONS = {
   USER: 'fa-solid fa-users',
   EYE: 'fa-solid fa-eye',
   EYE_SLASH: 'fa-solid fa-eye-slash',
+  SAVE: 'fa-solid fa-floppy-disk',
 };
 // <i class=""></i>
 // <i class=""></i><i class="n"></i>
