@@ -27,6 +27,8 @@ import { SwichService } from '../../../../application/global/swich.service';
       class="w-full flex justify-center items-center  gap-2"
     >
       <section class="flex flex-col justify-center items-center gap-2">
+        <p class="text-2xl font-bold mb-4">Registro de Usuarios</p>
+        <p class="self-start">Busca a un funcionario por el ci</p>
         <div class=" flex justify-center items-end  gap-2  w-full">
           <custom-input
             label="Ci"
