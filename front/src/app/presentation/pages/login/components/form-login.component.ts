@@ -24,7 +24,6 @@ import { ICONS } from '../../../shared/ui/icons';
   standalone: true,
   imports: [
     ButtonPrimaryComponent,
-    ButtonSecundaryComponent,
     ReactiveFormsModule,
     CustomInputComponent,
     Toast,

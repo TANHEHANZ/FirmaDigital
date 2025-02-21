@@ -6,6 +6,7 @@ import { Toast } from 'primeng/toast';
 import { ButtonPrimaryComponent } from '../../shared/ui/button/primary.component';
 import { TokenFiltersComponet } from './components/filers.token.component';
 import { TokenTable } from './components/token.table.component';
+import { TokenService } from '../../../application/services/token.service';
 
 @Component({
   selector: 'app-token',
@@ -44,7 +45,6 @@ import { TokenTable } from './components/token.table.component';
 export class TokenComponent {
   modalS = inject(SwichService);
   modalSwich: boolean = false;
-
   ngOnInit(): void {
     this.modalS.$modal.subscribe((valor) => (this.modalSwich = valor));
   }
