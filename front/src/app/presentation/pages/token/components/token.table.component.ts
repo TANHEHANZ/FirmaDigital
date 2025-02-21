@@ -56,16 +56,6 @@ import { ResponseToken } from '../../../../application/models/interfaces/api/tok
             {{ item.Certificado.titular.nombre }}
           </td>
 
-          <!-- <td
-            class="text-sm text-center"
-            [ngClass]="{
-              'text-green-600': item.estado_token === 'TRUE',
-              'text-red-500': item.estado_token === 'FALSE'
-            }"
-          >
-            <i [ngClass]="ICONS.STATUS"></i>
-          </td> -->
-
           <td class="text-center">
             <p-menu [model]="menuItems" [popup]="true" #menu></p-menu>
           </td>

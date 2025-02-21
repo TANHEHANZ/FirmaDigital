@@ -19,6 +19,8 @@ export const ICONS = {
   SAVE: 'fa-solid fa-floppy-disk',
   STATUS: 'fa-regular fa-circle-dot',
   MENU_VERTICAL: 'fa-solid fa-ellipsis-vertical',
+  INFO: 'fa-solid fa-circle-info',
 };
+// <i class=""></i>
 // <i class=""></i>
 // <i class=""></i><i class="n"></i>

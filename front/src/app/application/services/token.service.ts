@@ -20,6 +20,9 @@ export class TokenService {
       pin: data.pin,
     });
   }
+  getListToken(): Observable<any> {
+    return this.http.get(`${this.API_URL}${API_ROUTES.LIST_TOKEN}`);
+  }
   saveToken(data: TokenPayload): Observable<any> {
     return this.http.post<any>(this.URL_SAVE, data);
   }
