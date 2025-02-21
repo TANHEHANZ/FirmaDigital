@@ -10,38 +10,53 @@ import { ResponseToken } from '../../../../application/models/interfaces/api/tok
   selector: 'token-table',
   imports: [CommonModule, MenuModule],
   template: `
-    <table class="w-full">
-      <thead class="text-sm border-b border-gray-300  ">
-        <tr class="">
-          <th class="font-light text-start py-2">Nombre</th>
-          <th class="font-light text-start py-2">Ci</th>
-          <th class="font-light text-start py-2">Tipo usuario</th>
-          <th class="font-light text-start py-2">Estado usuario</th>
-          <th class="font-light text-start py-2">Tipo Token</th>
-          <th class="font-light text-start py-2">Estado Token</th>
-          <th class="font-light text-start py-2">Certificado</th>
-          <th class="font-light text-start py-2">Emisor</th>
-          <th class="font-light text-start py-2">Tiempo</th>
-          <th class="font-light text-start py-2">Titular</th>
+    <table class="w-full table-fixed">
+      <thead class="text-sm border-b border-gray-300">
+        <tr>
+          <th class="font-light text-start py-2 w-1/6">Nombre</th>
+          <th class="font-light text-start py-2 w-1/6">Ci</th>
+          <th class="font-light text-start py-2 w-1/6">Tipo usuario</th>
+          <th class="font-light text-start py-2 w-1/6">Estado usuario</th>
+          <th class="font-light text-start py-2 w-1/6">Tipo Token</th>
+          <th class="font-light text-start py-2 w-1/6">Estado Token</th>
+          <th class="font-light text-start py-2 w-1/6">Emisor</th>
+          <th class="font-light text-start py-2 w-1/6">Tiempo</th>
+          <th class="font-light text-start py-2 w-1/6">Titular</th>
         </tr>
       </thead>
-      <tbody class=" [&>*:nth-child(odd)]:bg-primary/15 ">
+      <tbody class=" [&>*:nth-child(odd)]:bg-primary/15">
         @for (item of token; track $index) {
-        <tr class="text-sm lowercase border-b border-gray-300 ">
-          <td class="py-2">{{ item.User.name }}</td>
-          <td class="py-2">{{ item.User.ci }}</td>
-          <td class="py-2">{{ item.User.tipo_user }}</td>
-          <td class="py-2">{{ item.User.estado_user }}</td>
-          <td class="py-2">{{ item.tipo_token }}</td>
-          <td class="py-2">{{ item.estado_token }}</td>
-          <td class="py-2">{{ item.Certificado.tipo_certificado }}</td>
-          <td class="py-2">{{ item.Certificado.Emisor.entidad }}</td>
-          <td class="py-2">
-            {{ item.Certificado.desde }} - {{ item.Certificado.hasta }}
+        <tr class="text-sm lowercase border-b border-gray-300">
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.User.name }}
           </td>
-          <td class="py-2">{{ item.Certificado.titular.nombre }}</td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.User.ci }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.User.tipo_user }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.User.estado_user }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.tipo_token }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.estado_token }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.Certificado.Emisor.entidad }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.Certificado.desde | date : 'shortDate' }} -
+            {{ item.Certificado.hasta | date : 'shortDate' }}
+          </td>
+          <td class="py-2 truncate" (click)="menu.toggle($event)">
+            {{ item.Certificado.titular.nombre }}
+          </td>
 
-          <td
+          <!-- <td
             class="text-sm text-center"
             [ngClass]="{
               'text-green-600': item.estado_token === 'TRUE',
@@ -49,13 +64,10 @@ import { ResponseToken } from '../../../../application/models/interfaces/api/tok
             }"
           >
             <i [ngClass]="ICONS.STATUS"></i>
-          </td>
+          </td> -->
 
-          <td class=" text-center">
+          <td class="text-center">
             <p-menu [model]="menuItems" [popup]="true" #menu></p-menu>
-            <button (click)="menu.toggle($event)">
-              <i [ngClass]="ICONS.MENU_VERTICAL"></i>
-            </button>
           </td>
         </tr>
         }@empty {
@@ -75,7 +87,7 @@ export class TokenTable implements OnInit {
   ICONS = ICONS;
   menuItems = [
     {
-      label: 'Asignar Token',
+      label: 'Ver mas información',
       icon: 'pi pi-key',
       command: () => this.asignarToken(),
     },
