@@ -59,7 +59,7 @@ export const createUser = async (
         "Error de validacion",
         `El usuario con  ${e.meta?.target} ya existe.`
       );
-
+      // debemos manejar los errores de bd de forma diferente
       return;
     } else {
       ManageResponse.serverError(res, "Error en el servidor", e);
