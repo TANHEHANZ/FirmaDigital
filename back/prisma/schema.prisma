@@ -29,6 +29,7 @@ enum Status {
   ACTIVO
   ELIMINADO
   EDITADO
+  DESHABILITADO
 }
 
 enum TypeUser {
@@ -93,10 +94,11 @@ model Documento {
 }
 
 enum EstadoDocumento {
-  ACTIVO
-  MODIFICADO // Datis normales modificados
-  ELIMINADO // eliminamos de forma logica todos los registros relacionados a el documentos
-  REMPLAZADO // seria como poner una nueva version del documento 
+  ACTIVO // Documento disponible y en uso
+  ARCHIVADO // Documento sin cambios, pero almacenado
+  MODIFICADO // Documento con cambios en datos generales
+  REMPLAZADO // Nueva versión, mantiene relación con el anterior
+  ELIMINADO // Eliminado de forma lógica
 }
 
 model Firmar {

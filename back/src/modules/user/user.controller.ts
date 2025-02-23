@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import ManageResponse from "../../infraestrucure/response/api";
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import fetch from "node-fetch";
 import { state } from "../../infraestrucure/interface/state";
 const prisma = new PrismaClient();
