@@ -8,6 +8,7 @@ export enum API_ROUTES {
 
 export enum API {
   BASE = '/v1/api/',
+  ROL = BASE + 'rol',
   LOGIN = BASE + 'login',
   TOKEN = BASE + 'token',
   SERVICE_EXTERNAL = BASE + 'user/info',

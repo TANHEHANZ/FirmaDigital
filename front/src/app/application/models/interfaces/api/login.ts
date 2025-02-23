@@ -3,7 +3,7 @@ export interface loginPeyload {
   password: string;
 }
 export interface RegisterPeyload {
-  is_active: string;
+  estado_user: string;
   name: string;
   password: string;
   ci: string;

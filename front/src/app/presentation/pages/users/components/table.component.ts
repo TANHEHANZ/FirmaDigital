@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { ICONS } from '../../../shared/ui/icons';
 import { MenuModule } from 'primeng/menu';
+import { SwichService } from '../../../../application/global/swich.service';
 @Component({
   selector: 'user-table',
   imports: [CommonModule, MenuModule],
@@ -11,15 +12,15 @@ import { MenuModule } from 'primeng/menu';
     <table class="w-full">
       <thead class="text-sm border-b border-gray-300  ">
         <tr class="">
-          <th class="font-light text-start py-2">Nombre</th>
-          <th class="font-light text-start py-2">Ci</th>
-          <th class="font-light text-start py-2">Tipo</th>
-          <th class="font-light text-start py-2">Unidad</th>
-          <th class="font-light text-start py-2">Institucion</th>
-          <th class="font-light text-start py-2">Cargo</th>
-          <th class="font-light text-start py-2">Estado</th>
-          <th class="font-light text-start py-2">Rol</th>
-          <th class="font-light text-start py-2">Acciones</th>
+          <th class="font-light text-start p-2">Nombre</th>
+          <th class="font-light text-start p-2">Ci</th>
+          <th class="font-light text-start p-2">Tipo</th>
+          <th class="font-light text-start p-2">Unidad</th>
+          <th class="font-light text-start p-2">Institucion</th>
+          <th class="font-light text-start p-2">Cargo</th>
+          <th class="font-light text-start p-2">Estado</th>
+          <th class="font-light text-start p-2">Rol</th>
+          <th class="font-light text-start p-2">Acciones</th>
         </tr>
       </thead>
       <tbody
@@ -27,23 +28,29 @@ import { MenuModule } from 'primeng/menu';
       >
         @for (item of user; track $index) {
         <tr class="text-sm lowercase border-b border-gray-300 ">
-          <td class="py-2">{{ item.name }}</td>
-          <td class="">{{ item.ci }}</td>
-          <td class="">{{ item.tipo_user }}</td>
-          <td class="">{{ item.unidad }}</td>
-          <td class="">{{ item.institucion }}</td>
-          <td class="">{{ item.cargo }}</td>
-          <td
-            class="text-sm text-center"
-            [ngClass]="{
-              'text-green-600': item.is_active === 'TRUE',
-              'text-red-500': item.is_active === 'FALSE'
-            }"
-          >
-            <i [ngClass]="ICONS.STATUS"></i>
+          <td class="p-2 ">{{ item.name }}</td>
+          <td class="p-2 ">{{ item.ci }}</td>
+          <td class="p-2 ">{{ item.tipo_user }}</td>
+          <td class="p-2 ">{{ item.unidad }}</td>
+          <td class="p-2 ">{{ item.institucion }}</td>
+          <td class="p-2 ">{{ item.cargo }}</td>
+          <td class="p-2 flex justify-center items-center">
+            <p
+              class="text-sm border rounded-xl text-center px-4  "
+              [ngClass]="{
+                'border-primary text-primary': item.estado_user === 'ACTIVO',
+                'border-error text-error': item.estado_user === 'ELIMINADO',
+                'border-processing text-processing':
+                  item.estado_user === 'EDITADO',
+                'border-gray-400 text-graborder-gray-400':
+                  item.estado_user === 'DESHABILITADO'
+              }"
+            >
+              {{ item.estado_user }}
+            </p>
           </td>
-          <td class="">{{ item.rol.tipo }}</td>
-          <td class=" text-center">
+          <td class="p-2 ">{{ item.rol.tipo }}</td>
+          <td class="p-2  text-center">
             <p-menu [model]="menuItems" [popup]="true" #menu></p-menu>
             <button (click)="menu.toggle($event)">
               <i [ngClass]="ICONS.MENU_VERTICAL"></i>
@@ -60,22 +67,20 @@ import { MenuModule } from 'primeng/menu';
 export class UserTable implements OnInit {
   userS = inject(UserService);
   toast = inject(MessageService);
+  modalS = inject(SwichService);
   user: any[] = [];
   ICONS = ICONS;
   menuItems = [
     {
       label: 'Asignar Token',
-      icon: 'pi pi-key',
       command: () => this.asignarToken(),
     },
     {
-      label: 'Editar',
-      icon: 'pi pi-pencil',
+      label: 'Editar usuario',
       command: () => this.editarUsuario(),
     },
     {
-      label: 'Dar de Baja',
-      icon: 'pi pi-trash',
+      label: 'Inhabilitar',
       command: () => this.darDeBajaUsuario(),
     },
   ];
@@ -103,8 +108,7 @@ export class UserTable implements OnInit {
   }
 
   editarUsuario() {
-    // Lógica para editar usuario
-    console.log('Editando usuario...');
+    this.modalS.$modal.emit(true);
   }
 
   darDeBajaUsuario() {

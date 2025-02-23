@@ -11,8 +11,10 @@ import { RegisterPeyload } from '../models/interfaces/api/login';
 })
 export class UserService {
   http = inject(HttpClient);
-  private URL_SEARCH_USER = 'http://localhost:3000' + API.SERVICE_EXTERNAL;
-  private URL_REGISTER = 'http://localhost:3000' + API.REGISTER;
+  private API_SERVER = 'http://localhost:3000';
+  private URL_SEARCH_USER = this.API_SERVER + API.SERVICE_EXTERNAL;
+  private URL_REGISTER = this.API_SERVER + API.REGISTER;
+  private URL_ROL = this.API_SERVER + API.ROL;
 
   infoUsre(CI: string): Observable<res<infoUser[]>> {
     return this.http.post<res<infoUser[]>>(
@@ -23,7 +25,9 @@ export class UserService {
   register(data: RegisterPeyload): Observable<res<any>> {
     return this.http.post<res<any>>(this.URL_REGISTER, data);
   }
-
+  getRolUser(): Observable<res<any>> {
+    return this.http.get<res<any>>(this.URL_ROL);
+  }
   getAllUser(): Observable<any> {
     return this.http.get<any>(this.URL_REGISTER);
   }

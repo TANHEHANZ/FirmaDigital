@@ -4,8 +4,6 @@ import { Toast } from 'primeng/toast';
 import { FormRegisterComponent } from './components/form-register.component';
 import { ModalComponent } from '../../shared/ui/modal.component';
 import { SwichService } from '../../../application/global/swich.service';
-import { CustomInputComponent } from '../../shared/ui/input.component';
-import { CustomSelectComponent } from '../../shared/ui/select.component';
 import { UserFilerComponet } from './components/filters.component';
 import { UserTable } from './components/table.component';
 
@@ -19,7 +17,29 @@ import { UserTable } from './components/table.component';
     UserFilerComponet,
     UserTable,
   ],
-  templateUrl: './users.component.html',
+  template: `
+    <section class="flex justify-center items-start flex-col h-full p-8">
+      <h1 class="text-2xl font-bold my-2">Administrar usuarios</h1>
+      <section class="w-full">
+        <p-toast></p-toast>
+        <section class="flex justify-between w-full gap-8">
+          <user-filter></user-filter>
+          <button-primary
+            (clicked)="openmodal()"
+            label="Registrar usuario"
+          ></button-primary>
+        </section>
+        @if(modalSwich === true){
+        <modal>
+          <form-register></form-register>
+        </modal>
+        }
+        <section class="border border-gray-300 rounded-md min-h-[70vh]">
+          <user-table></user-table>
+        </section>
+      </section>
+    </section>
+  `,
 })
 export class UsersComponent implements OnInit {
   modalS = inject(SwichService);

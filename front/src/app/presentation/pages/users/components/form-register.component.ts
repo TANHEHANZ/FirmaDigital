@@ -1,5 +1,5 @@
 import { Toast } from 'primeng/toast';
-import { Component, inject, NgModule } from '@angular/core';
+import { Component, inject, NgModule, OnInit } from '@angular/core';
 import { CustomInputComponent } from '../../../shared/ui/input.component';
 import { ButtonSecundaryComponent } from '../../../shared/ui/button/secundary.component';
 import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
@@ -93,10 +93,15 @@ import { SwichService } from '../../../../application/global/swich.service';
             <custom-select
               label="Estado usuario:"
               [options]="[
-                { label: 'Activo', value: 'TRUE' },
-                { label: 'Bloqueado', value: 'FALSE' }
+                { label: 'Activo', value: 'ACTIVO' },
+                { label: 'Deshabilitado', value: 'DESHABILITADO' }
               ]"
-              [control]="form.controls.is_active"
+              [control]="form.controls.estado_user"
+            />
+            <custom-select
+              label="Rol usuario"
+              [options]="roles"
+              [control]="form.controls.idRol"
             />
           </section>
           <button-secundary
@@ -108,20 +113,6 @@ import { SwichService } from '../../../../application/global/swich.service';
         </section>
         }
       </section>
-
-      <!-- <section
-        class="min-w-[30vw] border border-gray-300 min-h-72 flex justify-center items-center flex-col rounded-md"
-      >
-        @for(item of informacion; track item.ci){
-        <p>Empleado: {{ item.empleado }}</p>
-        <p>CI: {{ item.ci }}</p>
-        <p>Unidad: {{ item.unidad }}</p>
-        <p>Cargo: {{ item.cargo }}</p>
-        <p>Institución: {{ item.institucion }}</p>
-        }@empty {
-        <p>Informacion del usuario</p>
-        }
-      </section> -->
     </form>
     <div class="flex gap-2"></div>
   `,
@@ -134,28 +125,45 @@ import { SwichService } from '../../../../application/global/swich.service';
     ButtonSecundaryComponent,
   ],
 })
-export class FormRegisterComponent {
+export class FormRegisterComponent implements OnInit {
   private userService = inject(UserService);
   readonly messageService = inject(MessageService);
   modalS = inject(SwichService);
-
   ICONS = ICONS;
-  private router = inject(Router);
   informacion: any;
-
+  roles = [];
+  ngOnInit(): void {
+    this.userService.getRolUser().subscribe({
+      next: (data) => {
+        this.roles = data.data.map((rol: any) => ({
+          label: rol.tipo,
+          value: rol.id,
+        }));
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al traer los datos del rol ',
+          life: 3000,
+        });
+      },
+    });
+  }
   form = new FormGroup({
     ci: new FormControl('', [
       Validators.required,
       Validators.minLength(7),
       Validators.maxLength(9),
     ]),
+    idRol: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required]),
     institucion: new FormControl('', [Validators.required]),
     unidad: new FormControl('', [Validators.required]),
     cargo: new FormControl('', [Validators.required]),
     tipo_user: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
-    is_active: new FormControl('', [Validators.required]),
+    estado_user: new FormControl('', [Validators.required]),
   });
   validar() {
     if (!this.form.value.ci) {
@@ -219,9 +227,9 @@ export class FormRegisterComponent {
         password: this.form.value.password ?? '',
         ci: this.form.value.ci ?? '',
         name: this.form.value.name ?? '',
-        idRol: 'cm7eioao30000uoi0u812gr6z',
+        idRol: this.form.value.idRol ?? '',
         tipo_user: this.form.value.tipo_user ?? '',
-        is_active: this.form.value.is_active ?? '',
+        estado_user: this.form.value.estado_user ?? '',
         cargo: this.form.value.cargo ?? '',
         institucion: this.form.value.institucion ?? '',
         unidad: this.form.value.unidad ?? '',
