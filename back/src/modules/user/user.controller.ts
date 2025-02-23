@@ -16,7 +16,6 @@ export const userAll = async (req: Request, res: Response) => {
         },
       },
       omit: {
-        estado_user: true,
         password: true,
         refresh_token: true,
       },
@@ -72,7 +71,7 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const update = await prisma.user.update({
-      data: req.body,
+      data: { ...req.body, estado_user: "EDITADO" },
       where: { id: id },
     });
     if (update) {
