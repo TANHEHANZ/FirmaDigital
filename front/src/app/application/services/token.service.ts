@@ -13,6 +13,7 @@ export class TokenService {
   private http = inject(HttpClient);
   private readonly API_URL = 'https://localhost:9000';
   private readonly URL_SAVE = 'http://localhost:3000' + API.TOKEN;
+  private readonly URL_ASIGNAR = 'http://localhost:3000' + API.ASIGNAR;
 
   dataToken(data: any): Observable<any> {
     return this.http.post(`${this.API_URL}${API_ROUTES.DATA_TOKEN}`, {
@@ -28,5 +29,8 @@ export class TokenService {
   }
   getAllToken(): Observable<res<ResponseToken>> {
     return this.http.get<res<ResponseToken>>(this.URL_SAVE);
+  }
+  asignarToken(data: any): Observable<res<any>> {
+    return this.http.post<any>(`${this.URL_ASIGNAR}`, data);
   }
 }

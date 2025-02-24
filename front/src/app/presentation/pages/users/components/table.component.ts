@@ -104,6 +104,7 @@ export class UserTable implements OnInit {
 
   asignarToken() {
     this.modalS.$modal.emit('assign-token');
+    this.modalS.setData(this.user);
   }
 
   editarUsuario() {

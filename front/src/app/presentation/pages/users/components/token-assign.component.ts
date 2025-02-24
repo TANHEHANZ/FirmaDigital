@@ -13,13 +13,14 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { TokenService } from '../../../../application/services/token.service';
 import { ICONS } from '../../../shared/ui/icons';
+import { SwichService } from '../../../../application/global/swich.service';
 
 @Component({
   selector: 'token-assign',
   template: `
     <Form class="p-4 flex flex-col gap-4" [formGroup]="validar">
       <h2 class="text-2xl font-bold text-center">
-        Formulario asignacion de token al usuario
+        Formulario asignacion de token
       </h2>
       <section>
         <custom-select
@@ -46,7 +47,10 @@ export class TokenAssignComponent {
   ICONS = ICONS;
   toast = inject(MessageService);
   tokenS = inject(TokenService);
+  modalS = inject(SwichService);
   data: any[] = [];
+  userData: any;
+
   validar = new FormGroup({
     token: new FormControl('', [Validators.required, Validators.min(7)]),
   });
@@ -66,7 +70,6 @@ export class TokenAssignComponent {
           label: token.tipo_token,
           value: token.id,
         }));
-        console.log(this.data);
       },
       error: (err) => {
         this.toast.add({
@@ -77,6 +80,55 @@ export class TokenAssignComponent {
         });
       },
     });
+    this.modalS.$data.subscribe((data) => {
+      this.userData = data;
+    });
+    console.log('userData', this.userData);
   }
-  asignar() {}
+  asignar() {
+    console.log(this.userData);
+    if (!this.userData) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se ha seleccionado un usuario',
+        life: 3000,
+      });
+      return;
+    }
+    this.tokenS
+      .asignarToken({
+        id_token: this.validar.value.token,
+        id_usuario: this.userData[0].id,
+        estado: 'ACTIVO',
+      })
+      .subscribe({
+        next: (value) => {
+          if (!value.data) {
+            this.toast.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: value.message,
+              life: 3000,
+            });
+          }
+          this.toast.add({
+            severity: 'success',
+            summary: 'Exito',
+            detail: 'Token asignado correctamente',
+            life: 3000,
+          });
+          this.modalS.$modal.emit(null);
+        },
+        error: (err) => {
+          console.log(err);
+          this.toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.message,
+            life: 3000,
+          });
+        },
+      });
+  }
 }

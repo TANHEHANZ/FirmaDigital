@@ -3,7 +3,7 @@ import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.compon
 
 @Component({
   selector: 'login-informacion',
-  imports: [ButtonPrimaryComponent],
+  // imports: [ButtonPrimaryComponent],
   template: `
     <div
       class="bg-grid h-screen flex justify-center items-center relative shadow-lg border-r border-gray-300"
