@@ -50,18 +50,21 @@ import { SwichService } from '../../../../application/global/swich.service';
               label="Nombre"
               type="text"
               [control]="form.controls.name"
+              [isDisabled]="true"
             />
             <custom-input
               class="w-full"
               label="Ci"
               type="text"
               [control]="form.controls.ci"
+              [isDisabled]="true"
             />
             <custom-input
               class="w-full"
               label="Unidad"
               type="text"
               [control]="form.controls.unidad"
+              [isDisabled]="true"
             />
             <custom-input
               class="w-full"

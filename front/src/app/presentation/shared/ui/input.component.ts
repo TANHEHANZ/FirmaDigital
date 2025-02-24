@@ -26,7 +26,6 @@ import { ICONS } from './icons';
           class="border flex-1 rounded-md p-1 px-2 w-full outline-none border-gray-300 pr-10"
           [ngClass]="getValidationClass()"
           [formControl]="control"
-          [disabled]="_isDisabled"
           (blur)="onTouched()"
         />
         <button
@@ -60,14 +59,23 @@ import { ICONS } from './icons';
 export class CustomInputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() type: string = 'text';
-  @Input() _isDisabled: boolean = false;
   @Input() control: FormControl = new FormControl();
   @Input() controlName: string = '';
 
   ICONS = ICONS;
   id = Math.random().toString(36).substring(2, 9);
   isPassword = false;
+  private _isDisabled: boolean = false;
 
+  @Input() set isDisabled(value: boolean) {
+    this._isDisabled = value;
+    if (this.control) {
+      value ? this.control.disable() : this.control.enable();
+    }
+  }
+  get isDisabled(): boolean {
+    return this._isDisabled;
+  }
   togglePassword() {
     this.isPassword = !this.isPassword;
   }
