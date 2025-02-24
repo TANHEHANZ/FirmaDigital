@@ -244,7 +244,7 @@ export class FormRegisterComponent implements OnInit {
               life: 3000,
             });
           }
-          this.modalS.$modal.emit(false);
+          this.modalS.$modal.emit(null);
         },
         error: (error: any) => {
           this.messageService.add({

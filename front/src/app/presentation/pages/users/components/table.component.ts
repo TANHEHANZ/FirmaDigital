@@ -103,12 +103,11 @@ export class UserTable implements OnInit {
   }
 
   asignarToken() {
-    // Lógica para asignar token
-    console.log('Asignando token...');
+    this.modalS.$modal.emit('assign-token');
   }
 
   editarUsuario() {
-    this.modalS.$modal.emit(true);
+    this.modalS.$modal.emit('register');
   }
 
   darDeBajaUsuario() {

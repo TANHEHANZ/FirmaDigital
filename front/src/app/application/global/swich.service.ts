@@ -4,5 +4,5 @@ import { EventEmitter, Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class SwichService {
-  $modal = new EventEmitter<any>();
+  $modal = new EventEmitter<string | null>();
 }

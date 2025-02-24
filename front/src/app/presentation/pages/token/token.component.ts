@@ -44,11 +44,12 @@ import { TokenService } from '../../../application/services/token.service';
 })
 export class TokenComponent {
   modalS = inject(SwichService);
-  modalSwich: boolean = false;
-  ngOnInit(): void {
-    this.modalS.$modal.subscribe((valor) => (this.modalSwich = valor));
-  }
+  modalSwich = null;
+
+  // ngOnInit(): void {
+  //   this.modalS.$modal.subscribe((valor) => (this.modalSwich = valor));
+  // }
   openmodal() {
-    this.modalSwich = true;
+    //   this.modalSwich = true;
   }
 }

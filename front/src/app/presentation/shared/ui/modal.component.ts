@@ -25,6 +25,6 @@ export class ModalComponent {
   modalS = inject(SwichService);
   ICONS = ICONS;
   closeModal() {
-    this.modalS.$modal.emit(false);
+    this.modalS.$modal.emit(null);
   }
 }

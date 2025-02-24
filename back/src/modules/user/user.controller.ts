@@ -51,7 +51,6 @@ export const createUser = async (
   } catch (e: any) {
     console.log(req.body);
     console.log(e);
-
     if (e.code === "P2002") {
       ManageResponse.customError(
         res,

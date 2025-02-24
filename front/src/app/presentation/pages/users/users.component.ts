@@ -6,6 +6,7 @@ import { ModalComponent } from '../../shared/ui/modal.component';
 import { SwichService } from '../../../application/global/swich.service';
 import { UserFilerComponet } from './components/filters.component';
 import { UserTable } from './components/table.component';
+import { TokenAssignComponent } from './components/token-assign.component';
 
 @Component({
   selector: 'app-users',
@@ -16,6 +17,7 @@ import { UserTable } from './components/table.component';
     ButtonPrimaryComponent,
     UserFilerComponet,
     UserTable,
+    TokenAssignComponent,
   ],
   template: `
     <section class="flex justify-center items-start flex-col h-full p-8">
@@ -25,13 +27,18 @@ import { UserTable } from './components/table.component';
         <section class="flex justify-between w-full gap-8">
           <user-filter></user-filter>
           <button-primary
-            (clicked)="openmodal()"
+            (clicked)="openModal('register')"
+            label="Registrar usuario"
             label="Registrar usuario"
           ></button-primary>
         </section>
-        @if(modalSwich === true){
+        @if(currentModal !== null) {
         <modal>
+          @if(currentModal === 'register') {
           <form-register></form-register>
+          } @if(currentModal === 'assign-token') {
+          <token-assign></token-assign>
+          }
         </modal>
         }
         <section class="border border-gray-300 rounded-md min-h-[70vh]">
@@ -43,12 +50,12 @@ import { UserTable } from './components/table.component';
 })
 export class UsersComponent implements OnInit {
   modalS = inject(SwichService);
-  modalSwich: boolean = false;
+  currentModal: string | null = null;
 
   ngOnInit(): void {
-    this.modalS.$modal.subscribe((valor) => (this.modalSwich = valor));
+    this.modalS.$modal.subscribe((valor) => (this.currentModal = valor));
   }
-  openmodal() {
-    this.modalSwich = true;
+  openModal(type: string) {
+    this.modalS.$modal.emit(type);
   }
 }
