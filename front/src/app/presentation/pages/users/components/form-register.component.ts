@@ -50,21 +50,18 @@ import { SwichService } from '../../../../application/global/swich.service';
               label="Nombre"
               type="text"
               [control]="form.controls.name"
-              [isDisabled]="true"
             />
             <custom-input
               class="w-full"
               label="Ci"
               type="text"
               [control]="form.controls.ci"
-              [isDisabled]="true"
             />
             <custom-input
               class="w-full"
               label="Unidad"
               type="text"
               [control]="form.controls.unidad"
-              [isDisabled]="true"
             />
             <custom-input
               class="w-full"
@@ -191,7 +188,7 @@ export class FormRegisterComponent implements OnInit {
         this.informacion = response.data[0];
         console.log(this.informacion);
         this.form.patchValue({
-          name: this.informacion.empleado || 'no se hallo el name',
+          name: this.informacion.empleado || '',
           ci: this.informacion.ci || '',
           institucion: this.informacion.institucion || '',
           unidad: this.informacion.unidad || '',

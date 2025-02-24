@@ -63,7 +63,6 @@ export class SignedComponent {
     this.conectToken.dataToken(this.peyloadToken.value).subscribe({
       next(value) {
         localStorage.setItem('Informacion', JSON.stringify(value.datos));
-        // console.log(this.infoUserSelected);
       },
       error(err) {
         console.log(err);

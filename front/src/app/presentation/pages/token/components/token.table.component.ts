@@ -97,6 +97,7 @@ export class TokenTable implements OnInit {
     this.tokenS.getAllToken().subscribe({
       next: (value) => {
         this.token = Array.isArray(value.data) ? value.data : [];
+        console.log(this.token);
       },
       error: (err) => {
         console.log(err);

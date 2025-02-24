@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { FormTokenComponet } from './components/form.component';
 import { ModalComponent } from '../../shared/ui/modal.component';
 import { SwichService } from '../../../application/global/swich.service';
 import { Toast } from 'primeng/toast';
 import { ButtonPrimaryComponent } from '../../shared/ui/button/primary.component';
 import { TokenFiltersComponet } from './components/filers.token.component';
 import { TokenTable } from './components/token.table.component';
-import { TokenService } from '../../../application/services/token.service';
+import { FormTokenComponet } from './components/form.component';
 
 @Component({
   selector: 'app-token',
@@ -26,15 +25,20 @@ import { TokenService } from '../../../application/services/token.service';
         <section class="flex justify-between w-full gap-8">
           <token-filter></token-filter>
           <button-primary
-            (clicked)="openmodal()"
+            (clicked)="openModal('register')"
             label="Nuevo Token"
           ></button-primary>
         </section>
-        @if(modalSwich === true){
+
+        @if(currentModal !== null) {
         <modal>
+          @if(currentModal === 'register') {
           <form-token></form-token>
+
+          }
         </modal>
         }
+
         <section class="border border-gray-300 rounded-md min-h-[70vh]">
           <token-table></token-table>
         </section>
@@ -44,12 +48,12 @@ import { TokenService } from '../../../application/services/token.service';
 })
 export class TokenComponent {
   modalS = inject(SwichService);
-  modalSwich = null;
+  currentModal: string | null = null;
 
-  // ngOnInit(): void {
-  //   this.modalS.$modal.subscribe((valor) => (this.modalSwich = valor));
-  // }
-  openmodal() {
-    //   this.modalSwich = true;
+  ngOnInit(): void {
+    this.modalS.$modal.subscribe((valor) => (this.currentModal = valor));
+  }
+  openModal(type: string) {
+    this.modalS.$modal.emit(type);
   }
 }

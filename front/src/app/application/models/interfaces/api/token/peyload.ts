@@ -5,7 +5,6 @@ export interface TokenPayload {
   tipo_token: string;
   token_id: string;
   validate_certificado: boolean;
-  id_user_create: string;
   tipo_certificado: string;
   id_certificado_token: string;
   desde: string;
