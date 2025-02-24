@@ -12,11 +12,8 @@ export const TokenAll = async (req: Request, res: Response) => {
         estado_token: state,
         NOT: { estado_token: "ELIMINADO" },
       },
-      omit: { id_certificado: true, id_user_create: true },
+      omit: { id_certificado: true },
       include: {
-        User: {
-          omit: { idRol: true, password: true, refresh_token: true, id: true },
-        },
         Certificado: {
           include: {
             Emisor: { select: { entidad: true } },
@@ -65,7 +62,7 @@ export const createToken = async (req: Request, res: Response) => {
       alias,
       cantidad_certificados,
       cantidad_priv_key,
-      id_user_create,
+
       tipo_token,
       token_id,
       validate_certificado,
@@ -141,7 +138,6 @@ export const createToken = async (req: Request, res: Response) => {
         tipo_token,
         token_id,
         validate_certificado,
-        id_user_create,
         estado_token,
         id_certificado: certificado.id,
       },

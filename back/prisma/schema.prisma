@@ -8,21 +8,21 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(cuid())
-  name           String   @db.VarChar(150)
-  ci             String   @unique @db.VarChar(10) // inicio de secion por ci 
-  password       String
-  fecha_creacion DateTime @default(now())
-  tipo_user      TypeUser
-  estado_user    Status   @default(ACTIVO)
-  idRol          String
-  unidad         String
-  institucion    String
-  cargo          String
-  refresh_token  String?
-  rol            Rol      @relation(fields: [idRol], references: [id])
-  Firmar         Firmar[]
-  Token          Token[]
+  id              String            @id @default(cuid())
+  name            String            @db.VarChar(150)
+  ci              String            @unique @db.VarChar(10) // inicio de secion por ci 
+  password        String
+  fecha_creacion  DateTime          @default(now())
+  tipo_user       TypeUser
+  estado_user     Status            @default(ACTIVO)
+  idRol           String
+  unidad          String
+  institucion     String
+  cargo           String
+  refresh_token   String?
+  rol             Rol               @relation(fields: [idRol], references: [id])
+  Firmar          Firmar[]
+  AsignacionToken AsignacionToken[]
 }
 
 enum Status {
@@ -38,18 +38,27 @@ enum TypeUser {
 }
 
 model Token {
-  id                    String       @id @default(cuid())
+  id                    String            @id @default(cuid())
   cantidad_certificados Int
   cantidad_priv_key     Int
-  alias                 String       @db.VarChar(100)
-  tipo_token            String       @db.VarChar(100) //si es privado o que tipo de clave
+  alias                 String            @db.VarChar(100)
+  tipo_token            String            @db.VarChar(100) //si es privado o que tipo de clave
   token_id              String
   validate_certificado  Boolean // si tiene podremos registrar el certificado 
   id_certificado        String?
-  Certificado           Certificado? @relation(fields: [id_certificado], references: [id])
-  id_user_create        String
-  User                  User         @relation(fields: [id_user_create], references: [id])
-  estado_token          Status       @default(ACTIVO)
+  Certificado           Certificado?      @relation(fields: [id_certificado], references: [id])
+  estado_token          Status            @default(ACTIVO)
+  AsignacionToken       AsignacionToken[]
+}
+
+model AsignacionToken {
+  id               String   @id @default(cuid())
+  id_user_asignado String
+  id_token         String
+  fecha_asignacion DateTime @default(now())
+  estado           Status   @default(ACTIVO)
+  assigned_user    User     @relation(fields: [id_user_asignado], references: [id])
+  token            Token    @relation(fields: [id_token], references: [id])
 }
 
 model Certificado {
