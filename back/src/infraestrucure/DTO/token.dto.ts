@@ -7,7 +7,7 @@ export const schemaToken = z.object({
   tipo_token: z.string(),
   token_id: z.string(),
   validate_certificado: z.boolean(),
-  estado_token: z.enum(["ACTIVO", "ELIMINADO", "EDITADO"]),
+  estado_token: z.enum(["ACTIVO", "ELIMINADO", "EDITADO", "DESHABILITADO"]),
 
   tipo_certificado: z.string(),
   id_certificado_token: z.string(),

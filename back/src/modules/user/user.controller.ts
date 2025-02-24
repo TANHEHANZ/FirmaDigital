@@ -36,6 +36,39 @@ export const userAll = async (req: Request, res: Response) => {
   }
 };
 
+export const userById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: id },
+      include: {
+        AsignacionToken: {
+          select: {
+            token: true,
+          },
+        },
+
+        Firmar: {
+          select: {
+            Documento: true,
+          },
+        },
+        rol: {
+          select: {
+            tipo: true,
+          },
+        },
+      },
+    });
+    if (!user) {
+      ManageResponse.notFound(res, "Usuario no encontrado");
+    }
+    ManageResponse.success(res, "Usuario encontrado exitosamente", user);
+  } catch (e) {
+    ManageResponse.serverError(res, "Error en el servidor", e);
+  }
+};
+
 export const createUser = async (
   req: Request,
   res: Response
