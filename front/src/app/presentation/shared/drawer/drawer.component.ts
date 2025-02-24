@@ -1,6 +1,6 @@
 import { ICONS } from './../ui/icons';
 import { NgClass, NgIf } from '@angular/common';
-import { Component, ElementRef, inject, input, ViewChild } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { DrawerService } from '../../../application/global/drawer.service';
 
 @Component({
@@ -25,36 +25,23 @@ import { DrawerService } from '../../../application/global/drawer.service';
       </button>
       <h4 class="text-xl font-bold text-black">{{ title() }}</h4>
 
-      <div
-        class="py-2 overflow-y-auto h-full  flex justify-center items-center flex-col"
-      >
+      <div class="py-2 overflow-y-auto h-full  ">
         <ng-content />
-        @if(isEmptyContent()){
-        <section
-          class="h-full w-full flex justify-center items-center flex-col"
-        >
-          <img alt="photo" src="404-error.png" class="object-contain h-1/2" />
-          <p class="text-2xl font-bold">
-            No se ha <span class=" text-primary">seleccionado</span> un Token
-          </p>
-        </section>
-
-        }
       </div>
     </section>
   `,
 })
 export class DrawerComponent {
+  title = input<string>('');
+  content = input<any>(null);
   drawerService = inject(DrawerService);
-  @ViewChild('content', { static: false }) content!: ElementRef;
-  title = this.drawerService.title;
   ICONS = ICONS;
-  isContentEmpty = true;
-  ngAfterViewInit() {
-    this.isContentEmpty = !this.content.nativeElement.innerHTML.trim();
-  }
 
   isEmptyContent() {
-    return this.isContentEmpty;
+    return !this.content();
+  }
+
+  closeDrawer() {
+    this.drawerService.changeDrawer();
   }
 }

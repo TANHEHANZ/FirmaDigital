@@ -1,29 +1,46 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { LocalStorageService } from '../utils/local-storage.service';
-import { DRAWER_KEY } from '../constants/CONSTANTS';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DrawerService {
-  private storage = inject(LocalStorageService);
-  isCollapsed = signal<boolean>(false);
-  title = signal<string>('');
-  constructor() {
-    if (typeof window !== 'undefined') {
-      this.isCollapsed.set(this.storage.getItem<boolean>(DRAWER_KEY) || false);
-    }
+  private isOpen = new BehaviorSubject<boolean>(false);
+  private drawerContent = new BehaviorSubject<any>(null);
+  private drawerTitle = new BehaviorSubject<string>('');
+  private drawerData = new BehaviorSubject<any>(null);
+
+  isCollapsed() {
+    return this.isOpen.value;
   }
 
   changeDrawer() {
-    const newState = !this.isCollapsed();
-    this.isCollapsed.set(newState);
-    this.storage.setItem(DRAWER_KEY, newState);
+    this.isOpen.next(!this.isOpen.value);
   }
-  changeTitle(title: string) {
-    this.title.set(title);
+
+  openDrawer(title: string, content: any, data?: any) {
+    this.drawerTitle.next(title);
+    this.drawerContent.next(content);
+    if (data) this.drawerData.next(data);
+    this.isOpen.next(true);
   }
-  setSidebarState(state: boolean) {
-    this.storage.setItem(DRAWER_KEY, state);
+
+  closeDrawer() {
+    this.isOpen.next(false);
+    this.drawerContent.next(null);
+    this.drawerTitle.next('');
+    this.drawerData.next(null);
+  }
+
+  getTitle() {
+    return this.drawerTitle.asObservable();
+  }
+
+  getContent() {
+    return this.drawerContent.asObservable();
+  }
+
+  getData() {
+    return this.drawerData.asObservable();
   }
 }

@@ -11,7 +11,7 @@ import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.compon
       class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-full h-full"
     >
       <div
-        class=" flex justify-center items-center cursor-pointer p-6 transition-all duration-300 "
+        class=" flex justify-center items-center cursor-pointer p-6 transition-all duration-300 flex-col "
         [class.bg-gray-100]="isDragging"
         (click)="fileInput.click()"
         (dragover)="onDragOver($event)"

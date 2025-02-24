@@ -22,6 +22,9 @@ export class UserService {
       null
     );
   }
+  getById(id: string): Observable<any> {
+    return this.http.get<any>(this.URL_REGISTER + '/' + id);
+  }
   register(data: RegisterPeyload): Observable<res<any>> {
     return this.http.post<res<any>>(this.URL_REGISTER, data);
   }

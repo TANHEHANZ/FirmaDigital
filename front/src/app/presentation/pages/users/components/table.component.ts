@@ -5,9 +5,13 @@ import { CommonModule } from '@angular/common';
 import { ICONS } from '../../../shared/ui/icons';
 import { MenuModule } from 'primeng/menu';
 import { SwichService } from '../../../../application/global/swich.service';
+import { DrawerService } from '../../../../application/global/drawer.service';
+import { DrawerComponent } from '../../../shared/drawer/drawer.component';
+import { UserFilerComponet } from './filters.component';
+import { InformacionUserComponent } from './informacion-user.component';
 @Component({
   selector: 'user-table',
-  imports: [CommonModule, MenuModule],
+  imports: [CommonModule, MenuModule, DrawerComponent],
   template: `
     <table class="w-full">
       <thead class="text-sm border-b border-gray-300  ">
@@ -62,18 +66,28 @@ import { SwichService } from '../../../../application/global/swich.service';
         }
       </tbody>
     </table>
+    <app-drawer>
+      <ng-container *ngIf="drawerService.getContent() | async as content">
+        <ng-container *ngComponentOutlet="content"></ng-container>
+      </ng-container>
+    </app-drawer>
   `,
 })
 export class UserTable implements OnInit {
   userS = inject(UserService);
   toast = inject(MessageService);
   modalS = inject(SwichService);
+  drawerService = inject(DrawerService);
   user: any[] = [];
   ICONS = ICONS;
   menuItems = [
     {
       label: 'Asignar Token',
       command: () => this.asignarToken(),
+    },
+    {
+      label: 'Informacion del usuario',
+      command: () => this.iformacion(),
     },
     {
       label: 'Editar usuario',
@@ -109,6 +123,14 @@ export class UserTable implements OnInit {
 
   editarUsuario() {
     this.modalS.$modal.emit('register');
+  }
+
+  iformacion() {
+    this.drawerService.openDrawer(
+      'Informacion del usuario',
+      InformacionUserComponent,
+      this.user
+    );
   }
 
   darDeBajaUsuario() {
