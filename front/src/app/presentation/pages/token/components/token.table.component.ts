@@ -13,47 +13,34 @@ import { ResponseToken } from '../../../../application/models/interfaces/api/tok
     <table class="w-full table-fixed">
       <thead class="text-sm border-b border-gray-300">
         <tr>
-          <th class="font-light text-start py-2 w-1/6">Nombre</th>
-          <th class="font-light text-start py-2 w-1/6">Ci</th>
-          <th class="font-light text-start py-2 w-1/6">Tipo usuario</th>
-          <th class="font-light text-start py-2 w-1/6">Estado usuario</th>
-          <th class="font-light text-start py-2 w-1/6">Tipo Token</th>
-          <th class="font-light text-start py-2 w-1/6">Estado Token</th>
-          <th class="font-light text-start py-2 w-1/6">Emisor</th>
-          <th class="font-light text-start py-2 w-1/6">Tiempo</th>
           <th class="font-light text-start py-2 w-1/6">Titular</th>
+          <th class="font-light text-start py-2 w-1/6">Ci</th>
+          <th class="font-light text-start py-2 w-1/6">Descripcion</th>
+          <th class="font-light text-start py-2 w-1/6">Email</th>
+          <th class="font-light text-start py-2 w-1/6">Emisor</th>
+          <th class="font-light text-start py-2 w-1/6">Tipo Certificado</th>
         </tr>
       </thead>
       <tbody class=" [&>*:nth-child(odd)]:bg-primary/15">
         @for (item of token; track $index) {
         <tr class="text-sm lowercase border-b border-gray-300">
           <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.User.name }}
+            {{ item.Certificado.titular.nombre }}
+          </td>
+          <td class="py-2 w-[8vw]" (click)="menu.toggle($event)">
+            {{ item.Certificado.titular.ci }}
           </td>
           <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.User.ci }}
+            {{ item.Certificado.titular.descripcion }}
           </td>
           <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.User.tipo_user }}
-          </td>
-          <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.User.estado_user }}
-          </td>
-          <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.tipo_token }}
-          </td>
-          <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.estado_token }}
+            {{ item.Certificado.titular.email }}
           </td>
           <td class="py-2 truncate" (click)="menu.toggle($event)">
             {{ item.Certificado.Emisor.entidad }}
           </td>
           <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.Certificado.desde | date : 'shortDate' }} -
-            {{ item.Certificado.hasta | date : 'shortDate' }}
-          </td>
-          <td class="py-2 truncate" (click)="menu.toggle($event)">
-            {{ item.Certificado.titular.nombre }}
+            {{ item.Certificado.tipo_certificado }}
           </td>
 
           <td class="text-center">

@@ -41,6 +41,5 @@ export interface ResponseToken {
   token_id: string;
   validate_certificado: boolean;
   estado_token: string;
-  User: User;
   Certificado: Certificado;
 }
