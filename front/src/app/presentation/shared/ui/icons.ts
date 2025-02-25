@@ -1,5 +1,5 @@
 export const ICONS = {
-  VALIDATE: 'fa-solid fa-check',
+  VALIDATE: 'fa-solid fa-file-circle-check',
   SIGNATURE: 'fa-solid fa-file-signature',
   FOLDER: 'fa-regular fa-folder-open',
   FILTER: 'fa-solid fa-filter',

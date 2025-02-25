@@ -7,10 +7,17 @@ import { NgClass } from '@angular/common';
 import { WrapperlinkComponent } from './components/wrapperlink';
 import { AuthService } from '../../../application/services/login.service';
 import { TokenStateService } from '../../../application/services/token-state.service';
+import { Route, Router } from '@angular/router';
+import { ButtonPrimaryComponent } from '../ui/button/primary.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LinkComponent, NgClass, WrapperlinkComponent],
+  imports: [
+    LinkComponent,
+    NgClass,
+    WrapperlinkComponent,
+    ButtonPrimaryComponent,
+  ],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
@@ -21,8 +28,10 @@ export class SidebarComponent {
     private authService: AuthService,
     private tokenStateService: TokenStateService
   ) {}
+  private router = inject(Router);
   handleLogout() {
     this.authService.logout();
     this.tokenStateService.clearState();
+    this.router.navigate(['/login']);
   }
 }

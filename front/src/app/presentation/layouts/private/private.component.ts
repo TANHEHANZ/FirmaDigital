@@ -11,9 +11,9 @@ import { MessageService } from 'primeng/api';
   imports: [RouterOutlet, SidebarComponent, ToastModule],
   providers: [MessageService],
   template: `
-    <main class="h-screen w-full flex transition-all delay-100">
+    <main class="h-screen w-full flex transition-all delay-100 bg-backgraud">
       <app-sidebar />
-      <section class="w-full h-full ">
+      <section class="w-full h-full p-8 ">
         <router-outlet />
       </section>
     </main>

@@ -42,7 +42,7 @@ interface response {
       <div class="h-full">
         <p-toast></p-toast>
         <section class="flex flex-col flex-1 gap-2 justify-center p-2">
-          <h3 class="text-2xl font-bold">¿Ya conenctaste tu token?</h3>
+          <h3 class="text-2xl font-normal">¿Ya conenctaste tu token?</h3>
           <p>
             Recuerda que debes tener instalado
             <span class="bg-primary  text-white rounded-md text-sm px-2"
@@ -57,7 +57,7 @@ interface response {
         </section>
         @if(tokenData?.datos?.connected){
         <section class="bg-primary/10 p-4 rounded-lg mt-4">
-          <h3 class="text-xl font-bold mb-4">Token Conectado</h3>
+          <h3 class="text-xl font-normal mb-4">Token Conectado</h3>
           @for(token of tokenData?.datos?.tokens; track token.slot){
           <div
             class="bg-white p-4 rounded-lg mb-2 shadow-sm cursor-pointer"

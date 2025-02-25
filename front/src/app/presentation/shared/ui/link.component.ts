@@ -8,17 +8,17 @@ import { NgClass } from '@angular/common';
   imports: [RouterLink, RouterModule, NgClass],
   template: `
     <a
-      class="px-4 py-2 flex gap-2 items-center border- hover:text-primary  hover:border-gray-300    rounded-xl hover:backdrop-blur-md   "
+      class="px-4 py-2 flex gap-2 items-center border- hover:text-primary  hover:border-gray-300   hover:backdrop-blur-md   text-sm "
       [ngClass]="{
         ' justify-center': !expand.isCollapsed(),
         'justify-start ': expand.isCollapsed()
       }"
       [routerLink]="route()"
-      routerLinkActive="text-primary border border-gray-300"
+      routerLinkActive="text-primary border-l-4 border-primary"
       [routerLinkActiveOptions]="{ exact: true }"
       [attr.aria-current]="isActive() ? 'page' : null"
     >
-      <i [class]="'fa ' + iconName()" class="text-xl"></i>
+      <i [class]="'fa ' + iconName()" class="text-base"></i>
       @if(expand.isCollapsed()){
       <p>{{ label() }}</p>
       }
