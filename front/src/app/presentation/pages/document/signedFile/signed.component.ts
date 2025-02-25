@@ -3,10 +3,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Toast } from 'primeng/toast';
 import { SignedService } from '../../../../application/services/signed.service';
 import { responceSigned } from '../../../../application/models/interfaces/api/signed';
+import TableSignedFile from './components/table.sifned-file.component';
 
 @Component({
   selector: 'app-signed',
-  imports: [Toast, CommonModule],
+  imports: [Toast, CommonModule, TableSignedFile],
   templateUrl: './signed.component.html',
 })
 export class SignedFileComponent implements OnInit {
