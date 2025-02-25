@@ -107,19 +107,18 @@ export class UploadValidateComponent implements OnInit {
   readonly conectToken = inject(UploadService);
   readonly messageService = inject(MessageService);
   readonly tokenService = inject(TokenService);
-  readonly localStorage = inject(LocalStorageService);
   private tokenStateService = inject(TokenStateService);
 
   ngOnInit(): void {
-    this.tokenStateService.getState().subscribe((state) => {
-      if (state.slot) {
-        this.form.patchValue({
-          slot: state.slot,
-        });
-        this.alias = state.alias || '';
-        this.selectToken = state.selectedToken;
-      }
-    });
+    // this.tokenStateService.getState().subscribe((state) => {
+    //   if (state.slot) {
+    //     this.form.patchValue({
+    //       slot: state.slot,
+    //     });
+    //     this.alias = state.alias || '';
+    //     this.selectToken = state.selectedToken;
+    //   }
+    // });
   }
 
   ICONS = ICONS;
@@ -171,7 +170,6 @@ export class UploadValidateComponent implements OnInit {
     this.selectToken = token;
     this.form.patchValue({ slot: token.slot });
     this.tokenStateService.updateState({
-      selectedToken: token,
       slot: token.slot,
     });
   }
@@ -211,14 +209,10 @@ export class UploadValidateComponent implements OnInit {
           });
 
           this.alias = value.datos.data_token.data[0].alias;
-          const pin = this.form.value.pin!;
-          console.log(pin);
           this.tokenStateService.updateState({
             slot: this.form.value.slot!,
             alias: this.alias,
-            pin: pin,
-            isConnected: true,
-            selectedToken: this.selectToken,
+            pin: this.form.value.pin!,
           });
         },
         error: (err) => {

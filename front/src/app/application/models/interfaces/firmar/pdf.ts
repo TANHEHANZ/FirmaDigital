@@ -3,6 +3,9 @@ export interface FirmarPdfRequest {
   pin: string;
   alias: string;
   pdf: string;
+
+  nombre: string;
+  tipo_documento: string;
   bloquear?: boolean;
   point?: {
     x: number;

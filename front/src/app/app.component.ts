@@ -45,7 +45,7 @@ export class AppComponent {
   }
 
   serviceSign = inject(UploadService);
-  dataUpload: FirmarPdfRequest = {
+  dataUpload: any = {
     slot: 1,
     alias: '6567867533',
     pin: '15520557',

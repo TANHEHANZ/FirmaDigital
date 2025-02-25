@@ -10,6 +10,7 @@ import { TokenDataRequest } from '../models/interfaces/validate.token';
 })
 export class UploadService {
   private readonly API_URL = 'https://localhost:9000';
+  private readonly API_BAACK = 'http://localhost:3000';
   private http = inject(HttpClient);
 
   getStatusJacubitus(): Observable<any> {
@@ -28,10 +29,14 @@ export class UploadService {
     });
   }
 
-  uploadFile(fileData: FirmarPdfRequest): Observable<any> {
-    return this.http.post(
-      `${this.API_URL}${API_ROUTES.UPLOAD_FILE_PDF}`,
-      fileData
-    );
+  uploadFile(
+    fileData: FirmarPdfRequest,
+    id_historial?: string
+  ): Observable<any> {
+    const url = id_historial
+      ? `${this.API_BAACK}/v1/api/jacubitus/firmar/${id_historial}`
+      : `${this.API_BAACK}/v1/api/jacubitus/firmar`;
+
+    return this.http.post(url, fileData);
   }
 }

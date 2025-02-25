@@ -76,8 +76,9 @@ export class UploadFile implements OnInit {
   private messageService = inject(MessageService);
   private TokenS = inject(TokenStateService);
   ValueToken: any = null;
+
   ngOnInit(): void {
-    this.ValueToken = this.TokenS.getStoredToken();
+    // this.ValueToken = this.TokenS.getStoredToken();
   }
 
   onDragOver(event: DragEvent) {
@@ -97,7 +98,9 @@ export class UploadFile implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
-    if (!this.ValueToken) {
+
+    const currentState = this.TokenS.getCurrentState();
+    if (!currentState.slot || !currentState.pin || !currentState.alias) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -109,14 +112,15 @@ export class UploadFile implements OnInit {
     if (event.dataTransfer?.files.length) {
       const file = event.dataTransfer.files[0];
       this.fileName.set(file.name);
+      this.TokenS.setDocumentInfo(file.name, 'pdf');
       this.convertToBase64(file);
     }
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-
-    if (!this.ValueToken) {
+    const currentState = this.TokenS.getCurrentState();
+    if (!currentState.slot || !currentState.pin || !currentState.alias) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -128,6 +132,7 @@ export class UploadFile implements OnInit {
     if (input.files?.length) {
       const file = input.files[0];
       this.fileName.set(file.name);
+      this.TokenS.setDocumentInfo(file.name, 'pdf');
       this.convertToBase64(file);
     }
   }
@@ -142,7 +147,8 @@ export class UploadFile implements OnInit {
   }
 
   firmarDocumento() {
-    if (!this.ValueToken) {
+    const signingData = this.TokenS.getSigningData();
+    if (!signingData) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -161,10 +167,22 @@ export class UploadFile implements OnInit {
       });
       return;
     }
+    console.log({
+      slot: Number(signingData.slot!),
+      alias: signingData.alias!,
+      pin: signingData.pin!,
+      nombre: signingData.documentName!,
+      tipo_documento: signingData.documentType!,
+      pdf: this.fileBase64,
+    });
 
     this.serviceSign
       .uploadFile({
-        ...this.ValueToken,
+        slot: Number(signingData.slot!),
+        alias: signingData.alias!,
+        pin: signingData.pin!,
+        nombre: signingData.documentName!,
+        tipo_documento: signingData.documentType!,
         pdf: this.fileBase64,
       })
       .subscribe({
@@ -176,8 +194,6 @@ export class UploadFile implements OnInit {
             detail: 'Documento firmado correctamente',
             life: 3000,
           });
-          this.TokenS.clearPin();
-          this.ValueToken = null;
         },
         error: (error) => {
           this.messageService.add({
