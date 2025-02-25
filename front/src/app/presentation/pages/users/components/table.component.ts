@@ -54,8 +54,8 @@ import { InformacionUserComponent } from './informacion-user.component';
             </p>
           </td>
           <td class="p-2 ">{{ item.rol.tipo }}</td>
-          <td class="p-2  text-center">
-            <p-menu [model]="menuItems" [popup]="true" #menu></p-menu>
+          <td class="p-2 text-center">
+            <p-menu [model]="getMenuItems(item)" [popup]="true" #menu></p-menu>
             <button (click)="menu.toggle($event)">
               <i [ngClass]="ICONS.MENU_VERTICAL"></i>
             </button>
@@ -80,24 +80,26 @@ export class UserTable implements OnInit {
   drawerService = inject(DrawerService);
   user: any[] = [];
   ICONS = ICONS;
-  menuItems = [
-    {
-      label: 'Asignar Token',
-      command: () => this.asignarToken(),
-    },
-    {
-      label: 'Informacion del usuario',
-      command: () => this.iformacion(),
-    },
-    {
-      label: 'Editar usuario',
-      command: () => this.editarUsuario(),
-    },
-    {
-      label: 'Inhabilitar',
-      command: () => this.darDeBajaUsuario(),
-    },
-  ];
+  getMenuItems(user: any) {
+    return [
+      {
+        label: 'Asignar Token',
+        command: () => this.asignarToken(user),
+      },
+      {
+        label: 'Informacion del usuario',
+        command: () => this.iformacion(user),
+      },
+      {
+        label: 'Editar usuario',
+        command: () => this.editarUsuario(),
+      },
+      {
+        label: 'Inhabilitar',
+        command: () => this.darDeBajaUsuario(),
+      },
+    ];
+  }
 
   ngOnInit(): void {
     this.userS.getAllUser().subscribe({
@@ -116,7 +118,7 @@ export class UserTable implements OnInit {
     });
   }
 
-  asignarToken() {
+  asignarToken(event: any) {
     this.modalS.$modal.emit('assign-token');
     this.modalS.setData(this.user);
   }
@@ -125,11 +127,12 @@ export class UserTable implements OnInit {
     this.modalS.$modal.emit('register');
   }
 
-  iformacion() {
+  iformacion(selectedUser: any) {
+    console.log(selectedUser);
     this.drawerService.openDrawer(
       'Informacion del usuario',
       InformacionUserComponent,
-      this.user
+      selectedUser
     );
   }
 

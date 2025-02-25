@@ -83,8 +83,8 @@ export class InformacionUserComponent implements OnInit {
 
   ngOnInit() {
     this.drawerService.getData().subscribe((data) => {
-      if (data && data[0].id) {
-        this.userS.getById(data[0].id).subscribe({
+      if (data && data.id) {
+        this.userS.getById(data.id).subscribe({
           next: (res: any) => {
             console.log(res.data);
 

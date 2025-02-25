@@ -19,6 +19,10 @@ export class DrawerService {
   }
 
   openDrawer(title: string, content: any, data?: any) {
+    // Clear previous data first
+    this.closeDrawer();
+
+    // Then set new data
     this.drawerTitle.next(title);
     this.drawerContent.next(content);
     if (data) this.drawerData.next(data);
