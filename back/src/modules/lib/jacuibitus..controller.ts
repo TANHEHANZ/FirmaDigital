@@ -44,8 +44,8 @@ export const listToken = async (req: Request, res: Response) => {
 };
 
 export const firmar = async (req: Request, res: Response) => {
-  const { nombre, tipo_documento, pdf } = req.body;
-  const { id_historial } = req.params;
+  const { slot, alias, pin, nombre, tipo_documento, pdf } = req.body;
+  const id_historial = req.params.id_historial || null;
   try {
     const response = await fetch(jacubitus + PATH_LIB.UPLOAD_FILE_PDF, {
       method: "POST",
@@ -53,7 +53,12 @@ export const firmar = async (req: Request, res: Response) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(pdf),
+      body: JSON.stringify({
+        slot,
+        alias,
+        pin,
+        pdf,
+      }),
       agent: new https.Agent({
         rejectUnauthorized: false,
       }),
@@ -84,9 +89,19 @@ export const firmar = async (req: Request, res: Response) => {
         idDocumento: document.id,
         idUser: userId!,
       },
+      omit: {
+        idDocumento: true,
+        idUser: true,
+      },
       include: {
         Documento: true,
-        User: true,
+        User: {
+          omit: {
+            idRol: true,
+            password: true,
+            refresh_token: true,
+          },
+        },
       },
     });
     if (!firmar) {
@@ -96,7 +111,7 @@ export const firmar = async (req: Request, res: Response) => {
       );
     }
 
-    ManageResponse.success(res, data.mensaje, data.datos);
+    ManageResponse.success(res, data.mensaje, firmar);
   } catch (error) {
     console.error(error);
     ManageResponse.serverError(res, "Error al obtener lista de tokens", error);
