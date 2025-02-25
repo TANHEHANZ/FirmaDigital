@@ -21,6 +21,7 @@ export class SignedFileComponent implements OnInit {
   signed() {
     this.signedService.docuemntsSigned().subscribe({
       next: (response) => {
+        console.log(response);
         this.data = response.data as responceSigned[];
       },
 

@@ -12,7 +12,7 @@ import { RouterOutlet } from '@angular/router';
   providers: [MessageService],
   template: `
     <p-toast position="bottom-right"></p-toast>
-    <main class="grid grid-cols-2 relative">
+    <main class="grid grid-cols-2 relative bg-backgraud">
       <login-informacion />
       <section class="relative">
         <p

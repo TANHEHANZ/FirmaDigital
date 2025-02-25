@@ -19,7 +19,7 @@ interface response {
       class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-full h-full  overflow-hidden"
     >
       <div
-        class="flex justify-center items-center cursor-pointer p-6 transition-all duration-300 flex-col h-full w-full"
+        class="flex justify-center items-center cursor-pointer p-6 transition-all duration-300 flex-col h-full w-full gap-4"
         [ngClass]="{
           'bg-primary/80 text-white': isDragging,
           'hover:bg-primary/10': !isDragging
@@ -29,6 +29,11 @@ interface response {
         (dragleave)="onDragLeave()"
         (drop)="onDrop($event)"
       >
+        <p
+          class="ping bg-primary h-12 w-12 flex justify-center items-center text-white p-4 rounded-full"
+        >
+          <i [class]="ICONS.UPLOAD"></i>
+        </p>
         <p class="text-xl font-medium text-center ">
           <span class="text-primary">Haga clic aquí </span>
           para cargar su archivo o <span class="text-primary">arrástrelo</span>

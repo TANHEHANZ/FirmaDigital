@@ -42,7 +42,7 @@ import { ICONS } from './icons';
       </div>
       <p
         *ngIf="control.invalid && control.touched"
-        class="text-red-500 text-sm"
+        class="text-secundary text-sm"
       >
         {{ getErrorMessage() }}
       </p>
@@ -100,7 +100,7 @@ export class CustomInputComponent implements ControlValueAccessor {
 
   getValidationClass(): Record<string, boolean> {
     return {
-      'ring-1 ring-red-500': this.control.invalid && this.control.touched,
+      'ring-1 ring-secundary': this.control.invalid && this.control.touched,
       'ring-1 ring-green-500': this.control.valid && this.control.touched,
     };
   }

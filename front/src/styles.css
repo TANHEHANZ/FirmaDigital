@@ -2,9 +2,8 @@
 @theme {
   --font-sans: "Montserrat", sans-serif;
   --color-primary: #4f46e5;
-  --color-backgraud: #ced4da;
-  --color-backgraud-intence: #f2f2f2;
-  --color-secundary: #011c41;
+  --color-backgraud: #F8F9FD;
+  --color-secundary: #DE4B2B;
   --color-uploaded: #4f46e5;
   --color-processing: #facc15;
   --color-signed: #22c55e;

@@ -33,7 +33,10 @@ import { ICONS } from '../../../shared/ui/icons';
     <section
       class="h-full flex flex-col justify-center items-center text-center relative gap-2 w-[50dvw]"
     >
-      <h1 class="font-bold text-4xl">Sistema de Firmas Digitales</h1>
+      <h1 class="font-normal text-4xl">
+        Sistema de <span class="text-primary">Firmas</span>
+        <p>Digitales</p>
+      </h1>
 
       <form
         class="w-1/2 flex justify-center items-center flex-col gap-2"
@@ -53,13 +56,12 @@ import { ICONS } from '../../../shared/ui/icons';
         ></custom-input>
 
         <p class="self-end my-2">¿Has olvidado tu contraseña?</p>
-        <section class="flex gap-2">
-          <button-primary
-            label="Iniciar sesión"
-            (clicked)="logout()"
-            [icon]="ICONS.LOGOUT"
-          />
-        </section>
+        <button-primary
+          class="w-full"
+          label="Iniciar sesión"
+          (clicked)="logout()"
+          [icon]="ICONS.LOGOUT"
+        />
       </form>
     </section>
   `,

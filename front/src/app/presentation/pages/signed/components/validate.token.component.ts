@@ -34,7 +34,7 @@ interface response {
   template: `
     <section
       [ngClass]="{
-        'border-red-400/50 ': !tokenData?.datos?.connected,
+        'border-primary/50 ': !tokenData?.datos?.connected,
         'border-gray-300': tokenData?.datos?.connected
       }"
       class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto w-[350px] h-full"

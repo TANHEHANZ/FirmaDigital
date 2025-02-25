@@ -21,6 +21,7 @@ export const ICONS = {
   MENU_VERTICAL: 'fa-solid fa-ellipsis-vertical',
   INFO: 'fa-solid fa-circle-info',
   SEND: 'fa-regular fa-paper-plane',
+  DOWNLOAD: 'fa-solid fa-download',
 };
 // <i class=""></i>
 // <i class=""></i>
