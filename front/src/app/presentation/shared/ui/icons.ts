@@ -20,6 +20,7 @@ export const ICONS = {
   STATUS: 'fa-regular fa-circle-dot',
   MENU_VERTICAL: 'fa-solid fa-ellipsis-vertical',
   INFO: 'fa-solid fa-circle-info',
+  SEND: 'fa-regular fa-paper-plane',
 };
 // <i class=""></i>
 // <i class=""></i>

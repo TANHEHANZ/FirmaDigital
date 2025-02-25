@@ -5,6 +5,7 @@ import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.compon
 import { UploadService } from '../../../../application/services/upload.service';
 import { MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../../../application/utils/local-storage.service';
+import { TokenStateService } from '../../../../application/services/token-state.service';
 interface response {
   slot: number;
   alias: string;
@@ -12,7 +13,7 @@ interface response {
 }
 @Component({
   selector: 'upload-file',
-  imports: [NgIf, CommonModule, ButtonPrimaryComponent],
+  imports: [NgIf, CommonModule],
   template: `
     <section
       class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-full h-full  overflow-hidden"
@@ -28,13 +29,6 @@ interface response {
         (dragleave)="onDragLeave()"
         (drop)="onDrop($event)"
       >
-        <div class="ping flex justify-center items-center  w-12 h-12">
-          <i
-            [class]="ICONS.UPLOAD"
-            class="bg-primary/20 text-primary p-4 rounded-full z-50 "
-          ></i>
-        </div>
-
         <p class="text-xl font-medium text-center ">
           <span class="text-primary">Haga clic aquí </span>
           para cargar su archivo o <span class="text-primary">arrástrelo</span>
@@ -46,28 +40,30 @@ interface response {
           (change)="onFileSelected($event)"
         />
       </div>
-      <p
+      <div
         *ngIf="fileName()"
         [ngClass]="{
           'animate-slide-up': fileName(),
           'border-red-400': !isDragging
         }"
-        class="bg-white ring-1 rounded-md absolute bottom-[10vh] p-4 text-sm text-primary flex justify-center items-center gap-2 z-50 overflow-hidden "
+        class="bg-white ring-1 rounded-md absolute bottom-[10vh] p-4 text-sm text-primary flex flex-col justify-between items-center gap-4 z-50 overflow-hidden"
       >
-        <button
-          class="absolute top-0 left-0 bg-primary text-white w-7 h-7 rounded-br-md"
-          (click)="clear()"
-        >
-          x
-        </button>
-        <i [class]="ICONS.VALIDATE"></i>
-        {{ fileName() }}
-
-        <button-primary
-          label="Firmar Documento"
-          (clicked)="firmarDocumento()"
-        />
-      </p>
+        <span>{{ fileName() }}</span>
+        <div class="flex gap-2">
+          <button
+            class="border border-primary  rounded-md cursor-pointer px-2 py-1"
+            (click)="clear()"
+          >
+            <i [class]="ICONS.CLOSE"></i> Cancelar
+          </button>
+          <button
+            class="bg-primary text-white  rounded-md cursor-pointer px-2 py-1"
+            (click)="firmarDocumento()"
+          >
+            <i [class]="ICONS.SEND"></i> Firmar
+          </button>
+        </div>
+      </div>
     </section>
   `,
 })
@@ -78,10 +74,10 @@ export class UploadFile implements OnInit {
   fileBase64: string | null = null;
   serviceSign = inject(UploadService);
   private messageService = inject(MessageService);
-  private localStorage = inject(LocalStorageService);
+  private TokenS = inject(TokenStateService);
+  ValueToken: any = null;
   ngOnInit(): void {
-    const token = this.localStorage.getItem('tokenData');
-    console.log(token);
+    this.ValueToken = this.TokenS.getStoredToken();
   }
 
   onDragOver(event: DragEvent) {
@@ -101,7 +97,15 @@ export class UploadFile implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
-
+    if (!this.ValueToken) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Debe validar el token primero',
+        life: 3000,
+      });
+      return;
+    }
     if (event.dataTransfer?.files.length) {
       const file = event.dataTransfer.files[0];
       this.fileName.set(file.name);
@@ -111,6 +115,16 @@ export class UploadFile implements OnInit {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+
+    if (!this.ValueToken) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Debe validar el token primero',
+        life: 3000,
+      });
+      return;
+    }
     if (input.files?.length) {
       const file = input.files[0];
       this.fileName.set(file.name);
@@ -128,8 +142,7 @@ export class UploadFile implements OnInit {
   }
 
   firmarDocumento() {
-    const tokenData = this.localStorage.getItem('tokenData') as response;
-    if (!tokenData) {
+    if (!this.ValueToken) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -151,9 +164,7 @@ export class UploadFile implements OnInit {
 
     this.serviceSign
       .uploadFile({
-        slot: tokenData.slot,
-        alias: tokenData.alias,
-        pin: tokenData.pin,
+        ...this.ValueToken,
         pdf: this.fileBase64,
       })
       .subscribe({

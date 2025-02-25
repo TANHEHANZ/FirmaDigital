@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { TokenService } from '../../../../application/services/token.service';
 import { LocalStorageService } from '../../../../application/utils/local-storage.service';
+import { TokenStateService } from '../../../../application/services/token-state.service';
 interface response {
   slot: string;
   alias: string;
@@ -107,32 +108,29 @@ export class UploadValidateComponent implements OnInit {
   readonly messageService = inject(MessageService);
   readonly tokenService = inject(TokenService);
   readonly localStorage = inject(LocalStorageService);
+  private tokenStateService = inject(TokenStateService);
+
+  ngOnInit(): void {
+    this.tokenStateService.getState().subscribe((state) => {
+      if (state.slot) {
+        this.form.patchValue({
+          slot: state.slot,
+        });
+        this.alias = state.alias || '';
+        this.selectToken = state.selectedToken;
+      }
+    });
+  }
+
   ICONS = ICONS;
   tokenData: any = null;
   selectToken: any = null;
   alias = '';
-  rememberData = false; // Estado del checkbox
 
   form = new FormGroup({
     pin: new FormControl('', Validators.required),
     slot: new FormControl('', Validators.required),
   });
-
-  ngOnInit(): void {
-    const storedData = this.localStorage.getItem('tokenData');
-
-    if (storedData) {
-      try {
-        const token: any = storedData;
-        this.form.patchValue({
-          slot: token.slot,
-        });
-        this.alias = token.alias;
-      } catch (error) {
-        console.error('Error al leer localStorage:', error);
-      }
-    }
-  }
 
   tokenConected() {
     this.conectToken.getListToken().subscribe({
@@ -172,6 +170,10 @@ export class UploadValidateComponent implements OnInit {
   seleccionar(token: any) {
     this.selectToken = token;
     this.form.patchValue({ slot: token.slot });
+    this.tokenStateService.updateState({
+      selectedToken: token,
+      slot: token.slot,
+    });
   }
 
   validatePin() {
@@ -192,27 +194,32 @@ export class UploadValidateComponent implements OnInit {
       })
       .subscribe({
         next: (value) => {
+          if (!value.finalizado) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: value.mensaje,
+              life: 3000,
+            });
+            return;
+          }
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
-            detail: 'PIN correcto, proceda a firmar',
+            detail: value.mensaje,
             life: 3000,
           });
 
           this.alias = value.datos.data_token.data[0].alias;
-
-          if (this.rememberData) {
-            this.localStorage.setItem(
-              'tokenData',
-              JSON.stringify({
-                slot: this.form.value.slot,
-                alias: this.alias,
-              })
-            );
-          }
-
-          sessionStorage.setItem('pin', this.form.value.pin!);
-          setTimeout(() => sessionStorage.removeItem('pin'), 10 * 60 * 1000);
+          const pin = this.form.value.pin!;
+          console.log(pin);
+          this.tokenStateService.updateState({
+            slot: this.form.value.slot!,
+            alias: this.alias,
+            pin: pin,
+            isConnected: true,
+            selectedToken: this.selectToken,
+          });
         },
         error: (err) => {
           console.log(err);
