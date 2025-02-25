@@ -176,7 +176,8 @@ export class UploadFile implements OnInit {
             detail: 'Documento firmado correctamente',
             life: 3000,
           });
-          this.clear();
+          this.TokenS.clearPin();
+          this.ValueToken = null;
         },
         error: (error) => {
           this.messageService.add({

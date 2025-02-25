@@ -62,6 +62,10 @@ export class TokenStateService {
     this.localStorage.removeItem('tokenData');
     sessionStorage.removeItem('pin');
   }
+
+  clearPin() {
+    sessionStorage.removeItem('pin');
+  }
   getStoredToken(): Partial<TokenState> | null {
     const { slot, alias } = this.localStorage.getItem(
       'tokenData'
