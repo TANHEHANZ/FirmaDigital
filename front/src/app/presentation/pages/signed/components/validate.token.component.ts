@@ -104,25 +104,34 @@ interface response {
 })
 export class UploadValidateComponent implements OnInit {
   readonly conectToken = inject(UploadService);
-  tokenData: TokenConnectedResponse | null = null;
   readonly messageService = inject(MessageService);
-  tokenS = inject(TokenService);
-
+  readonly tokenService = inject(TokenService);
+  readonly localStorage = inject(LocalStorageService);
   ICONS = ICONS;
+  tokenData: any = null;
   selectToken: any = null;
-  tokenDetectado = false;
+  alias = '';
+  rememberData = false; // Estado del checkbox
+
   form = new FormGroup({
     pin: new FormControl('', Validators.required),
     slot: new FormControl('', Validators.required),
   });
-  alias = '';
-  private localStorage = inject(LocalStorageService);
+
   ngOnInit(): void {
-    const token = this.localStorage.getItem('tokenData') as response;
-    this.form.patchValue({
-      slot: token.slot,
-      pin: null,
-    });
+    const storedData = this.localStorage.getItem('tokenData');
+
+    if (storedData) {
+      try {
+        const token: any = storedData;
+        this.form.patchValue({
+          slot: token.slot,
+        });
+        this.alias = token.alias;
+      } catch (error) {
+        console.error('Error al leer localStorage:', error);
+      }
+    }
   }
 
   tokenConected() {
@@ -136,64 +145,75 @@ export class UploadValidateComponent implements OnInit {
             detail: data.mensaje,
             life: 3000,
           });
-          console.log(data.datos.tokens);
           this.form.patchValue({
             slot: data.datos.tokens[0].slot,
           });
-          return;
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se encontraron Tokens',
+            life: 3000,
+          });
         }
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se encontro Tokens',
-          life: 3000,
-        });
-        return;
       },
       error: (e) => {
         console.log(e);
         this.messageService.add({
           severity: 'error',
-          summary: e.name,
+          summary: 'Error',
           detail: e.message,
           life: 3000,
         });
       },
     });
   }
+
   seleccionar(token: any) {
     this.selectToken = token;
+    this.form.patchValue({ slot: token.slot });
   }
+
   validatePin() {
     if (!this.form.value.pin) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'El campo ping no puede estar vacio.',
+        detail: 'El campo PIN no puede estar vacío.',
         life: 3000,
       });
       return;
     }
-    this.tokenS
+
+    this.tokenService
       .dataToken({
-        slot: this.form.value.slot,
-        pin: this.form.value.pin,
+        slot: this.form.value.slot!,
+        pin: this.form.value.pin!,
       })
       .subscribe({
         next: (value) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
-            detail: 'Pin correcto proceda a firmar',
+            detail: 'PIN correcto, proceda a firmar',
             life: 3000,
           });
-          this.alias = value.datos.data_token.data[0].alias;
-          this.localStorage.setItem('tokenData', {
-            ...this.form.value,
-            alias: this.alias,
-          });
-        },
 
+          this.alias = value.datos.data_token.data[0].alias;
+
+          if (this.rememberData) {
+            this.localStorage.setItem(
+              'tokenData',
+              JSON.stringify({
+                slot: this.form.value.slot,
+                alias: this.alias,
+              })
+            );
+          }
+
+          sessionStorage.setItem('pin', this.form.value.pin!);
+          setTimeout(() => sessionStorage.removeItem('pin'), 10 * 60 * 1000);
+        },
         error: (err) => {
           console.log(err);
           this.messageService.add({
@@ -205,5 +225,4 @@ export class UploadValidateComponent implements OnInit {
         },
       });
   }
-  constructor() {}
 }

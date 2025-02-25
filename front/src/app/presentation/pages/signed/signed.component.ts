@@ -1,9 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { ICONS } from '../../shared/ui/icons';
+import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { ActiveService } from '../../../application/global/active.service';
-import { DrawerService } from '../../../application/global/drawer.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UploadValidateComponent } from './components/validate.token.component';
 import { UploadFile } from './components/uplodad.file.component';
