@@ -3,60 +3,55 @@ import { DrawerComponent } from '../../../../shared/drawer/drawer.component';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../../application/services/user.service';
 import { SwichService } from '../../../../../application/global/swich.service';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { DrawerService } from '../../../../../application/global/drawer.service';
 import { ICONS } from '../../../../shared/ui/icons';
 import { MenuModule } from 'primeng/menu';
 import InformationFile from './informacion-file.component';
 import { SignedService } from '../../../../../application/services/signed.service';
 import { responceSigned } from '../../../../../application/models/interfaces/api/signed';
+import { ButtonSecundaryComponent } from '../../../../shared/ui/button/secundary.component';
 
 @Component({
-  imports: [DrawerComponent, CommonModule, MenuModule],
+  imports: [
+    DrawerComponent,
+    CommonModule,
+    MenuModule,
+    ButtonSecundaryComponent,
+  ],
   selector: 'table-signed-file',
   template: `
-    <section class="h-full ">
+    <section class="] overflow-hidden w-full">
       <table class="w-full rounded-md overflow-hidden">
         <thead class="text-sm border-b border-gray-300  ">
-          <th colspan="3" class="bg-primary p-2 text-white font-light ">
+          <th colspan="3" class="bg-secundary p-2 text-white font-light ">
             Usuario firmador
           </th>
-          <th colspan="6" class="bg-primary/70 p-2 text-white font-light ">
+          <th colspan="6" class="bg-terteary p-2 font-light ">
             informacion del documento firmado
           </th>
           <tr class="">
             <th class="font-light text-start p-2">Nombre</th>
             <th class="font-light text-start p-2">Ci</th>
-            <th class="font-light text-start p-2">Tipo</th>
-            <th class="font-light text-start p-2">Fecha</th>
+            <th class="font-light text-start p-2">Persona</th>
             <th class="font-light text-start p-2">Nombre</th>
             <th class="font-light text-start p-2">Tipo</th>
-            <th class="font-light text-start p-2">Historial</th>
+            <th class="font-light text-start p-2">Fecha</th>
             <th class="font-light text-start p-2">Estado</th>
-            <th class="font-light text-start p-2">Acciones</th>
           </tr>
         </thead>
         <tbody
-          class=" [&>*:nth-child(odd)]:bg-primary/10 [&>*:nth-child(even)]:bg-primary/2"
+          class=" [&>*:nth-child(odd)]:bg-terteary/15 [&>*:nth-child(even)]:bg-secundary/2"
         >
           @for (item of data; track $index) {
           <tr class="text-sm lowercase border-b border-gray-300 ">
-            <td class="p-2 ">{{ item.User.name }}</td>
-            <td class="p-2 ">{{ item.User.ci }}</td>
-            <td class="p-2 ">{{ item.User.tipo_user }}</td>
-            <td class="p-2 ">{{ item.Documento.nombre }}</td>
-            <td class="p-2 ">{{ item.Documento.tipo_documento }}</td>
-            <td class="p-2 ">
-              <!-- {{
-              item.Documento.id_historial.length > 0
-                ? 'ver histotial'
-                : 'Unico registro'
-            }} -->
-              ver histotial
-            </td>
-            <td class="p-2 ">{{ item.fecha | date : 'short' }}</td>
-
-            <td class="p-2 flex justify-center items-center">
+            <td class="py-3 ">{{ item.User.name }}</td>
+            <td class="py-3 ">{{ item.User.ci }}</td>
+            <td class="py-3 ">{{ item.User.tipo_user }}</td>
+            <td class="py-3 ">{{ item.Documento.nombre }}</td>
+            <td class="py-3 ">{{ item.Documento.tipo_documento }}</td>
+            <td class="py-3 ">{{ item.fecha | date : 'short' }}</td>
+            <td class="py-3 ">
               <p
                 class="text-sm border rounded-xl text-center px-4  "
                 [ngClass]="{
@@ -79,9 +74,8 @@ import { responceSigned } from '../../../../../application/models/interfaces/api
                 [model]="getMenuItems(item)"
                 [popup]="true"
                 #menu
-                class=""
               ></p-menu>
-              <button (click)="menu.toggle($event)" class="  w-full h-full">
+              <button (click)="menu.toggle($event)" class="w-full h-full px-3">
                 <i [ngClass]="ICONS.MENU_VERTICAL"></i>
               </button>
             </td>
@@ -91,12 +85,8 @@ import { responceSigned } from '../../../../../application/models/interfaces/api
           }
         </tbody>
       </table>
+      <button-secundary> </button-secundary>
     </section>
-    <app-drawer>
-      <ng-container *ngIf="drawerService.getContent() | async as content">
-        <ng-container *ngComponentOutlet="content"></ng-container>
-      </ng-container>
-    </app-drawer>
   `,
 })
 export default class TableSignedFile {
@@ -108,23 +98,26 @@ export default class TableSignedFile {
   ICONS = ICONS;
   data: responceSigned[] = [];
 
-  getMenuItems(user: any) {
+  getMenuItems(item: any): MenuItem[] {
     return [
       {
-        label: 'Asignar Token',
-        command: () => this.asignarToken(user),
+        label: 'Validar documento',
+        icon: 'ri-checkbox-circle-line',
+        command: () => this.validarDocumento(item),
       },
       {
-        label: 'Informacion del usuario',
-        command: () => this.iformacion(user),
+        label: 'Ver Historial',
+        icon: 'ri-history-line',
+        command: () => this.Historial(item),
       },
       {
-        label: 'Editar usuario',
-        command: () => this.editarUsuario(),
-      },
-      {
-        label: 'Inhabilitar',
-        command: () => this.darDeBajaUsuario(),
+        label: 'Actualizar y firmar',
+        icon: 'ri-file-edit-line',
+        tooltipOptions: {
+          tooltipLabel: 'Subir nueva versión del documento y firmar',
+          tooltipPosition: 'left' as const, // Fix type error
+        },
+        command: () => this.actualizarYFirmar(item),
       },
     ];
   }
@@ -137,7 +130,7 @@ export default class TableSignedFile {
     this.signedService.docuemntsSigned().subscribe({
       next: (response) => {
         console.log(response);
-        this.data = response.data as responceSigned[];
+        this.data = response.data.slice(0, 10) as responceSigned[];
       },
 
       error: (err) => {
@@ -146,24 +139,32 @@ export default class TableSignedFile {
     });
   }
 
-  asignarToken(event: any) {
-    this.modalS.$modal.emit('assign-token');
-    this.modalS.setData(this.user);
+  validarDocumento(event: any) {
+    console.log(event);
+
+    // this.modalS.$modal.emit('assign-token');
+    // this.modalS.setData(this.user);
   }
 
   editarUsuario() {
     this.modalS.$modal.emit('register');
   }
 
-  iformacion(selectedUser: any) {
-    console.log(selectedUser);
+  Historial(signed: any) {
+    console.log(signed);
     this.drawerService.openDrawer(
-      'Informacion del usuario',
+      'Historial del documento ',
       InformationFile,
-      selectedUser
+      signed
     );
   }
-
+  actualizarYFirmar(documento: any) {
+    this.modalS.$modal.emit('update-sign');
+    this.modalS.setData({
+      originalDocument: documento,
+      type: 'update',
+    });
+  }
   darDeBajaUsuario() {
     // Lógica para dar de baja al usuario
     console.log('Dando de baja usuario...');

@@ -11,8 +11,12 @@ import { responceSigned } from '../models/interfaces/api/signed';
 export class SignedService {
   private http = inject(HttpClient);
   private URL_DOCUMENTS_SIGNED = 'http://localhost:3000' + API.SIGNED;
+  private URL_SIGNED_HISTORY = 'http://localhost:3000' + API.SIGNED_HISTORY;
 
   docuemntsSigned(): Observable<res<responceSigned[]>> {
     return this.http.get<res<responceSigned[]>>(this.URL_DOCUMENTS_SIGNED);
+  }
+  signedHistory(id: string) {
+    return this.http.get(this.URL_SIGNED_HISTORY + id);
   }
 }

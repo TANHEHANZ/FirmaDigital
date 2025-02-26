@@ -4,21 +4,63 @@ import { Toast } from 'primeng/toast';
 import { SignedService } from '../../../../application/services/signed.service';
 import { responceSigned } from '../../../../application/models/interfaces/api/signed';
 import TableSignedFile from './components/table.sifned-file.component';
+import { DrawerComponent } from '../../../shared/drawer/drawer.component';
+import { DrawerService } from '../../../../application/global/drawer.service';
+import { ModalComponent } from '../../../shared/ui/modal.component';
+import { SwichService } from '../../../../application/global/swich.service';
+import { SignedComponent } from '../../signed/signed.component';
+import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
+import CountComponent, { propsInfoSigned } from './components/count.component';
+import { ICONS } from '../../../shared/ui/icons';
+import { CustomInputComponent } from '../../../shared/ui/input.component';
+import { CustomSelectComponent } from '../../../shared/ui/select.component';
 
 @Component({
   selector: 'app-signed',
-  imports: [Toast, CommonModule, TableSignedFile],
+  imports: [
+    Toast,
+    CommonModule,
+    TableSignedFile,
+    DrawerComponent,
+    ModalComponent,
+    SignedComponent,
+    ButtonPrimaryComponent,
+    CountComponent,
+    CustomInputComponent,
+    CustomSelectComponent,
+  ],
   templateUrl: './signed.component.html',
 })
 export class SignedFileComponent implements OnInit {
   signedService = inject(SignedService);
+  drawerService = inject(DrawerService);
+  modalS = inject(SwichService);
+  currentModal: string | null = null;
   data: responceSigned[] = [];
   pdfUrl: string | null = null;
+  ICONS = ICONS;
+  infoTop: propsInfoSigned[] = [
+    {
+      count: 15,
+      icon: ICONS.SAVE,
+      title: 'Documentos Firmados',
+    },
+    {
+      count: 10,
+      icon: ICONS.VALIDATE,
+      title: 'Documentos activos',
+    },
+  ];
+
   ngOnInit(): void {
     this.signed();
+    this.modalS.$modal.subscribe((valor) => (this.currentModal = valor));
   }
   today: number = Date.now();
 
+  openModal(type: string) {
+    this.modalS.$modal.emit(type);
+  }
   signed() {
     this.signedService.docuemntsSigned().subscribe({
       next: (response) => {

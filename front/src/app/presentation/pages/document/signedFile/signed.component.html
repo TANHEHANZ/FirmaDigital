@@ -1,5 +1,47 @@
-<section class="p-8 flex flex-col gap-8 justify-center h-full">
+<section class="p-8 flex flex-col gap-8 justify-center h-full items-start">
   <p-toast></p-toast>
-  <h1 class="text-3xl font-bold">Documentos firmados</h1>
-  <table-signed-file class="h-full"></table-signed-file>
+  <h1 class="text-3xl font-light">Documentos firmados</h1>
+  <count-component [data]="infoTop" class="w-full"></count-component>
+  <div class="flex gap-4 justify-between items-center w-full">
+    <div class="flex gap-4">
+      <custom-input label="Filtrar" />
+      <custom-select
+        label="Ordenar por"
+        [options]="[
+          { label: 'Fecha de creación', value: 'fechaCreacion' },
+          { label: 'Fecha de firma', value: 'fechaFirma' },
+          { label: 'Nombre', value: 'nombre' },
+          { label: 'Tipo de documento', value: 'tipoDocumento' }
+        ]"
+      />
+    </div>
+
+    <button-primary
+      [icon]="ICONS.SIGNATURE"
+      label="Firmar documento"
+      (click)="openModal('actualizar')"
+    ></button-primary>
+  </div>
+  <!-- <custom-select
+    label="filas por pagina "
+    [options]="[
+      { label: '10', value: '10' },
+      { label: '20', value: '20' },
+      { label: '50', value: '50' }
+    ]"
+  /> -->
+  <table-signed-file class="w-full"></table-signed-file>
+  @if(currentModal != null){
+  <modal>
+    @if(currentModal === 'actualizar') {
+    <app-upload></app-upload>
+    }
+  </modal>
+  }
+
+  <app-drawer>
+    <ng-container *ngIf="drawerService.getContent() | async as content">
+      <ng-container *ngComponentOutlet="content"></ng-container>
+    </ng-container>
+  </app-drawer>
 </section>
