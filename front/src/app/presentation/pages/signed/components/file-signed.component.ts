@@ -8,9 +8,16 @@ import CardComponenr from '../../../shared/ui/card..component';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { ICONS } from '../../../shared/ui/icons';
+import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
 @Component({
   selector: 'file-signed',
-  imports: [CommonModule, CardComponenr, CalendarModule, FormsModule],
+  imports: [
+    CommonModule,
+    CardComponenr,
+    CalendarModule,
+    FormsModule,
+    ButtonPrimaryComponent,
+  ],
   template: `
     <section
       class=" rounded-xl  p-8 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto w-[450px] h-full items-start "
@@ -91,6 +98,23 @@ import { ICONS } from '../../../shared/ui/icons';
           {{ signedDocument()?.User?.institucion ?? '' }}
         </div>
       </app-card>
+      @if(signedDocument()?.Documento?.documento_blob) {
+      <div class=" w-full flex justify-center items-center text-[14px] gap-4 ">
+        <button-primary
+          (click)="donwload(signedDocument()?.Documento?.documento_blob)"
+          label="Descargar "
+          class="w-full"
+        >
+        </button-primary>
+        <button-primary
+          (click)="donwload(signedDocument()?.Documento?.documento_blob)"
+          class=""
+          class="w-full"
+          label="Validar "
+        >
+        </button-primary>
+      </div>
+      }
     </section>
   `,
 })
@@ -106,5 +130,29 @@ export class FileSigned {
         this.documentDate.set(new Date(doc.Documento.fecha_creacion));
       }
     });
+  }
+  donwload(documentBlob: any) {
+    if (!documentBlob) return;
+
+    const byteCharacters = atob(documentBlob);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download =
+      this.signedDocument()?.Documento?.nombre || 'documento_firmado.pdf';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   }
 }
