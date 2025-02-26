@@ -172,14 +172,6 @@ export class UploadFile implements OnInit {
       });
       return;
     }
-    console.log({
-      slot: Number(signingData.slot!),
-      alias: signingData.alias!,
-      pin: signingData.pin!,
-      nombre: signingData.documentName!,
-      tipo_documento: signingData.documentType!,
-      pdf: this.fileBase64,
-    });
 
     this.serviceSign
       .uploadFile({
@@ -192,6 +184,7 @@ export class UploadFile implements OnInit {
       })
       .subscribe({
         next: (response) => {
+          this.TokenS.setSignedDocument(response);
           console.log('respuesta del jacubitus', response);
           this.messageService.add({
             severity: 'success',

@@ -28,7 +28,22 @@ body {
     backdrop-filter: blur(10px);
   }
 }
+.disabled-calendar .p-calendar {
+  opacity: 1 !important;
+}
 
+.disabled-calendar .p-datepicker {
+  opacity: 1 !important;
+  cursor: not-allowed;
+}
+
+.disabled-calendar .p-datepicker * {
+  cursor: not-allowed;
+}
+
+.disabled-calendar .p-datepicker table td > span {
+  opacity: 1 !important;
+}
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 ::view-transition-old(root) {
   animation: fadeOut 0.5s forwards;

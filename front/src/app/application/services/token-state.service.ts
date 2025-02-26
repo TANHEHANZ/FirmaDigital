@@ -8,11 +8,38 @@ interface TokenState {
   documentType?: string;
 }
 
+export interface SignedDocumentResponse {
+  id: string;
+  fecha: string;
+  Documento: {
+    id: string;
+    nombre: string;
+    tipo_documento: string;
+    documento_blob: string;
+    estado: string;
+    fecha_creacion: string;
+    id_historial: string | null;
+  };
+  User: {
+    id: string;
+    name: string;
+    ci: string;
+    tipo_user: string;
+    estado_user: string;
+    unidad: string;
+    institucion: string;
+    cargo: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class TokenStateService {
   private state = new BehaviorSubject<TokenState>({});
+  private signedDocument = new BehaviorSubject<SignedDocumentResponse | null>(
+    null
+  );
 
   updateState(newState: Partial<TokenState>) {
     const currentState = this.state.value;
@@ -52,5 +79,18 @@ export class TokenStateService {
       };
     }
     return null;
+  }
+
+  // siigned docuement
+  setSignedDocument(response: any) {
+    this.signedDocument.next(response.data);
+  }
+
+  getSignedDocument() {
+    return this.signedDocument.asObservable();
+  }
+
+  clearSignedDocument() {
+    this.signedDocument.next(null);
   }
 }
