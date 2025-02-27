@@ -17,3 +17,52 @@ export const asignarToken = async (req: Request, res: Response) => {
     ManageResponse.serverError(res, "Error del server", error);
   }
 };
+export const unsubcribe = async (req: Request, res: Response) => {
+  const id = req.body.id;
+
+  try {
+    const unsubscribe = await prisma.asignacionToken.update({
+      where: {
+        id: id,
+      },
+      data: {
+        estado: "DESHABILITADO",
+      },
+    });
+    ManageResponse.success(res, "Datos correctamente eliminados", unsubscribe);
+  } catch (error) {
+    ManageResponse.serverError(res, "Error del server", error);
+  }
+};
+
+export const updateData = async (req: Request, res: Response) => {
+  try {
+    const update = await prisma.asignacionToken.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        ...req.body,
+        estado: "EDITADO",
+      },
+    });
+    ManageResponse.success(res, "Datos correctamente actualizados", update);
+  } catch (error) {
+    ManageResponse.serverError(res, "Error del server", error);
+  }
+};
+export const deletedAssignment = async (req: Request, res: Response) => {
+  try {
+    const deleted = await prisma.asignacionToken.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        estado: "ELIMINADO",
+      },
+    });
+    ManageResponse.success(res, "Datos correctamente eliminados", deleted);
+  } catch (error) {
+    ManageResponse.serverError(res, "Error del server", error);
+  }
+};
