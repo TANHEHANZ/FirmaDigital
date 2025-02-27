@@ -15,6 +15,7 @@ export class UserService {
   private URL_SEARCH_USER = this.API_SERVER + API.SERVICE_EXTERNAL;
   private URL_REGISTER = this.API_SERVER + API.REGISTER;
   private URL_ROL = this.API_SERVER + API.ROL;
+  private URL_UNSUB = this.API_SERVER + API.UNSUB;
 
   infoUsre(CI: string): Observable<res<infoUser[]>> {
     return this.http.post<res<infoUser[]>>(
@@ -33,5 +34,11 @@ export class UserService {
   }
   getAllUser(): Observable<any> {
     return this.http.get<any>(this.URL_REGISTER);
+  }
+
+  unsubscribe(id: string): Observable<any> {
+    return this.http.patch<any>(this.URL_UNSUB, {
+      id,
+    });
   }
 }

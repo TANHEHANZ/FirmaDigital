@@ -92,11 +92,11 @@ export class UserTable implements OnInit {
       },
       {
         label: 'Editar usuario',
-        command: () => this.editarUsuario(),
+        command: () => this.editarUsuario(user),
       },
       {
         label: 'Inhabilitar',
-        command: () => this.darDeBajaUsuario(),
+        command: () => this.darDeBajaUsuario(user),
       },
     ];
   }
@@ -123,7 +123,7 @@ export class UserTable implements OnInit {
     this.modalS.setData(selectedUser);
   }
 
-  editarUsuario() {
+  editarUsuario(use: any) {
     this.modalS.$modal.emit('register');
   }
 
@@ -136,8 +136,26 @@ export class UserTable implements OnInit {
     );
   }
 
-  darDeBajaUsuario() {
+  darDeBajaUsuario(selectedUser: any) {
     // Lógica para dar de baja al usuario
     console.log('Dando de baja usuario...');
+    this.userS.unsubscribe(selectedUser.id).subscribe({
+      next: (value) => {
+        this.toast.add({
+          severity: 'success',
+          summary: 'Exito',
+          detail: value.message,
+          life: 3000,
+        });
+      },
+      error: (err) => {
+        this.toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error.message || 'Ocurrio un error inseperado',
+          life: 3000,
+        });
+      },
+    });
   }
 }

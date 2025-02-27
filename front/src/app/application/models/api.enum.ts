@@ -17,4 +17,5 @@ export enum API {
   SIGNED = BASE + '/signed',
   SIGNED_HISTORY = SIGNED + '/history/',
   ASIGNAR = BASE + 'asignar',
+  UNSUB = ASIGNAR,
 }
