@@ -118,9 +118,9 @@ export class UserTable implements OnInit {
     });
   }
 
-  asignarToken(event: any) {
+  asignarToken(selectedUser: any) {
     this.modalS.$modal.emit('assign-token');
-    this.modalS.setData(this.user);
+    this.modalS.setData(selectedUser);
   }
 
   editarUsuario() {

@@ -194,10 +194,11 @@ export class UploadFile implements OnInit {
           });
         },
         error: (error) => {
+          console.log(error);
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.message || 'Error al firmar el documento',
+            detail: error.error.message || 'Error al firmar el documento',
             life: 3000,
           });
         },

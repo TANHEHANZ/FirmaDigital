@@ -86,7 +86,7 @@ export class TokenAssignComponent {
     console.log('userData', this.userData);
   }
   asignar() {
-    console.log(this.userData);
+    console.log('Data llegando al asignar', this.userData);
     if (!this.userData) {
       this.toast.add({
         severity: 'error',
@@ -99,7 +99,7 @@ export class TokenAssignComponent {
     this.tokenS
       .asignarToken({
         id_token: this.validar.value.token,
-        id_usuario: this.userData[0].id,
+        id_usuario: this.userData.id,
         estado: 'ACTIVO',
       })
       .subscribe({

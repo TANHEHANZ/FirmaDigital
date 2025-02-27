@@ -20,7 +20,7 @@ import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.compon
   ],
   template: `
     <section
-      class=" rounded-xl  p-8 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto w-[450px] h-full items-start "
+      class=" rounded-xl  p-8 flex flex-col gap-2 border-2 border-gray-300 relative overflow-y-scroll w-[450px] max-h-[80vh] items-start "
     >
       <p
         class="text-xs font-light rounded-md px-3 py-1 bg-primary  top-2 left-2 text-white "

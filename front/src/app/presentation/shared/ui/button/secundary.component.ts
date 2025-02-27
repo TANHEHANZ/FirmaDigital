@@ -16,11 +16,11 @@ import { Component, EventEmitter, input, Output, output } from '@angular/core';
     >
       <label
         *ngIf="icon()"
-        class=" flex  justify-center items-center h-full bg-primary text-white px-4 "
+        class=" flex  justify-center items-center h-full bg-primary text-white px-4 cursor-pointer "
       >
         <i [class]="icon()"></i>
       </label>
-      <label class=" px-8 font-medium">
+      <label class=" px-8 font-medium" *ngIf="label()">
         {{ label() }}
       </label>
     </button>

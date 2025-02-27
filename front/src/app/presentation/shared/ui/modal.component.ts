@@ -7,9 +7,9 @@ import { ICONS } from './icons';
   imports: [],
   template: `
     <section
-      class=" absolute left-0 bg-gray-400/50 w-screen h-full top-0 flex justify-center items-center z-10"
+      class=" absolute left-0 bg-gray-400/50 w-screen h-full top-0 flex justify-center items-center z-10 overflow-hidden"
     >
-      <article class="bg-white p-8 relative rounded-md z-50">
+      <article class="bg-white p-8 relative rounded-md z-50 max-h-[95dvh]">
         <ng-content></ng-content>
         <button
           (click)="closeModal()"
