@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -124,4 +125,31 @@ model Rol {
   tipo       String @unique @db.VarChar(100)
   estado_rol Status @default(ACTIVO)
   User       User[]
+}
+
+view UserInfo {
+  id    Int     @unique
+  email String?
+  name  String?
+  bio   String?
+}
+
+view DocumentHistory {
+  id               String  @unique
+  documento_id     String
+  documento_nombre String
+  documento_tipo   String
+  documento_blob   String  @db.Text
+  id_historial     String?
+  user_name        String
+  user_ci          String
+  user_tipo        String
+  token_tipo       String?
+  certificado_tipo String?
+  titular_ci       String?
+  titular_nombre   String?
+  titular_email    String?
+  emisor_entidad   String?
+
+  @@map("vw_document_history")
 }

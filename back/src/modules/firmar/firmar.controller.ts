@@ -220,62 +220,102 @@ export const UpdateDocument = async (req: Request, res: Response) => {
     ManageResponse.serverError(res, "Error del servidor", error);
   }
 };
-
 export const historyDocument = async (req: Request, res: Response) => {
   const document_id = req.params.id;
 
-  try {
-    const principal = await prisma.firmar.findMany({
-      where: {
-        Documento: {
-          id: document_id,
-        },
-      },
-      include: {
-        Documento: true,
-        User: {
-          select: {
-            name: true,
-            ci: true,
-            tipo_user: true,
+  const includeQuery = {
+    Documento: true,
+    User: {
+      select: {
+        name: true,
+        ci: true,
+        tipo_user: true,
+        AsignacionToken: {
+          include: {
+            token: {
+              include: {
+                Certificado: {
+                  include: {
+                    titular: {
+                      select: {
+                        ci: true,
+                        nombre: true,
+                        email: true,
+                      },
+                    },
+                    Emisor: {
+                      select: {
+                        entidad: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
-    });
-    if (!principal) {
-      ManageResponse.notFound(res, "Error no se pudo obtener el historial");
-      return;
-    }
+    },
+  };
 
-    const history = await prisma.firmar.findMany({
-      where: {
-        Documento: {
-          id_historial: document_id,
-        },
-      },
-      include: {
-        Documento: true,
-        User: {
-          select: {
-            name: true,
-            ci: true,
-            tipo_user: true,
-          },
-        },
-      },
-    });
-    if (!history) {
-      ManageResponse.notFound(res, "Error no se pudo obtener el historial");
+  try {
+    const [principal, history] = await Promise.all([
+      prisma.firmar.findMany({
+        where: { Documento: { id: document_id } },
+        include: includeQuery,
+      }),
+      prisma.firmar.findMany({
+        where: { Documento: { id_historial: document_id } },
+        include: includeQuery,
+      }),
+    ]);
+    if (!principal.length && !history.length) {
+      ManageResponse.notFound(res, "No se encontraron registros del documento");
+      return;
     }
     ManageResponse.success(
       res,
-      "Historial del documento obtenida exitosamente",
-      { history, principal }
+      "Historial del documento obtenido exitosamente",
+      { principal, history }
     );
+    return;
   } catch (error) {
+    console.error(error);
     ManageResponse.serverError(res, "Error del servidor", error);
   }
+  return;
 };
+
+// export const historyDocument = async (req: Request, res: Response) => {
+//   const document_id = req.params.id;
+
+//   try {
+//     const [principal, history] = await Promise.all([
+//       prisma.documentHistory.findMany({
+//         where: { documento_id: document_id },
+//       }),
+//       prisma.documentHistory.findMany({
+//         where: { id_historial: document_id },
+//       }),
+//     ]);
+
+//     if (!principal.length && !history.length) {
+//       ManageResponse.notFound(res, "No se encontraron registros del documento");
+//       return;
+//     }
+
+//     ManageResponse.success(
+//       res,
+//       "Historial del documento obtenido exitosamente",
+//       { principal, history }
+//     );
+//     return;
+//   } catch (error) {
+//     console.error(error);
+//     ManageResponse.serverError(res, "Error del servidor", error);
+//     return;
+//   }
+// };
 
 export const uploadFile = async (req: Request, res: Response) => {
   const { nombre, tipo_documento, documento_blob, estado } = req.body;
