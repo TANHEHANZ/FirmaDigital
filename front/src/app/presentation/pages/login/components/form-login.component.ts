@@ -115,7 +115,7 @@ export class FormLoginComponent {
             detail: response.message,
             life: 3000,
           });
-          this.router.navigate([PATH_ROUTES.DASHBOARD_FIRMAR]);
+          this.router.navigate([PATH_ROUTES.DASHBOARD_SIGNED]);
         },
         error: (error: any) => {
           console.log(error);

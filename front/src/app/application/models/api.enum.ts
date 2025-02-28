@@ -14,8 +14,9 @@ export enum API {
   SERVICE_EXTERNAL = BASE + 'user/info',
   REGISTER = BASE + 'user',
   REFRESH__TOKEN = LOGIN + '/refresh',
-  SIGNED = BASE + '/signed',
+  SIGNED = BASE + 'signed',
   SIGNED_HISTORY = SIGNED + '/history/',
+  SIGNED_FILE_BY_ID = SIGNED + '/file/',
   ASIGNAR = BASE + 'asignar',
   UNSUB = ASIGNAR,
 }

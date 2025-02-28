@@ -182,7 +182,7 @@ export default class TableSignedFile {
     );
   }
   actualizarYFirmar(documento: any) {
-    this.modalS.$modal.emit('update-sign');
+    this.modalS.$modal.emit('actualizar');
     this.modalS.setData({
       originalDocument: documento,
       type: 'update',

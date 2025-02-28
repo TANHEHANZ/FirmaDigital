@@ -36,9 +36,9 @@ export class UserService {
     return this.http.get<any>(this.URL_REGISTER);
   }
 
-  unsubscribe(id: string): Observable<any> {
-    return this.http.patch<any>(this.URL_UNSUB, {
-      id,
+  unsubscribe(id: string, state: string): Observable<any> {
+    return this.http.patch<any>(this.URL_REGISTER + '/' + id, {
+      state,
     });
   }
 }

@@ -6,6 +6,7 @@ import { UploadService } from '../../../../application/services/upload.service';
 import { MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../../../application/utils/local-storage.service';
 import { TokenStateService } from '../../../../application/services/token-state.service';
+import { SwichService } from '../../../../application/global/swich.service';
 interface response {
   slot: number;
   alias: string;
@@ -80,10 +81,16 @@ export class UploadFile implements OnInit {
   serviceSign = inject(UploadService);
   private messageService = inject(MessageService);
   private TokenS = inject(TokenStateService);
+  documentId: string | null = null;
   ValueToken: any = null;
-
+  propModalS = inject(SwichService);
   ngOnInit(): void {
-    // this.ValueToken = this.TokenS.getStoredToken();
+    this.propModalS.$data.subscribe((data) => {
+      console.log(data);
+      if (data && data.originalDocument?.Documento?.id) {
+        this.documentId = data.originalDocument?.Documento?.id;
+      }
+    });
   }
 
   onDragOver(event: DragEvent) {
@@ -174,14 +181,17 @@ export class UploadFile implements OnInit {
     }
 
     this.serviceSign
-      .uploadFile({
-        slot: Number(signingData.slot!),
-        alias: signingData.alias!,
-        pin: signingData.pin!,
-        nombre: signingData.documentName!,
-        tipo_documento: signingData.documentType!,
-        pdf: this.fileBase64,
-      })
+      .uploadFile(
+        {
+          slot: Number(signingData.slot!),
+          alias: signingData.alias!,
+          pin: signingData.pin!,
+          nombre: signingData.documentName!,
+          tipo_documento: signingData.documentType!,
+          pdf: this.fileBase64,
+        },
+        this.documentId || undefined
+      )
       .subscribe({
         next: (response) => {
           this.TokenS.setSignedDocument(response);

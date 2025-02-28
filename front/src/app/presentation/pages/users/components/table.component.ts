@@ -9,6 +9,7 @@ import { DrawerService } from '../../../../application/global/drawer.service';
 import { DrawerComponent } from '../../../shared/drawer/drawer.component';
 import { UserFilerComponet } from './filters.component';
 import { InformacionUserComponent } from './informacion-user.component';
+import { state } from '@angular/animations';
 @Component({
   selector: 'user-table',
   imports: [CommonModule, MenuModule, DrawerComponent],
@@ -95,8 +96,8 @@ export class UserTable implements OnInit {
         command: () => this.editarUsuario(user),
       },
       {
-        label: 'Inhabilitar',
-        command: () => this.darDeBajaUsuario(user),
+        label: user.estado_user === 'ACTIVO' ? 'Inhabilitar' : 'Habilitar',
+        command: () => this.cambiarEstadoUsuario(user),
       },
     ];
   }
@@ -136,23 +137,24 @@ export class UserTable implements OnInit {
     );
   }
 
-  darDeBajaUsuario(selectedUser: any) {
-    // Lógica para dar de baja al usuario
-    console.log('Dando de baja usuario...');
-    this.userS.unsubscribe(selectedUser.id).subscribe({
+  cambiarEstadoUsuario(selectedUser: any) {
+    const newState =
+      selectedUser.estado_user === 'ACTIVO' ? 'DESHABILITADO' : 'ACTIVO';
+    this.userS.unsubscribe(selectedUser.id, newState).subscribe({
       next: (value) => {
         this.toast.add({
           severity: 'success',
-          summary: 'Exito',
+          summary: 'Éxito',
           detail: value.message,
           life: 3000,
         });
+        selectedUser.estado_user = newState;
       },
       error: (err) => {
         this.toast.add({
           severity: 'error',
           summary: 'Error',
-          detail: err.error.message || 'Ocurrio un error inseperado',
+          detail: err.error.message || 'Ocurrió un error inesperado',
           life: 3000,
         });
       },
