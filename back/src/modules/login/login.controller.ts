@@ -15,14 +15,28 @@ export const loginController = async (
   const { ci, password } = req.body;
   try {
     const existingUser = await prisma.user.findUnique({
-      where: { ci },
+      where: {
+        ci,
+      },
     });
 
-    if (!existingUser || existingUser.password !== password) {
+    if (!existingUser) {
       ManageResponse.unauthorized(res, "Credenciales incorrectas");
       return;
     }
 
+    if (existingUser.estado_user === "DESHABILITADO") {
+      ManageResponse.unauthorized(
+        res,
+        "Usuario deshabilitado. Contacte al administrador"
+      );
+      return;
+    }
+
+    if (existingUser.password !== password) {
+      ManageResponse.unauthorized(res, "Credenciales incorrectas");
+      return;
+    }
     const accessToken = jwt.sign(
       { userId: existingUser.id, ci: existingUser.ci },
       ACCESS_SECRET,

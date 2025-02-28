@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  FileSignedById,
   historyDocument,
   signedDocuments,
   UpdateDocument,
@@ -12,6 +13,7 @@ const signedRouter = Router();
 
 signedRouter.post("/", validate(schemaSignedFile), uploadAndSignDocument);
 signedRouter.get("/", signedDocuments);
+signedRouter.get("/file/:id", FileSignedById);
 signedRouter.put("/:id", UpdateDocument);
 signedRouter.post("/prueba/", uploadFile);
 // Hostorial de documentos

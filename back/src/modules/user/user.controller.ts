@@ -161,3 +161,21 @@ export const infoUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateState = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const state = req.body.state;
+    const update = await prisma.user.update({
+      data: { estado_user: state },
+      where: { id: id },
+    });
+    if (update) {
+      ManageResponse.success(res, "Usuario modificado exitosamente", update);
+    } else {
+      ManageResponse.notFound(res, "Usuario no modificado");
+    }
+  } catch (e) {
+    ManageResponse.serverError(res, "Error en el servidor", e);
+  }
+};

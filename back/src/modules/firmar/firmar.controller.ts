@@ -5,14 +5,27 @@ import { SignedDTO } from "../../infraestrucure/DTO/signedfile.dto";
 const prisma = new PrismaClient();
 export const signedDocuments = async (req: Request, res: Response) => {
   try {
+    const idUser = req.user?.userId;
+
     const signed = await prisma.firmar.findMany({
+      where: {
+        idUser: idUser,
+      },
       include: {
-        Documento: true,
+        Documento: {
+          omit: {
+            documento_blob: true,
+            id_historial: true,
+            fecha_eliminacion: true,
+          },
+        },
         User: {
-          select: {
-            name: true,
-            ci: true,
-            tipo_user: true,
+          omit: {
+            idRol: true,
+            password: true,
+            refresh_token: true,
+            fecha_creacion: true,
+            id: true,
           },
         },
       },
@@ -21,12 +34,34 @@ export const signedDocuments = async (req: Request, res: Response) => {
       ManageResponse.notFound(res, "Error el obtener los documentos firmados");
       return;
     }
+    console.log(req.body.idUSer);
     ManageResponse.success(
       res,
       "Documentos firmados obtenidos correctamente",
       signed
     ),
       signed;
+  } catch (error) {
+    ManageResponse.serverError(res, "Error en el servidor", error);
+  }
+};
+
+export const FileSignedById = async (req: Request, res: Response) => {
+  const id = req.params.idFile;
+  try {
+    const document = await prisma.documento.findFirst({
+      where: {
+        id: id,
+      },
+      select: {
+        documento_blob: true,
+      },
+    });
+    if (!document) {
+      ManageResponse.notFound(res, "No se encontro el documento");
+      return;
+    }
+    ManageResponse.success(res, "Documento obtenido correctamente", document);
   } catch (error) {
     ManageResponse.serverError(res, "Error en el servidor", error);
   }
@@ -270,7 +305,10 @@ export const historyDocument = async (req: Request, res: Response) => {
       }),
     ]);
     if (!principal.length && !history.length) {
-      ManageResponse.notFound(res, "No se encontraron registros del documento");
+      ManageResponse.notFound(
+        res,
+        "No se encontraron registros del documento" + document_id
+      );
       return;
     }
     ManageResponse.success(

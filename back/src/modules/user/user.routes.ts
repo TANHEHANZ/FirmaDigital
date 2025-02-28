@@ -3,6 +3,7 @@ import {
   createUser,
   deletedUser,
   infoUser,
+  updateState,
   updateUser,
   userAll,
   userById,
@@ -18,5 +19,6 @@ userRouter.get("/:id", userById);
 userRouter.post("/", validate(userSchema), createUser);
 userRouter.post("/info/:ci", infoUser);
 userRouter.put("/:id", validate(userSchema), updateUser);
+userRouter.patch("/:id", updateState);
 userRouter.delete("/:id", deletedUser);
 export default userRouter;
