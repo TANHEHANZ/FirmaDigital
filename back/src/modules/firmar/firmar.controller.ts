@@ -34,7 +34,6 @@ export const signedDocuments = async (req: Request, res: Response) => {
       ManageResponse.notFound(res, "Error el obtener los documentos firmados");
       return;
     }
-    console.log(req.body.idUSer);
     ManageResponse.success(
       res,
       "Documentos firmados obtenidos correctamente",
@@ -259,7 +258,11 @@ export const historyDocument = async (req: Request, res: Response) => {
   const document_id = req.params.id;
 
   const includeQuery = {
-    Documento: true,
+    Documento: {
+      omit: {
+        documento_blob: true,
+      },
+    },
     User: {
       select: {
         name: true,
@@ -295,7 +298,7 @@ export const historyDocument = async (req: Request, res: Response) => {
 
   try {
     const [principal, history] = await Promise.all([
-      prisma.firmar.findMany({
+      prisma.firmar.findFirst({
         where: { Documento: { id: document_id } },
         include: includeQuery,
       }),
@@ -304,7 +307,7 @@ export const historyDocument = async (req: Request, res: Response) => {
         include: includeQuery,
       }),
     ]);
-    if (!principal.length && !history.length) {
+    if (!principal && !history.length) {
       ManageResponse.notFound(
         res,
         "No se encontraron registros del documento" + document_id
