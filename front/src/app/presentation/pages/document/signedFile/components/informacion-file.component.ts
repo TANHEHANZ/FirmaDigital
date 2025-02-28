@@ -31,18 +31,16 @@ import { FormsModule } from '@angular/forms';
       <h2 class="text-xl mb-4">Historial del documento</h2>
 
       <div class="">
-        @for (item of infoHistory?.principal; track $index) {
         <section class="grid grid-cols-2 gap-4">
           <h3 class="font-medium col-span-2 mb-4">Información del documento</h3>
-
-          <!-- Document Info -->
           <app-card title="Nombre del documento">
-            <p class="text-sm">{{ item.Documento?.nombre }}</p>
+            <p class="text-sm">{{ infoHistory.principal.Documento?.nombre }}</p>
           </app-card>
-
-          <app-card title="Tipo de documento">
-            <p class="text-sm">{{ item.Documento?.tipo_documento }}</p>
-          </app-card>
+          <!-- <app-card title="Tipo de documento">
+            <p class="text-sm">
+              {{ infoHistory.principal.Documento?.tipo_documento }}
+            </p>
+          </app-card> -->
 
           <app-card title="Fecha de creación">
             <p-calendar
@@ -53,64 +51,73 @@ import { FormsModule } from '@angular/forms';
               dateFormat="dd/mm/yy"
             ></p-calendar>
           </app-card>
-
           <app-card title="Estado del documento">
             <p
               class="text-sm border rounded-xl text-center px-4"
               [ngClass]="{
-                'border-primary text-primary':
-                  item.Documento?.estado === 'ACTIVO',
+                'border-signed text-signed':
+                  infoHistory.principal.Documento?.estado === 'ACTIVO',
                 'border-error text-error':
-                  item.Documento?.estado === 'ELIMINADO',
+                  infoHistory.principal.Documento?.estado === 'ELIMINADO',
                 'border-processing text-processing':
-                  item.Documento?.estado === 'EDITADO',
-                'border-gray-400': item.Documento?.estado === 'DESHABILITADO'
+                  infoHistory.principal.Documento?.estado === 'EDITADO',
+                'border-gray-400':
+                  infoHistory.principal.Documento?.estado === 'DESHABILITADO'
               }"
             >
               {{
-                item.Documento?.estado === 'ACTIVO'
+                infoHistory.principal.Documento?.estado === 'ACTIVO'
                   ? 'FIRMADO'
-                  : item.Documento?.estado
+                  : infoHistory.principal.Documento?.estado
               }}
             </p>
           </app-card>
           <h3 class="font-medium col-span-2 ">Información del firmante</h3>
-
           <app-card title="Nombre">
-            <p class="text-sm">{{ item.User?.name }}</p>
+            <p class="text-sm">{{ infoHistory.principal.User?.name }}</p>
           </app-card>
 
           <app-card title="CI">
-            <p class="text-sm">{{ item.User?.ci }}</p>
+            <p class="text-sm">{{ infoHistory.principal.User?.ci }}</p>
           </app-card>
-
-          <!-- Certificate Info -->
-          @if (item.User?.AsignacionToken?.[0]?.token?.Certificado) {
-          <h3 class="font-medium col-span-2 ">Información del certificado</h3>
+          <h3 class="font-medium col-span-2 ">Token Asignado</h3>
+          @for(asig of infoHistory?.principal?.User?.AsignacionToken; track
+          $index){
+          <app-card title="fecha_asignacion">
+            <p-calendar
+              [(ngModel)]="documentCreationDate"
+              [showIcon]="true"
+              [showTime]="true"
+              disabled="true"
+              dateFormat="dd/mm/yy"
+            ></p-calendar>
+          </app-card>
+          <app-card title="Cantidad de certificados">
+            <p class="text-sm">
+              {{ asig.token.cantidad_certificados }}
+            </p>
+          </app-card>
+          <app-card title="Estado token">
+            <p class="text-sm">
+              {{ asig.token.estado_token }}
+            </p>
+          </app-card>
+          <h3 class="font-medium col-span-2 ">Titular del token</h3>
 
           <app-card title="Titular">
             <p class="text-sm">
-              {{
-                item.User?.AsignacionToken[0]?.token?.Certificado?.titular
-                  ?.nombre
-              }}
+              {{ asig.token.Certificado?.titular?.nombre }}
             </p>
           </app-card>
-
           <app-card title="CI Titular">
             <p class="text-sm">
-              {{
-                item.User?.AsignacionToken[0]?.token?.Certificado?.titular?.ci
-              }}
+              {{ asig.token.Certificado?.titular?.ci }}
             </p>
           </app-card>
 
           <app-card title="Emisor">
             <p class="text-sm">
-              {{
-                item.User?.AsignacionToken[0]?.token?.Certificado?.Emisor
-                  ?.entidad
-              }}
+              {{ asig.token.Certificado?.Emisor?.entidad }}
             </p>
           </app-card>
 
@@ -131,7 +138,19 @@ import { FormsModule } from '@angular/forms';
               ></p-calendar>
             </div>
           </app-card>
+          } @empty {
+          <p class="text-sm">No se encontraron registros</p>
           }
+        </section>
+        <!-- @for (item of infoHistory?.data?.principal; track $index) { -->
+        <!-- 
+         
+
+        
+
+          
+          @for(items of item.User?.Asig.tokennacionToken; track $index){
+
 
           <button-primary
             class="col-span-2 mt-4"
@@ -139,8 +158,8 @@ import { FormsModule } from '@angular/forms';
             label="Descargar Documento"
             [icon]="ICONS.DOWNLOAD"
           ></button-primary>
-        </section>
-        }
+        </section> -->
+        <!-- } -->
       </div>
     </section>
   `,
@@ -163,21 +182,21 @@ export default class InformationFile implements OnInit {
           next: (res: any) => {
             this.infoHistory = res.data;
 
-            if (this.infoHistory?.principal[0]) {
-              const doc = this.infoHistory.principal[0];
-              if (doc.Documento?.fecha_creacion) {
-                this.documentCreationDate.set(
-                  new Date(doc.Documento.fecha_creacion)
-                );
-              }
+            // if (this.infoHistory?.principal) {
+            //   const doc = this.infoHistory.principal;
+            //   if (doc.Documento?.fecha_creacion) {
+            //     this.documentCreationDate.set(
+            //       new Date(doc.Documento.fecha_creacion)
+            //     );
+            //   }
 
-              // Set certificate dates if available
-              const cert = doc.User?.AsignacionToken?.[0]?.token?.Certificado;
-              if (cert) {
-                this.certificateStartDate.set(new Date(cert.desde));
-                this.certificateEndDate.set(new Date(cert.hasta));
-              }
-            }
+            //   // Set certificate dates if available
+            //   const cert = doc.User?.AsignacionToken?.token?.Certificado;
+            //   if (cert) {
+            //     this.certificateStartDate.set(new Date(cert.desde));
+            //     this.certificateEndDate.set(new Date(cert.hasta));
+            //   }
+            // }
           },
           error: (err) => {
             console.error('Error fetching document data:', err);

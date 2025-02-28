@@ -1,10 +1,8 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ICONS } from '../../../shared/ui/icons';
 import { CommonModule, NgIf } from '@angular/common';
-import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
 import { UploadService } from '../../../../application/services/upload.service';
 import { MessageService } from 'primeng/api';
-import { LocalStorageService } from '../../../../application/utils/local-storage.service';
 import { TokenStateService } from '../../../../application/services/token-state.service';
 import { SwichService } from '../../../../application/global/swich.service';
 interface response {
