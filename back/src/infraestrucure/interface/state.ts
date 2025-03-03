@@ -1,1 +1,1 @@
-export type state = "ACTIVO" | "ELIMINADO" | "EDITADO";
+export type Status = "ACTIVO" | "ELIMINADO" | "EDITADO" | "DESHABILITADO";

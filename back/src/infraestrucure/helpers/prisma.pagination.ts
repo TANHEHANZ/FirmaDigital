@@ -8,7 +8,6 @@ export const getPaginatedResults = async <T, M extends keyof PrismaClient>(
   include: Prisma.Args<PrismaClient[M], "findMany">["include"] = {},
   orderBy: Prisma.Args<PrismaClient[M], "findMany">["orderBy"] = {}
 ) => {
-  // Obtener total de registros y datos paginados
   const [total, items] = await Promise.all([
     (prisma[model] as any).count({ where }),
     (prisma[model] as any).findMany({
@@ -21,7 +20,7 @@ export const getPaginatedResults = async <T, M extends keyof PrismaClient>(
   ]);
 
   return {
-    data: items, // Ahora `items` está dentro de `data`
+    data: items,
     pagination: {
       total,
       page: Math.floor(pagination.skip / pagination.limit) + 1,

@@ -2,20 +2,34 @@ import { PrismaClient } from "@prisma/client";
 import ManageResponse from "../../infraestrucure/response/api";
 import { Request, Response } from "express";
 import fetch from "node-fetch";
-import { state } from "../../infraestrucure/interface/state";
+import { Status } from "../../infraestrucure/interface/state";
 import { getPaginatedResults } from "../../infraestrucure/helpers/prisma.pagination";
 const prisma = new PrismaClient();
 
 export const userAll = async (req: Request, res: Response) => {
-  const state = req.query.state as any;
-  const { page, limit, skip } = req.pagination; // Valores del middleware de paginación
+  const state = req.query.state as Status;
+  const { limit, skip } = req.pagination;
+  const { nameFilter, TipoFilter } = req.query;
 
   try {
+    const whereClause: any = {
+      estado_user: state,
+      NOT: { estado_user: "ELIMINADO" },
+    };
+
+    if (nameFilter) {
+      whereClause.name = { contains: nameFilter, mode: "insensitive" };
+    }
+
+    if (TipoFilter) {
+      whereClause.tipo_user = TipoFilter as any;
+    }
+
     const result = await getPaginatedResults(
       prisma,
       "user",
       { skip, limit },
-      { estado_user: state, NOT: { estado_user: "ELIMINADO" } },
+      whereClause,
       { rol: { select: { tipo: true } } },
       { name: "asc" }
     );
@@ -27,7 +41,6 @@ export const userAll = async (req: Request, res: Response) => {
     );
   } catch (e) {
     ManageResponse.serverError(res, "Error en el servidor", e);
-    return;
   }
 };
 

@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import ManageResponse from "../../infraestrucure/response/api";
-import { state } from "../../infraestrucure/interface/state";
+import { Status } from "../../infraestrucure/interface/state";
 const prisma = new PrismaClient();
 
 export const rolAll = async (req: Request, res: Response) => {
-  const state = req.params.state as state;
+  const state = req.params.state as Status;
 
   try {
     const rol = await prisma.rol.findMany({
