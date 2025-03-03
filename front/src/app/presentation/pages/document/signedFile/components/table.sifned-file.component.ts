@@ -11,16 +11,9 @@ import InformationFile from './informacion-file.component';
 import { SignedService } from '../../../../../application/services/signed.service';
 import { responceSigned } from '../../../../../application/models/interfaces/api/signed';
 import { ButtonSecundaryComponent } from '../../../../shared/ui/button/secundary.component';
-import { CustomSelectComponent } from '../../../../shared/ui/select.component';
 
 @Component({
-  imports: [
-    DrawerComponent,
-    CommonModule,
-    MenuModule,
-    ButtonSecundaryComponent,
-    CustomSelectComponent,
-  ],
+  imports: [CommonModule, MenuModule, ButtonSecundaryComponent],
   selector: 'table-signed-file',
   template: `
     <section class="  w-full">
@@ -138,7 +131,7 @@ export default class TableSignedFile {
         icon: 'ri-file-edit-line',
         tooltipOptions: {
           tooltipLabel: 'Subir nueva versión del documento y firmar',
-          tooltipPosition: 'left' as const, // Fix type error
+          tooltipPosition: 'left' as const,
         },
         command: () => this.actualizarYFirmar(item),
       },
@@ -164,9 +157,6 @@ export default class TableSignedFile {
 
   validarDocumento(event: any) {
     console.log(event);
-
-    // this.modalS.$modal.emit('assign-token');
-    // this.modalS.setData(this.user);
   }
 
   editarUsuario() {
@@ -189,7 +179,6 @@ export default class TableSignedFile {
     });
   }
   darDeBajaUsuario() {
-    // Lógica para dar de baja al usuario
     console.log('Dando de baja usuario...');
   }
 }
