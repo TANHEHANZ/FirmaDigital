@@ -10,10 +10,11 @@ import {
 } from "./user.controller";
 import { validate } from "../../infraestrucure/middleware/validate";
 import { userSchema } from "../../infraestrucure/DTO/user.dto";
+import { paginate } from "../../infraestrucure/middleware/pagination.middleware";
 
 const userRouter = Router();
 
-userRouter.get("/", userAll);
+userRouter.get("/", paginate, userAll);
 userRouter.get("/:id", userById);
 
 userRouter.post("/", validate(userSchema), createUser);

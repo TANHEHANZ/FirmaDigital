@@ -3,36 +3,30 @@ import ManageResponse from "../../infraestrucure/response/api";
 import { Request, Response } from "express";
 import fetch from "node-fetch";
 import { state } from "../../infraestrucure/interface/state";
+import { getPaginatedResults } from "../../infraestrucure/helpers/prisma.pagination";
 const prisma = new PrismaClient();
 
 export const userAll = async (req: Request, res: Response) => {
-  const state = req.params.state as state;
+  const state = req.query.state as any;
+  const { page, limit, skip } = req.pagination; // Valores del middleware de paginación
+
   try {
-    const userAll = await prisma.user.findMany({
-      where: {
-        estado_user: state,
-        NOT: {
-          estado_user: "ELIMINADO",
-        },
-      },
-      omit: {
-        password: true,
-        refresh_token: true,
-      },
-      include: {
-        rol: {
-          select: {
-            tipo: true,
-          },
-        },
-      },
+    const result = await getPaginatedResults(
+      prisma,
+      "user",
+      { skip, limit },
+      { estado_user: state, NOT: { estado_user: "ELIMINADO" } },
+      { rol: { select: { tipo: true } } },
+      { name: "asc" }
+    );
+
+    ManageResponse.success(res, "Usuarios obtenidos exitosamente", {
+      data: result.data,
+      pagination: result.pagination,
     });
-    if (!userAll) {
-      ManageResponse.notFound(res, "Error al obtener usuarios");
-    }
-    ManageResponse.success(res, "Usuarios obtenidos exitosamente", userAll);
   } catch (e) {
-    ManageResponse.badRequest(res, "Error de servidor", e);
+    ManageResponse.serverError(res, "Error en el servidor", e);
+    return;
   }
 };
 

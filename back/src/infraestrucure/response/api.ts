@@ -1,14 +1,32 @@
 import { Response } from "express";
 
 const ManageResponse = {
-  success: (res: Response, message: string, data: any = null): Response => {
+  success: (res: Response, message: string, response: any = null): Response => {
+    return res.status(200).json({
+      status: 200,
+      message,
+      response,
+    });
+  },
+
+  paginatedSuccess: (
+    res: Response,
+    message: string,
+    data: any[],
+    pagination: {
+      total: number;
+      page: number;
+      totalPages: number;
+      limit: number;
+    }
+  ): Response => {
     return res.status(200).json({
       status: 200,
       message,
       data,
+      pagination,
     });
   },
-
   badRequest: (
     res: Response,
     message: string,

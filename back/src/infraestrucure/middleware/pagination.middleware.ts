@@ -1,48 +1,29 @@
 import { Request, Response, NextFunction } from "express";
 
-interface PaginationQuery {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order?: "asc" | "desc";
+interface PaginationParams {
+  page: number;
+  limit: number;
+  skip: number;
 }
 
 declare global {
   namespace Express {
     interface Request {
-      pagination?: {
-        page: number;
-        limit: number;
-        skip: number;
-        sort: string;
-        order: "asc" | "desc";
-      };
+      pagination: PaginationParams;
     }
   }
 }
 
-export const paginationMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const {
-    page = 1,
-    limit = 10,
-    sort = "createdAt",
-    order = "desc",
-  } = req.query as PaginationQuery;
-
-  const validPage = Math.max(1, Number(page));
-  const validLimit = Math.min(100, Math.max(1, Number(limit)));
-  const validOrder = order === "asc" ? "asc" : "desc";
+export const paginate = (req: Request, res: Response, next: NextFunction) => {
+  const page = parseInt(req.query.page as string);
+  const limit = parseInt(req.query.limit as string);
 
   req.pagination = {
-    page: validPage,
-    limit: validLimit,
-    skip: (validPage - 1) * validLimit,
-    sort,
-    order: validOrder,
+    page: isNaN(page) || page < 1 ? 1 : page,
+    limit: isNaN(limit) || limit < 1 ? 10 : limit,
+    skip:
+      ((isNaN(page) || page < 1 ? 1 : page) - 1) *
+      (isNaN(limit) || limit < 1 ? 10 : limit),
   };
 
   next();
