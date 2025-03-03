@@ -20,10 +20,11 @@ export const userAll = async (req: Request, res: Response) => {
       { name: "asc" }
     );
 
-    ManageResponse.success(res, "Usuarios obtenidos exitosamente", {
-      data: result.data,
-      pagination: result.pagination,
-    });
+    ManageResponse.paginatedSuccess(
+      res,
+      "Usuarios obtenidos exitosamente",
+      result
+    );
   } catch (e) {
     ManageResponse.serverError(res, "Error en el servidor", e);
     return;
