@@ -175,7 +175,7 @@ export class FormRegisterComponent implements OnInit {
       });
       return;
     }
-    this.userService.infoUsre(this.form.value.ci ?? '').subscribe({
+    this.userService.infoUser(this.form.value.ci ?? '').subscribe({
       next: (response) => {
         if (response.status === 200 && response.data) {
           this.messageService.add({

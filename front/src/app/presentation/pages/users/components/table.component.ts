@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../../../application/services/user.service';
 import { MessageService } from 'primeng/api';
@@ -14,12 +15,13 @@ import { ButtonSecundaryComponent } from '../../../shared/ui/button/secundary.co
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'user-table',
-  imports: [CommonModule, MenuModule, ButtonSecundaryComponent],
+  imports: [CommonModule, MenuModule, ButtonSecundaryComponent, FormsModule],
   template: `
     <article class=" overflow-y-scroll max-h-[70dvh] ">
       <table class="w-full">
         <thead class="text-sm border-b border-gray-300  ">
           <tr class="">
+            <th>#</th>
             <th class="font-light text-start p-2">Nombre</th>
             <th class="font-light text-start p-2">Ci</th>
             <th class="font-light text-start p-2">Tipo</th>
@@ -36,6 +38,8 @@ import { Subscription } from 'rxjs';
         >
           @for (item of user; track $index) {
           <tr class="text-sm lowercase border-b border-gray-300 ">
+            <td class="p-2">{{ (page - 1) * limit + $index + 1 }}</td>
+
             <td class="p-2 ">{{ item.name }}</td>
             <td class="p-2 ">{{ item.ci }}</td>
             <td class="p-2 ">{{ item.tipo_user }}</td>
@@ -78,16 +82,29 @@ import { Subscription } from 'rxjs';
 
     <div class="flex justify-end items-center gap-4 my-2">
       <div class="flex justify-center items-center gap-4">
-        <p class="text-sm">Filas por pagina</p>
-        <select class=" border border-primary p-2 rounded-md">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
+        <p class="text-sm">Filas por página</p>
+        <select
+          class="border border-primary p-2 rounded-md"
+          [(ngModel)]="limit"
+          (change)="changeLimit()"
+        >
+          <option *ngFor="let opt of [10, 20, 30]" [value]="opt">
+            {{ opt }}
+          </option>
         </select>
       </div>
 
-      <button-secundary [icon]="ICONS.LEFT"> </button-secundary>
-      <button-secundary [icon]="ICONS.RIGHT"> </button-secundary>
+      <button-secundary
+        [icon]="ICONS.LEFT"
+        (click)="prevPage()"
+        [disabled]="page === 1"
+      ></button-secundary>
+      <p class="text-sm">Página {{ page }} de {{ lastPage }}</p>
+      <button-secundary
+        [icon]="ICONS.RIGHT"
+        (click)="nextPage()"
+        [disabled]="page >= lastPage"
+      ></button-secundary>
     </div>
   `,
 })
@@ -99,6 +116,11 @@ export class UserTable implements OnInit, OnDestroy {
   user: any[] = [];
   ICONS = ICONS;
   subscription!: Subscription;
+  page = 1;
+  limit = 10;
+  lastPage = 1;
+  total = 0;
+
   getMenuItems(user: any) {
     return [
       {
@@ -128,15 +150,40 @@ export class UserTable implements OnInit, OnDestroy {
     });
   }
   loadUsers() {
-    this.userS.getAllUser().subscribe((data) => {
-      this.user = data;
-    });
+    this.userS
+      .getAllUser({
+        TipoFilter: 'Juridica',
+        page: this.page,
+        limit: this.limit,
+      })
+      .subscribe((response) => {
+        this.user = response.data;
+        this.total = response.pagination.total;
+        this.lastPage = response.pagination.lastPage;
+      });
   }
   asignarToken(selectedUser: any) {
     this.modalS.$modal.emit('assign-token');
     this.modalS.setData(selectedUser);
   }
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.loadUsers();
+    }
+  }
 
+  nextPage() {
+    if (this.page < this.lastPage) {
+      this.page++;
+      this.loadUsers();
+    }
+  }
+
+  changeLimit() {
+    this.page = 1; // Reiniciar a la primera página
+    this.loadUsers();
+  }
   editarUsuario(use: any) {
     this.modalS.$modal.emit('register');
   }
