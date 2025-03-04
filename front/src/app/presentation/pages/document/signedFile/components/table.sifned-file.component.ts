@@ -11,15 +11,21 @@ import InformationFile from './informacion-file.component';
 import { SignedService } from '../../../../../application/services/signed.service';
 import { responceSigned } from '../../../../../application/models/interfaces/api/signed';
 import { ButtonSecundaryComponent } from '../../../../shared/ui/button/secundary.component';
+import StatusBadgeComponent from '../../../../shared/ui/status';
 
 @Component({
-  imports: [CommonModule, MenuModule, ButtonSecundaryComponent],
+  imports: [
+    CommonModule,
+    MenuModule,
+    ButtonSecundaryComponent,
+    StatusBadgeComponent,
+  ],
   selector: 'table-signed-file',
   template: `
     <section class="  w-full">
       <article class=" overflow-y-scroll h-[50dvh]">
         <table class="w-full rounded-md">
-          <thead class="text-sm border-b border-gray-300  ">
+          <thead class="text-sm border-b border-gray-300">
             <th colspan="3" class="bg-secundary p-2 text-white font-light ">
               Usuario firmador
             </th>
@@ -47,22 +53,8 @@ import { ButtonSecundaryComponent } from '../../../../shared/ui/button/secundary
               <td class="py-3 ">{{ item.Documento.nombre }}</td>
               <td class="py-3 ">{{ item.Documento.tipo_documento }}</td>
               <td class="py-3 ">{{ item.fecha | date : 'short' }}</td>
-              <td class="py-3 ">
-                <p
-                  class="text-sm border rounded-xl text-center px-4  "
-                  [ngClass]="{
-                    'border-primary text-primary':
-                      item.Documento.estado === 'ACTIVO',
-                    'border-error text-error':
-                      item.Documento.estado === 'ELIMINADO',
-                    'border-processing text-processing':
-                      item.Documento.estado === 'EDITADO',
-                    'border-gray-400 text-graborder-gray-400':
-                      item.Documento.estado === 'DESHABILITADO'
-                  }"
-                >
-                  {{ item.Documento.estado }}
-                </p>
+              <td class="py-3">
+                <status-badge [estado]="item.Documento.estado" />
               </td>
 
               <td class="p-2 text-center">

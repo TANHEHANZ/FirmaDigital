@@ -41,6 +41,7 @@ import { TokenAssignComponent } from './components/token-assign.component';
           }
         </modal>
         }
+
         <section class="border border-gray-300 rounded-md min-h-[70vh]">
           <user-table></user-table>
         </section>

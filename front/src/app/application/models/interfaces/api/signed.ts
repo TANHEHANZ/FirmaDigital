@@ -14,7 +14,7 @@ export interface peyloadDocumento {
   nombre: string;
   tipo_documento: string;
   documento_blob: string;
-  estado: string;
+  estado: any;
   fecha_creacion: string;
   id_historial: string;
   fecha_modificacion?: string | null;
