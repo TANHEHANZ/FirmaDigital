@@ -266,3 +266,24 @@ export const deletedToken = async (req: Request, res: Response) => {
     ManageResponse.serverError(res, "Datos correctamente eliminados", error);
   }
 };
+
+export const changeStatus = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const estado_token = req.body.estado_token;
+    const update = await prisma.token.update({
+      data: {
+        estado_token: estado_token,
+      },
+      where: { id: id },
+    });
+    if (!update) {
+      ManageResponse.notFound(res, "No se pudo actualizar el estado del token");
+      return;
+    }
+    ManageResponse.success(res, "Estado del token actualizado", update);
+  } catch (error) {
+    console.error(error);
+    ManageResponse.serverError(res, "Error en el servidor", error);
+  }
+};

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changeStatus,
   createToken,
   deletedToken,
   Token,
@@ -13,6 +14,7 @@ const tokenRouter = Router();
 tokenRouter.get("/", paginate, TokenAll);
 tokenRouter.get("/:id", Token);
 tokenRouter.post("/", validate(schemaToken), createToken);
+tokenRouter.patch("/:id", changeStatus);
 tokenRouter.put("/", validate(schemaToken), updateToken);
 tokenRouter.delete("/", deletedToken);
 export default tokenRouter;
