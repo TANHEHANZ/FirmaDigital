@@ -14,36 +14,29 @@ import { FormTokenComponet } from './components/form.component';
     ModalComponent,
     Toast,
     ButtonPrimaryComponent,
-    TokenFiltersComponet,
     TokenTable,
   ],
   template: `
-    <section class="flex justify-center items-start flex-col h-full p-8">
-      <h1 class="text-2xl font-bold my-2">Administrar Tokens</h1>
-      <section class="w-full">
-        <p-toast></p-toast>
-        <section class="flex justify-between w-full gap-8">
-          <token-filter></token-filter>
-          <button-primary
-            (clicked)="openModal('register')"
-            label="Nuevo Token"
-          ></button-primary>
-        </section>
+    <p-toast></p-toast>
+    <section class="flex flex-col gap-2">
+      <h1 class="text-2xl font-bold my-8">Administrar Tokens</h1>
+      <section class="w-full flex flex-col justify-center items-start">
+        <button-primary
+          (clicked)="openModal('register')"
+          label="Nuevo Token"
+        ></button-primary>
 
-        @if(currentModal !== null) {
-        <modal>
-          @if(currentModal === 'register') {
-          <form-token></form-token>
-
-          }
-        </modal>
-        }
-
-        <section class="border border-gray-300 rounded-md min-h-[70vh]">
-          <token-table></token-table>
-        </section>
+        <token-table></token-table>
       </section>
     </section>
+    @if(currentModal !== null) {
+    <modal>
+      @if(currentModal === 'register') {
+      <form-token></form-token>
+
+      }
+    </modal>
+    }
   `,
 })
 export class TokenComponent {
