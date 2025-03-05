@@ -3,6 +3,7 @@ import {
   createUser,
   deletedUser,
   infoUser,
+  updateRol,
   updateState,
   updateUser,
   userAll,
@@ -16,6 +17,7 @@ const userRouter = Router();
 
 userRouter.get("/", paginate, userAll);
 userRouter.get("/:id", userById);
+userRouter.post("/:id", updateRol);
 
 userRouter.post("/", validate(userSchema), createUser);
 userRouter.post("/info/:ci", infoUser);

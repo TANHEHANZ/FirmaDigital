@@ -30,7 +30,7 @@ export const userAll = async (req: Request, res: Response) => {
       "user",
       { skip, limit },
       whereClause,
-      { rol: { select: { tipo: true } } },
+      null,
       { name: "asc" }
     );
 
@@ -41,6 +41,21 @@ export const userAll = async (req: Request, res: Response) => {
     );
   } catch (e) {
     ManageResponse.serverError(res, "Error en el servidor", e);
+  }
+};
+export const updateRol = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const user = await prisma.user.update({
+      where: { id: id },
+      data: { rol: req.body.rol },
+    });
+    if (!user) {
+      ManageResponse.notFound(res, "Rol no actualizado");
+    }
+    ManageResponse.success(res, "Usuario actualizado exitosamente", user);
+  } catch (error) {
+    ManageResponse.serverError(res, "Error en el servidor", error);
   }
 };
 
@@ -59,11 +74,6 @@ export const userById = async (req: Request, res: Response) => {
         Firmar: {
           select: {
             Documento: true,
-          },
-        },
-        rol: {
-          select: {
-            tipo: true,
           },
         },
       },

@@ -27,7 +27,7 @@ export const userSchema = z.object({
   cargo: z.string().min(1, { message: "el cargo campo son obligatorios" }),
   refresh_token: z.string().optional(),
 
-  idRol: z.string().min(1, { message: "El rol es obligatorio" }),
+  rol: z.string().min(1, { message: "El rol es obligatorio" }),
   estado_user: z.enum(["ACTIVO", "ELIMINADO", "EDITADO", "DESHABILITADO"]),
 });
 

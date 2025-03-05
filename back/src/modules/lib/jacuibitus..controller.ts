@@ -2,11 +2,51 @@ import { Request, Response } from "express";
 import fetch from "node-fetch";
 import ManageResponse from "../../infraestrucure/response/api";
 import { PATH_LIB } from "./path.enum";
-import { dataPdf, datosList, resJacubitus } from "./response";
+import { dataPdf, DatosFirmas, datosList, resJacubitus } from "./response";
 import https from "https";
 const jacubitus = process.env.URL_JACUBITUS || "consumer_key";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+
+export const ValidatedDocument = async (req: Request, res: Response) => {
+  try {
+    const response = await fetch(jacubitus + PATH_LIB.VALIDAR_PDF, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        pdf: req.body.pdf,
+      }),
+      agent: new https.Agent({
+        rejectUnauthorized: false,
+      }),
+    });
+
+    if (response.status === 400) {
+      console.log("Response headers:", response.headers);
+      const errorData = await response.json();
+      console.log("Error response:", errorData);
+      ManageResponse.badRequest(
+        res,
+        "Error en la petición al servidor Jacubitus"
+      );
+      return;
+    }
+    const data = (await response.json()) as resJacubitus<DatosFirmas>;
+
+    if (!data.finalizado) {
+      ManageResponse.notFound(res, "No hay token conectados");
+      return;
+    }
+    ManageResponse.success(res, data.mensaje, data.datos);
+  } catch (error) {
+    console.error("Full error:", error);
+    ManageResponse.serverError(res, "Error al obtener lista de tokens", error);
+  }
+};
+
 export const listToken = async (req: Request, res: Response) => {
   try {
     const response = await fetch(jacubitus + PATH_LIB.LIST_TOKEN, {
@@ -39,7 +79,11 @@ export const listToken = async (req: Request, res: Response) => {
     ManageResponse.success(res, data.mensaje, data.datos);
   } catch (error) {
     console.error("Full error:", error);
-    ManageResponse.serverError(res, "Error al obtener lista de tokens", error);
+    ManageResponse.serverError(
+      res,
+      "Revise que se este ejecutando Jacubitus",
+      error
+    );
   }
 };
 
@@ -117,7 +161,6 @@ export const firmar = async (req: Request, res: Response) => {
           Documento: true,
           User: {
             omit: {
-              idRol: true,
               password: true,
               refresh_token: true,
             },
