@@ -2,44 +2,94 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import ManageResponse from "../../infraestrucure/response/api";
 import { SignedDTO } from "../../infraestrucure/DTO/signedfile.dto";
+import { getPaginatedResults } from "../../infraestrucure/helpers/prisma.pagination";
 const prisma = new PrismaClient();
 export const signedDocuments = async (req: Request, res: Response) => {
   try {
     const idUser = req.user?.userId;
+    const { limit, skip } = req.pagination;
+    const { nombreFirmador, Cifirmador, FechaCreacion, estadoDocumento } =
+      req.query;
 
-    const signed = await prisma.firmar.findMany({
-      where: {
-        idUser: idUser,
-      },
-      include: {
+    const whereClause: any = {
+      idUser: idUser,
+    };
+
+    if (nombreFirmador || Cifirmador || FechaCreacion || estadoDocumento) {
+      whereClause.AND = [] as any[];
+
+      if (nombreFirmador || Cifirmador) {
+        whereClause.AND.push({
+          User: {
+            OR: [
+              nombreFirmador && {
+                name: {
+                  contains: nombreFirmador as string,
+                  mode: "insensitive",
+                },
+              },
+              Cifirmador && {
+                ci: { contains: Cifirmador as string, mode: "insensitive" },
+              },
+            ].filter(Boolean),
+          },
+        });
+      }
+
+      if (FechaCreacion) {
+        const startDate = new Date(FechaCreacion as string);
+        startDate.setHours(0, 0, 0, 0);
+        const endDate = new Date(FechaCreacion as string);
+        endDate.setHours(23, 59, 59, 999);
+
+        whereClause.AND.push({
+          fecha: {
+            gte: startDate,
+            lte: endDate,
+          },
+        });
+      }
+
+      if (estadoDocumento) {
+        whereClause.AND.push({
+          Documento: {
+            estado: estadoDocumento as string,
+          },
+        });
+      }
+    }
+
+    const result = await getPaginatedResults(
+      prisma,
+      "firmar",
+      { skip, limit },
+      whereClause,
+      {
         Documento: {
-          omit: {
-            documento_blob: true,
+          select: {
+            nombre: true,
+            tipo_documento: true,
+            estado: true,
+            fecha_creacion: true,
             id_historial: true,
-            fecha_eliminacion: true,
           },
         },
         User: {
-          omit: {
-            idRol: true,
-            password: true,
-            refresh_token: true,
-            fecha_creacion: true,
-            id: true,
+          select: {
+            name: true,
+            ci: true,
+            tipo_user: true,
           },
         },
       },
-    });
-    if (!signed) {
-      ManageResponse.notFound(res, "Error el obtener los documentos firmados");
-      return;
-    }
-    ManageResponse.success(
+      { fecha: "desc" }
+    );
+
+    ManageResponse.paginatedSuccess(
       res,
       "Documentos firmados obtenidos correctamente",
-      signed
-    ),
-      signed;
+      result
+    );
   } catch (error) {
     ManageResponse.serverError(res, "Error en el servidor", error);
   }

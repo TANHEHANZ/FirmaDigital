@@ -9,10 +9,11 @@ import {
 } from "./firmar.controller";
 import { validate } from "../../infraestrucure/middleware/validate";
 import { schemaSignedFile } from "../../infraestrucure/DTO/signedfile.dto";
+import { paginate } from "../../infraestrucure/middleware/pagination.middleware";
 const signedRouter = Router();
 
 signedRouter.post("/", validate(schemaSignedFile), uploadAndSignDocument);
-signedRouter.get("/", signedDocuments);
+signedRouter.get("/", paginate, signedDocuments);
 signedRouter.get("/file/:id", FileSignedById);
 signedRouter.put("/:id", UpdateDocument);
 signedRouter.post("/prueba/", uploadFile);
