@@ -15,8 +15,8 @@ export class SignedService {
   private URL_SIGNED_HISTORY = this.URL_ADDRESS + API.SIGNED_HISTORY;
   private URL_SIGNED_FILE_BY_ID = this.URL_ADDRESS + API.SIGNED_FILE_BY_ID;
 
-  docuemntsSigned(): Observable<res<responceSigned[]>> {
-    return this.http.get<res<responceSigned[]>>(this.URL_DOCUMENTS_SIGNED);
+  docuemntsSigned(): Observable<res<responceSigned>> {
+    return this.http.get<res<responceSigned>>(this.URL_DOCUMENTS_SIGNED);
   }
   signedHistory(id: string) {
     return this.http.get(this.URL_SIGNED_HISTORY + id);

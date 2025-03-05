@@ -138,7 +138,7 @@ export default class TableSignedFile {
     this.signedService.docuemntsSigned().subscribe({
       next: (response) => {
         console.log(response);
-        this.data = response.data.slice(0, 10) as responceSigned[];
+        this.data = response.data as responceSigned[];
       },
 
       error: (err) => {

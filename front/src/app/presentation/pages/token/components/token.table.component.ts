@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
     FormsModule,
   ],
   template: `
-    <token-filter></token-filter>
+    <token-filter (filterChanged)="applyFilters($event)"></token-filter>
     <article
       class="min-h-[55dvh] max-h-[55dvh] border border-gray-300 rounded-xl overflow-hidden w-full overflow-y-scroll  min-w-[80dvw]  "
     >
@@ -122,9 +122,10 @@ export class TokenTable implements OnInit {
   lastPage = 1;
   total = 0;
   filters = {
-    nameFilter: '',
-    TipoFilter: '',
-    state: '',
+    nombreTitular: '',
+    ciTitular: '',
+    entidadEmisora: '',
+    fechaExpiracion: '',
     page: 1,
     limit: 10,
   };
@@ -147,9 +148,10 @@ export class TokenTable implements OnInit {
     },
   ];
   applyFilters(filters: {
-    nameFilter?: string;
-    TipoFilter?: string;
-    state?: string;
+    nombreTitular?: string;
+    ciTitular?: string;
+    entidadEmisora?: string;
+    fechaExpiracion?: string;
   }) {
     this.page = 1;
     this.filters = {
@@ -158,15 +160,6 @@ export class TokenTable implements OnInit {
       page: this.page,
       limit: this.limit,
     };
-    if (!filters.nameFilter && !filters.TipoFilter && !filters.state) {
-      this.filters = {
-        nameFilter: '',
-        TipoFilter: '',
-        state: '',
-        page: 1,
-        limit: this.limit,
-      };
-    }
     this.getToken();
   }
   getValidityStatus(expiryDate: string): string {
@@ -186,15 +179,31 @@ export class TokenTable implements OnInit {
     this.getToken();
   }
   getToken() {
-    this.tokenS.getAllToken().subscribe({
-      next: (value) => {
-        this.token = Array.isArray(value.data) ? value.data : [];
-        console.log(this.token);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+    this.tokenS
+      .getAllToken({
+        nombreTitular: this.filters.nombreTitular,
+        ciTitular: this.filters.ciTitular,
+        entidadEmisora: this.filters.entidadEmisora,
+        fechaExpiracion: this.filters.fechaExpiracion,
+        page: this.page,
+        limit: this.limit,
+      })
+      .subscribe({
+        next: (value) => {
+          this.token = value.data;
+          this.total = value.pagination.total;
+          this.lastPage = value.pagination.lastPage;
+          this.page = value.pagination.page;
+        },
+        error: (err) => {
+          this.toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error al cargar los tokens',
+            life: 3000,
+          });
+        },
+      });
   }
   asignarToken() {
     // Lógica para asignar token

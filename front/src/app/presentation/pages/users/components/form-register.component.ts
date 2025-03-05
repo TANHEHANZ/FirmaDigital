@@ -17,7 +17,10 @@ import { UserService } from '../../../../application/services/user.service';
 import { CommonModule } from '@angular/common';
 import { ICONS } from '../../../shared/ui/icons';
 import { SwichService } from '../../../../application/global/swich.service';
-
+interface Role {
+  label: string;
+  value: string;
+}
 @Component({
   selector: 'form-register',
 
@@ -138,7 +141,7 @@ export class FormRegisterComponent implements OnInit {
   modalS = inject(SwichService);
   ICONS = ICONS;
   informacion: any;
-  roles = [];
+  roles: Role[] = [];
   isEditing = false;
   userId: string = '';
 

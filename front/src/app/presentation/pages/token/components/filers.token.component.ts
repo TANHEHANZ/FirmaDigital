@@ -17,12 +17,12 @@ import { CalendarModule } from 'primeng/calendar';
           <custom-input
             type="search"
             label="Filtrar por nombre"
-            [(ngModel)]="nameFilter"
+            [(ngModel)]="nombreTitular"
           ></custom-input>
           <custom-input
             type="search"
             label="Filtrar por ci"
-            [(ngModel)]="nameFilter"
+            [(ngModel)]="ciTitular"
           ></custom-input>
         </section>
         <section class=" grid grid-cols-2 gap-2">
@@ -39,7 +39,7 @@ import { CalendarModule } from 'primeng/calendar';
           <custom-input
             type="search"
             label="Filtrar Emisor"
-            [(ngModel)]="nameFilter"
+            [(ngModel)]="entidadEmisora"
           ></custom-input>
         </section>
       </div>
@@ -68,27 +68,32 @@ import { CalendarModule } from 'primeng/calendar';
 })
 export class TokenFiltersComponet {
   @Output() filterChanged = new EventEmitter<{
-    nameFilter?: string;
-    TipoFilter?: string;
-    state?: string;
+    nombreTitular?: string;
+    ciTitular?: string;
+    entidadEmisora?: string;
+    fechaExpiracion?: string;
   }>();
   ICONS = ICONS;
-  nameFilter: string = '';
-  tipoFilter: string = '';
-  state: string = '';
+  nombreTitular: string = '';
+  ciTitular: string = '';
+  entidadEmisora: string = '';
   documentDate = signal<Date | null>(null);
 
   filtrar() {
     this.filterChanged.emit({
-      nameFilter: this.nameFilter || undefined,
-      TipoFilter: this.tipoFilter || undefined,
-      state: this.state || undefined,
+      nombreTitular: this.nombreTitular || undefined,
+      ciTitular: this.ciTitular || undefined,
+      entidadEmisora: this.entidadEmisora || undefined,
+      fechaExpiracion: this.documentDate()
+        ? this.documentDate()?.toISOString().split('T')[0]
+        : undefined,
     });
   }
   limpiarFiltros() {
-    this.nameFilter = '';
-    this.tipoFilter = '';
-    this.state = '';
+    this.nombreTitular = '';
+    this.ciTitular = '';
+    this.entidadEmisora = '';
+    this.documentDate.set(null);
     this.filterChanged.emit({});
   }
 }

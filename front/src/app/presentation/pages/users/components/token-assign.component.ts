@@ -55,7 +55,7 @@ export class TokenAssignComponent {
     token: new FormControl('', [Validators.required, Validators.min(7)]),
   });
   ngOnInit(): void {
-    this.tokenS.getAllToken().subscribe({
+    this.tokenS.getAllToken({}).subscribe({
       next: (value) => {
         if (!value.data) {
           this.toast.add({
