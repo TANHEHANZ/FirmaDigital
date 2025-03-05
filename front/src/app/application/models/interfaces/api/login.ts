@@ -11,5 +11,5 @@ export interface RegisterPeyload {
   unidad: string;
   cargo: string;
   tipo_user: string;
-  idRol: string | null;
+  rol: string | null;
 }

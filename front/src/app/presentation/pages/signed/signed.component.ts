@@ -29,6 +29,4 @@ import { FileSigned } from './components/file-signed.component';
   `,
   providers: [MessageService],
 })
-export class SignedComponent {
-  signAgain = input<any>();
-}
+export class SignedComponent {}

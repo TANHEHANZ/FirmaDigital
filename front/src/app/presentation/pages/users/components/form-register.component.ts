@@ -110,8 +110,17 @@ interface Role {
             />
             <custom-select
               label="Rol usuario"
-              [options]="roles"
-              [control]="form.controls.idRol"
+              [options]="[
+                {
+                  label: 'Administrador',
+                  value: 'ADMINISTRADOR'
+                },
+                {
+                  label: 'Usuario',
+                  value: 'USUARIO'
+                }
+              ]"
+              [control]="form.controls.rol"
             />
           </section>
           <button-secundary
@@ -146,22 +155,6 @@ export class FormRegisterComponent implements OnInit {
   userId: string = '';
 
   ngOnInit(): void {
-    this.userService.getRolUser().subscribe({
-      next: (data) => {
-        this.roles = data.data.map((rol: any) => ({
-          label: rol.tipo,
-          value: rol.id,
-        }));
-      },
-      error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al traer los datos del rol ',
-          life: 3000,
-        });
-      },
-    });
     this.modalS.$data.subscribe((user) => {
       if (user) {
         this.isEditing = true;
@@ -175,7 +168,7 @@ export class FormRegisterComponent implements OnInit {
           cargo: user.cargo || '',
           tipo_user: user.tipo_user || '',
           estado_user: user.estado_user || '',
-          idRol: user.rol?.id || '',
+          rol: user.rol?.id || '',
           password: user.password || '',
         });
       } else {
@@ -192,7 +185,7 @@ export class FormRegisterComponent implements OnInit {
       Validators.minLength(7),
       Validators.maxLength(9),
     ]),
-    idRol: new FormControl('', [Validators.required]),
+    rol: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required]),
     institucion: new FormControl('', [Validators.required]),
     unidad: new FormControl('', [Validators.required]),
@@ -262,7 +255,7 @@ export class FormRegisterComponent implements OnInit {
       password: this.form.value.password ?? '',
       ci: this.form.value.ci ?? '',
       name: this.form.value.name ?? '',
-      idRol: this.form.value.idRol ?? '',
+      rol: this.form.value.rol ?? '',
       tipo_user: this.form.value.tipo_user ?? '',
       estado_user: this.form.value.estado_user ?? '',
       cargo: this.form.value.cargo ?? '',

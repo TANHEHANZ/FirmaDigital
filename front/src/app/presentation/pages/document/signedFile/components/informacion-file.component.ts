@@ -28,13 +28,10 @@ import { FormsModule } from '@angular/forms';
         <section class="grid grid-cols-2 gap-4">
           <h3 class="font-medium col-span-2 mb-4">Información del documento</h3>
           <app-card title="Nombre del documento">
-            <p class="text-sm">{{ infoHistory.principal.Documento?.nombre }}</p>
-          </app-card>
-          <!-- <app-card title="Tipo de documento">
             <p class="text-sm">
-              {{ infoHistory.principal.Documento?.tipo_documento }}
+              {{ infoHistory?.principal?.Documento?.nombre }}
             </p>
-          </app-card> -->
+          </app-card>
 
           <app-card title="Fecha de creación">
             <p-calendar
@@ -50,29 +47,29 @@ import { FormsModule } from '@angular/forms';
               class="text-sm border rounded-xl text-center px-4"
               [ngClass]="{
                 'border-signed text-signed':
-                  infoHistory.principal.Documento?.estado === 'ACTIVO',
+                  infoHistory?.principal?.Documento?.estado === 'ACTIVO',
                 'border-error text-error':
-                  infoHistory.principal.Documento?.estado === 'ELIMINADO',
+                  infoHistory?.principal?.Documento?.estado === 'ELIMINADO',
                 'border-processing text-processing':
-                  infoHistory.principal.Documento?.estado === 'EDITADO',
+                  infoHistory?.principal?.Documento?.estado === 'EDITADO',
                 'border-gray-400':
-                  infoHistory.principal.Documento?.estado === 'DESHABILITADO'
+                  infoHistory?.principal?.Documento?.estado === 'DESHABILITADO'
               }"
             >
               {{
-                infoHistory.principal.Documento?.estado === 'ACTIVO'
+                infoHistory?.principal?.Documento?.estado === 'ACTIVO'
                   ? 'FIRMADO'
-                  : infoHistory.principal.Documento?.estado
+                  : infoHistory?.principal?.Documento?.estado
               }}
             </p>
           </app-card>
           <h3 class="font-medium col-span-2 ">Información del firmante</h3>
           <app-card title="Nombre">
-            <p class="text-sm">{{ infoHistory.principal.User?.name }}</p>
+            <p class="text-sm">{{ infoHistory?.principal?.User?.name }}</p>
           </app-card>
 
           <app-card title="CI">
-            <p class="text-sm">{{ infoHistory.principal.User?.ci }}</p>
+            <p class="text-sm">{{ infoHistory?.principal?.User?.ci }}</p>
           </app-card>
           <h3 class="font-medium col-span-2 ">Token Asignado</h3>
           @for(asig of infoHistory?.principal?.User?.AsignacionToken; track
@@ -138,10 +135,6 @@ import { FormsModule } from '@angular/forms';
         </section>
         <!-- @for (item of infoHistory?.data?.principal; track $index) { -->
         <!-- 
-         
-
-        
-
           
           @for(items of item.User?.Asig.tokennacionToken; track $index){
 
@@ -171,26 +164,12 @@ export default class InformationFile implements OnInit {
 
   ngOnInit() {
     this.drawerService.getData().subscribe((data) => {
-      if (data && data.Documento.id) {
-        this.historyS.signedHistory(data.Documento.id).subscribe({
+      console.log(data);
+      if (data && data.idDocumento) {
+        this.historyS.signedHistory(data.idDocumento).subscribe({
           next: (res: any) => {
             this.infoHistory = res.data;
-
-            // if (this.infoHistory?.principal) {
-            //   const doc = this.infoHistory.principal;
-            //   if (doc.Documento?.fecha_creacion) {
-            //     this.documentCreationDate.set(
-            //       new Date(doc.Documento.fecha_creacion)
-            //     );
-            //   }
-
-            //   // Set certificate dates if available
-            //   const cert = doc.User?.AsignacionToken?.token?.Certificado;
-            //   if (cert) {
-            //     this.certificateStartDate.set(new Date(cert.desde));
-            //     this.certificateEndDate.set(new Date(cert.hasta));
-            //   }
-            // }
+            console.log('Informacion', this.infoHistory);
           },
           error: (err) => {
             console.error('Error fetching document data:', err);

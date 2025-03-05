@@ -208,9 +208,8 @@ export default class TableSignedFile {
   }
 
   Historial(signed: any) {
-    console.log(signed);
     this.drawerService.openDrawer(
-      'Historial del documento ',
+      'Historial del documento',
       InformationFile,
       signed
     );

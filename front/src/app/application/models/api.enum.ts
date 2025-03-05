@@ -18,5 +18,6 @@ export enum API {
   SIGNED_HISTORY = SIGNED + '/history/',
   SIGNED_FILE_BY_ID = SIGNED + '/file/',
   ASIGNAR = BASE + 'asignar',
+  LIST_TOKEN = BASE + 'jacubitus',
   UNSUB = ASIGNAR,
 }

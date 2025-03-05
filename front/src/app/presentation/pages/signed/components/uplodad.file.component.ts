@@ -17,6 +17,11 @@ interface response {
     <section
       class="rounded-xl border-2 border-gray-300 flex flex-col justify-center items-center col-span-2 relative w-full h-full  overflow-hidden"
     >
+      <p
+        class=" bg-secundary rounded-full w-6 h-6 flex justify-center items-center text-white absolute top-2 left-2 text-xs"
+      >
+        2
+      </p>
       <div
         class="flex justify-center items-center cursor-pointer p-6 transition-all duration-300 flex-col h-full w-full gap-4"
         [ngClass]="{

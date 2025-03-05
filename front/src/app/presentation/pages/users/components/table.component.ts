@@ -70,7 +70,7 @@ import { UserFilterComponent } from './filters.component';
                 {{ item.estado_user }}
               </p>
             </td>
-            <td class="p-2 ">{{ item.rol.tipo }}</td>
+            <td class="p-2 ">{{ item.rol }}</td>
             <td class="p-2 text-center">
               <button (click)="menu.toggle($event)" class="w-full ">
                 <i [ngClass]="ICONS.MENU_VERTICAL"></i>

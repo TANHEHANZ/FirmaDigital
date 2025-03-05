@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_ROUTES } from '../models/api.enum';
+import { API, API_ROUTES } from '../models/api.enum';
 import { FirmarPdfRequest } from '../models/interfaces/firmar/pdf';
 import { TokenDataRequest } from '../models/interfaces/validate.token';
 
@@ -19,7 +19,7 @@ export class UploadService {
     );
   }
   getListToken(): Observable<any> {
-    return this.http.get(`${this.API_URL}${API_ROUTES.LIST_TOKEN}`);
+    return this.http.get(`${this.API_BAACK}${API.LIST_TOKEN}`);
   }
 
   dataToken(data: any): Observable<any> {

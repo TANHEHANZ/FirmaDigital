@@ -14,6 +14,7 @@ export class TokenService {
   private readonly API_URL = 'https://localhost:9000';
   private readonly URL_SAVE = 'http://localhost:3000' + API.TOKEN;
   private readonly URL_ASIGNAR = 'http://localhost:3000' + API.ASIGNAR;
+  private readonly URL_LIST = 'http://localhost:3000' + API.LIST_TOKEN;
   private refreshSubject = new Subject<boolean>();
   refresh$ = this.refreshSubject.asObservable();
   dataToken(data: any): Observable<any> {
@@ -23,7 +24,7 @@ export class TokenService {
     });
   }
   getListToken(): Observable<any> {
-    return this.http.get(`${this.API_URL}${API_ROUTES.LIST_TOKEN}`);
+    return this.http.get(this.URL_LIST);
   }
   saveToken(data: TokenPayload): Observable<any> {
     return this.http.post<any>(this.URL_SAVE, data);

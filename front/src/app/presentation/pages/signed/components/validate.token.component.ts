@@ -39,6 +39,11 @@ interface response {
       }"
       class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto w-[350px] h-full"
     >
+      <p
+        class=" bg-secundary rounded-full w-6 h-6 flex justify-center items-center text-white absolute top-2 left-2 text-xs"
+      >
+        1
+      </p>
       <div class="h-full">
         <p-toast></p-toast>
         <section class="flex flex-col flex-1 gap-2 justify-center p-2">
@@ -149,7 +154,7 @@ export class UploadValidateComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'No se encontraron Tokens',
+            detail: data.error.message,
             life: 3000,
           });
         }
@@ -159,7 +164,7 @@ export class UploadValidateComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: e.message,
+          detail: e.error.message,
           life: 3000,
         });
       },
