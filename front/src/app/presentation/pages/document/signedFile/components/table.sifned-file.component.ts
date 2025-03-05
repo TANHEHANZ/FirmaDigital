@@ -148,11 +148,6 @@ export default class TableSignedFile {
   getMenuItems(item: any): MenuItem[] {
     return [
       {
-        label: 'Validar documento',
-        icon: 'ri-checkbox-circle-line',
-        command: () => this.validarDocumento(item),
-      },
-      {
         label: 'Ver Historial',
         icon: 'ri-history-line',
         command: () => this.Historial(item),
@@ -197,10 +192,6 @@ export default class TableSignedFile {
           });
         },
       });
-  }
-
-  validarDocumento(event: any) {
-    console.log(event);
   }
 
   editarUsuario() {

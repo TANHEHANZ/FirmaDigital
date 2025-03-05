@@ -11,6 +11,7 @@ import { SignedComponent } from '../../signed/signed.component';
 import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
 import CountComponent, { propsInfoSigned } from './components/count.component';
 import { ICONS } from '../../../shared/ui/icons';
+import { pruebaService } from '../../../../application/services/prueva.service';
 
 @Component({
   selector: 'app-signed',
@@ -32,6 +33,7 @@ export class SignedFileComponent implements OnInit {
   data: responceSigned[] = [];
   pdfUrl: string | null = null;
   ICONS = ICONS;
+  pruebaS = inject(pruebaService);
   infoTop: propsInfoSigned[] = [
     {
       count: 15,
@@ -59,6 +61,18 @@ export class SignedFileComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.data = response.data as responceSigned[];
+      },
+
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
+  validar() {
+    this.pruebaS.conectedToken().subscribe({
+      next: (response) => {
+        console.log(response);
       },
 
       error: (err) => {

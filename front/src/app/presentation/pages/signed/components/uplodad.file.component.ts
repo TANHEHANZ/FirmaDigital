@@ -89,9 +89,9 @@ export class UploadFile implements OnInit {
   propModalS = inject(SwichService);
   ngOnInit(): void {
     this.propModalS.$data.subscribe((data) => {
-      console.log(data);
-      if (data && data.originalDocument?.Documento?.id) {
-        this.documentId = data.originalDocument?.Documento?.id;
+      console.log('informacion prop', data);
+      if (data && data.originalDocument?.idDocumento) {
+        this.documentId = data.originalDocument?.idDocumento;
       }
     });
   }
@@ -182,7 +182,7 @@ export class UploadFile implements OnInit {
       });
       return;
     }
-
+    console.log(signingData);
     this.serviceSign
       .uploadFile(
         {

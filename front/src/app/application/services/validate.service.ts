@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ValidateService {
-  private apiUrl = 'http://localhost:3000/v1/api/jacubitus/validar';
+  private apiUrl = 'http://192.168.220.119:3000/v1/api/jacubitus/validar';
 
   constructor(private http: HttpClient) {}
 
