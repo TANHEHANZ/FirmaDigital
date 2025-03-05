@@ -49,9 +49,16 @@ export const TokenAll = async (req: Request, res: Response) => {
       }
 
       if (fechaExpiracion) {
+        const startDate = new Date(fechaExpiracion as string);
+        startDate.setHours(0, 0, 0, 0);
+
+        const endDate = new Date(fechaExpiracion as string);
+        endDate.setHours(23, 59, 59, 999);
+
         whereClause.Certificado.AND.push({
           hasta: {
-            lte: new Date(fechaExpiracion as string),
+            gte: startDate,
+            lte: endDate,
           },
         });
       }
