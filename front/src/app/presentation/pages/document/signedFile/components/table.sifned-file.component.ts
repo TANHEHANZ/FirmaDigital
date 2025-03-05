@@ -12,6 +12,9 @@ import { SignedService } from '../../../../../application/services/signed.servic
 import { responceSigned } from '../../../../../application/models/interfaces/api/signed';
 import { ButtonSecundaryComponent } from '../../../../shared/ui/button/secundary.component';
 import StatusBadgeComponent from '../../../../shared/ui/status';
+import { SignedFiltersComponet } from './filters.signed.components';
+import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   imports: [
@@ -19,78 +22,91 @@ import StatusBadgeComponent from '../../../../shared/ui/status';
     MenuModule,
     ButtonSecundaryComponent,
     StatusBadgeComponent,
+    SignedFiltersComponet,
+    FormsModule,
   ],
   selector: 'table-signed-file',
   template: `
-    <section class="  w-full">
-      <article class=" overflow-y-scroll h-[50dvh]">
-        <table class="w-full rounded-md">
-          <thead class="text-sm border-b border-gray-300">
-            <th colspan="3" class="bg-secundary p-2 text-white font-light ">
-              Usuario firmador
-            </th>
-            <th colspan="6" class="bg-terteary p-2 font-light ">
-              informacion del documento firmado
-            </th>
-            <tr class="">
-              <th class="font-light text-start p-2">Nombre</th>
-              <th class="font-light text-start p-2">Ci</th>
-              <th class="font-light text-start p-2">Persona</th>
-              <th class="font-light text-start p-2">Nombre</th>
-              <th class="font-light text-start p-2">Tipo</th>
-              <th class="font-light text-start p-2">Fecha</th>
-              <th class="font-light text-start p-2">Estado</th>
-            </tr>
-          </thead>
-          <tbody
-            class=" [&>*:nth-child(odd)]:bg-terteary/15 [&>*:nth-child(even)]:bg-secundary/2"
-          >
-            @for (item of data; track $index) {
-            <tr class="text-sm lowercase border-b border-gray-300 ">
-              <td class="py-3 ">{{ item.User.name }}</td>
-              <td class="py-3 ">{{ item.User.ci }}</td>
-              <td class="py-3 ">{{ item.User.tipo_user }}</td>
-              <td class="py-3 ">{{ item.Documento.nombre }}</td>
-              <td class="py-3 ">{{ item.Documento.tipo_documento }}</td>
-              <td class="py-3 ">{{ item.fecha | date : 'short' }}</td>
-              <td class="py-3">
-                <status-badge [estado]="item.Documento.estado" />
-              </td>
+    <signed-filter (filterChanged)="applyFilters($event)"></signed-filter>
+    <article
+      class="min-h-[55dvh] max-h-[55dvh] border border-gray-300 rounded-xl overflow-hidden w-full overflow-y-scroll  min-w-[80dvw]  "
+    >
+      <table class="w-full">
+        <thead class="text-sm border-b border-gray-300">
+          <th colspan="3" class="bg-secundary p-2 text-white font-light ">
+            Usuario firmador
+          </th>
+          <th colspan="6" class="bg-terteary p-2 font-light ">
+            informacion del documento firmado
+          </th>
+          <tr class="">
+            <th class="font-light text-start p-2">Nombre</th>
+            <th class="font-light text-start p-2">Ci</th>
+            <th class="font-light text-start p-2">Persona</th>
+            <th class="font-light text-start p-2">Nombre</th>
+            <th class="font-light text-start p-2">Tipo</th>
+            <th class="font-light text-start p-2">Fecha</th>
+            <th class="font-light text-start p-2">Estado</th>
+          </tr>
+        </thead>
+        <tbody
+          class=" [&>*:nth-child(odd)]:bg-terteary/15 [&>*:nth-child(even)]:bg-secundary/2"
+        >
+          @for (item of data; track $index) {
+          <tr class="text-sm lowercase border-b border-gray-300 ">
+            <td class="py-3 ">{{ item.User.name }}</td>
+            <td class="py-3 ">{{ item.User.ci }}</td>
+            <td class="py-3 ">{{ item.User.tipo_user }}</td>
+            <td class="py-3 ">{{ item.Documento.nombre }}</td>
+            <td class="py-3 ">{{ item.Documento.tipo_documento }}</td>
+            <td class="py-3 ">{{ item.fecha | date : 'short' }}</td>
+            <td class="py-3">
+              <status-badge [estado]="item.Documento.estado" />
+            </td>
 
-              <td class="p-2 text-center">
-                <p-menu
-                  [model]="getMenuItems(item)"
-                  [popup]="true"
-                  #menu
-                ></p-menu>
-                <button
-                  (click)="menu.toggle($event)"
-                  class="w-full h-full px-3"
-                >
-                  <i [ngClass]="ICONS.MENU_VERTICAL"></i>
-                </button>
-              </td>
-            </tr>
-            }@empty {
-            <p>No hay Datos de usuarios</p>
-            }
-          </tbody>
-        </table>
-      </article>
-      <div class="flex justify-end items-center gap-4 my-2">
-        <div class="flex justify-center items-center gap-4">
-          <p class="text-sm">Filas por pagina</p>
-          <select class=" border border-primary p-2 rounded-md">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-          </select>
-        </div>
-
-        <button-secundary [icon]="ICONS.LEFT"> </button-secundary>
-        <button-secundary [icon]="ICONS.RIGHT"> </button-secundary>
+            <td class="p-2 text-center">
+              <p-menu
+                [model]="getMenuItems(item)"
+                [popup]="true"
+                #menu
+              ></p-menu>
+              <button (click)="menu.toggle($event)" class="w-full h-full px-3">
+                <i [ngClass]="ICONS.MENU_VERTICAL"></i>
+              </button>
+            </td>
+          </tr>
+          }@empty {
+          <p>No hay Datos de usuarios</p>
+          }
+        </tbody>
+      </table>
+    </article>
+    <div class="flex justify-end items-center gap-4 my-2">
+      <div class="flex justify-center items-center gap-4">
+        <p class="text-sm">Filas por página</p>
+        <select
+          class="border border-primary p-2 rounded-md"
+          [(ngModel)]="limit"
+          (change)="changeLimit()"
+        >
+          <option *ngFor="let opt of [5, 10, 20, 30]" [value]="opt">
+            {{ opt }}
+          </option>
+        </select>
       </div>
-    </section>
+
+      <button-secundary
+        [icon]="ICONS.LEFT"
+        (click)="prevPage()"
+        [disabled]="page === 1"
+      ></button-secundary>
+      <p class="text-sm">Página {{ page }} de {{ lastPage }}</p>
+      <button-secundary
+        [icon]="ICONS.RIGHT"
+        (click)="nextPage()"
+        [disabled]="page >= lastPage"
+      ></button-secundary>
+    </div>
   `,
 })
 export default class TableSignedFile {
@@ -101,11 +117,34 @@ export default class TableSignedFile {
   user: any[] = [];
   ICONS = ICONS;
   data: responceSigned[] = [];
-  pageSizeOptions: any[] = [
-    { label: '5', value: 5 },
-    { label: '10 ', value: 10 },
-    { label: '25', value: 25 },
-  ];
+  subscription!: Subscription;
+  page = 1;
+  limit = 10;
+  lastPage = 1;
+  total = 0;
+  filters = {
+    nombreFirmador: '',
+    Cifirmador: '',
+    FechaCreacion: '',
+    estadoDocumento: '',
+    page: 1,
+    limit: 10,
+  };
+  applyFilters(filters: {
+    nombreFirmador?: string;
+    Cifirmador?: string;
+    FechaCreacion?: string;
+    estadoDocumento?: string;
+  }) {
+    this.page = 1;
+    this.filters = {
+      ...this.filters,
+      ...filters,
+      page: this.page,
+      limit: this.limit,
+    };
+    this.signed();
+  }
   getMenuItems(item: any): MenuItem[] {
     return [
       {
@@ -133,18 +172,31 @@ export default class TableSignedFile {
   ngOnInit(): void {
     this.signed();
   }
-
   signed() {
-    this.signedService.docuemntsSigned().subscribe({
-      next: (response) => {
-        console.log(response);
-        this.data = response.data as responceSigned[];
-      },
-
-      error: (err) => {
-        console.log(err);
-      },
-    });
+    this.signedService
+      .docuemntsSigned({
+        page: this.page,
+        limit: this.limit,
+        nombreFirmador: this.filters.nombreFirmador,
+        Cifirmador: this.filters.Cifirmador,
+        FechaCreacion: this.filters.FechaCreacion,
+        estadoDocumento: this.filters.estadoDocumento,
+      })
+      .subscribe({
+        next: (response) => {
+          this.data = response.data;
+          this.total = response.pagination.total;
+          this.lastPage = response.pagination.lastPage;
+        },
+        error: (err) => {
+          this.toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error al cargar los documentos firmados',
+            life: 3000,
+          });
+        },
+      });
   }
 
   validarDocumento(event: any) {
@@ -172,5 +224,23 @@ export default class TableSignedFile {
   }
   darDeBajaUsuario() {
     console.log('Dando de baja usuario...');
+  }
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.signed();
+    }
+  }
+
+  nextPage() {
+    if (this.page < this.lastPage) {
+      this.page++;
+      this.signed();
+    }
+  }
+
+  changeLimit() {
+    this.page = 1;
+    this.signed();
   }
 }

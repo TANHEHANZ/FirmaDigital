@@ -15,8 +15,28 @@ export class SignedService {
   private URL_SIGNED_HISTORY = this.URL_ADDRESS + API.SIGNED_HISTORY;
   private URL_SIGNED_FILE_BY_ID = this.URL_ADDRESS + API.SIGNED_FILE_BY_ID;
 
-  docuemntsSigned(): Observable<res<responceSigned>> {
-    return this.http.get<res<responceSigned>>(this.URL_DOCUMENTS_SIGNED);
+  docuemntsSigned(params: {
+    page?: number;
+    limit?: number;
+    nombreFirmador?: string;
+    Cifirmador?: string;
+    FechaCreacion?: string;
+    estadoDocumento?: string;
+  }): Observable<res<responceSigned>> {
+    const queryParams = new URLSearchParams();
+
+    if (params.page) queryParams.append('page', params.page.toString());
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+    if (params.nombreFirmador)
+      queryParams.append('nombreFirmador', params.nombreFirmador);
+    if (params.Cifirmador) queryParams.append('Cifirmador', params.Cifirmador);
+    if (params.FechaCreacion)
+      queryParams.append('FechaCreacion', params.FechaCreacion);
+    if (params.estadoDocumento)
+      queryParams.append('estadoDocumento', params.estadoDocumento);
+
+    const url = `${this.URL_DOCUMENTS_SIGNED}?${queryParams.toString()}`;
+    return this.http.get<res<responceSigned>>(url);
   }
   signedHistory(id: string) {
     return this.http.get(this.URL_SIGNED_HISTORY + id);

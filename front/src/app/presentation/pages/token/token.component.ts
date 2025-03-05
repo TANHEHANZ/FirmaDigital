@@ -19,7 +19,7 @@ import { FormTokenComponet } from './components/form.component';
   template: `
     <p-toast></p-toast>
     <section class="flex flex-col gap-2">
-      <h1 class="text-2xl font-bold my-8">Administrar Tokens</h1>
+      <h1 class="text-2xl font-light my-8">Administrar Tokens</h1>
       <section class="w-full flex flex-col justify-center items-start">
         <button-primary
           (clicked)="openModal('register')"

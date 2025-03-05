@@ -24,9 +24,6 @@ import { CustomSelectComponent } from '../../../shared/ui/select.component';
     ModalComponent,
     SignedComponent,
     ButtonPrimaryComponent,
-    CountComponent,
-    CustomInputComponent,
-    CustomSelectComponent,
   ],
   templateUrl: './signed.component.html',
 })
@@ -61,7 +58,7 @@ export class SignedFileComponent implements OnInit {
     this.modalS.$modal.emit(type);
   }
   signed() {
-    this.signedService.docuemntsSigned().subscribe({
+    this.signedService.docuemntsSigned({}).subscribe({
       next: (response) => {
         console.log(response);
         this.data = response.data as responceSigned[];

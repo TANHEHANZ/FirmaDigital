@@ -1,29 +1,19 @@
-<section class="p-8 flex flex-col gap-8 justify-center h-full items-start">
-  <p-toast></p-toast>
-  <h1 class="text-3xl font-light">Documentos firmados</h1>
-  <count-component [data]="infoTop" class="w-full"></count-component>
-  <div class="flex gap-4 justify-between items-center w-full">
-    <div class="flex gap-4">
-      <custom-input label="Filtrar" />
-      <custom-select
-        label="Ordenar por"
-        [options]="[
-          { label: 'Fecha de creación', value: 'fechaCreacion' },
-          { label: 'Fecha de firma', value: 'fechaFirma' },
-          { label: 'Nombre', value: 'nombre' },
-          { label: 'Tipo de documento', value: 'tipoDocumento' }
-        ]"
-      />
-    </div>
-
+<p-toast></p-toast>
+<section class="flex flex-col gap-2">
+  <!-- <div class="flex justify-around items-center"> -->
+  <h1 class="text-3xl font-light my-8">Documentos firmados</h1>
+  <!-- <count-component [data]="infoTop" class="w-full"></count-component> -->
+  <!-- </div> -->
+  <section class="w-full flex flex-col justify-center items-start">
     <button-primary
       [icon]="ICONS.SIGNATURE"
       label="Firmar documento"
       (click)="openModal('actualizar')"
     ></button-primary>
-  </div>
+  </section>
 
   <table-signed-file class="w-full"></table-signed-file>
+
   @if(currentModal != null){
   <modal>
     @if(currentModal === 'actualizar') {

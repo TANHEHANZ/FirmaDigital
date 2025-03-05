@@ -76,8 +76,8 @@ import { UserFilterComponent } from './filters.component';
                 <i [ngClass]="ICONS.MENU_VERTICAL"></i>
               </button>
             </td>
+            <p-menu [model]="getMenuItems(item)" [popup]="true" #menu></p-menu>
           </tr>
-          <p-menu [model]="getMenuItems(item)" [popup]="true" #menu></p-menu>
           }@empty {
           <tr>
             No hay Datos de usuarios
