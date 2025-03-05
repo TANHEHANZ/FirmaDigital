@@ -14,18 +14,22 @@ export const loginController = async (
 ): Promise<void> => {
   const { ci, password } = req.body;
   try {
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        ci,
+    const userForValidation = await prisma.user.findUnique({
+      where: { ci },
+      select: {
+        id: true,
+        ci: true,
+        password: true,
+        estado_user: true,
       },
     });
 
-    if (!existingUser) {
+    if (!userForValidation) {
       ManageResponse.unauthorized(res, "Credenciales incorrectas");
       return;
     }
 
-    if (existingUser.estado_user === "DESHABILITADO") {
+    if (userForValidation.estado_user === "DESHABILITADO") {
       ManageResponse.unauthorized(
         res,
         "Usuario deshabilitado. Contacte al administrador"
@@ -33,26 +37,41 @@ export const loginController = async (
       return;
     }
 
-    if (existingUser.password !== password) {
+    if (userForValidation.password !== password) {
       ManageResponse.unauthorized(res, "Credenciales incorrectas");
       return;
     }
+
     const accessToken = jwt.sign(
-      { userId: existingUser.id, ci: existingUser.ci },
+      { userId: userForValidation.id, ci: userForValidation.ci },
       ACCESS_SECRET,
       { expiresIn: "1h" }
     );
-    const refreshToken = jwt.sign({ userId: existingUser.id }, REFRESH_SECRET, {
-      expiresIn: "7d",
-    });
+    const refreshToken = jwt.sign(
+      { userId: userForValidation.id },
+      REFRESH_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     await prisma.user.update({
-      where: { id: existingUser.id },
+      where: { id: userForValidation.id },
       data: { refresh_token: refreshToken },
     });
+
+    const userForResponse = await prisma.user.findUnique({
+      where: { id: userForValidation.id },
+      select: {
+        name: true,
+        rol: true,
+      },
+    });
+
     ManageResponse.success(res, "Inicio de sesión correcto", {
       accessToken,
       refreshToken,
+      user: userForResponse,
     });
     return;
   } catch (error) {
@@ -60,7 +79,6 @@ export const loginController = async (
     return;
   }
 };
-
 export const dataToken = (req: Request, res: Response) => {
   try {
     const token = req.headers?.authorization?.split(" ")[1] as string;

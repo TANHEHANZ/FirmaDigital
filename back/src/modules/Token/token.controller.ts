@@ -270,7 +270,7 @@ export const deletedToken = async (req: Request, res: Response) => {
 export const changeStatus = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const estado_token = req.body.estado_token;
+    const estado_token = req.body.state;
     const update = await prisma.token.update({
       data: {
         estado_token: estado_token,
