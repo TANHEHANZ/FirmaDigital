@@ -22,6 +22,7 @@ export const ICONS = {
   INFO: 'fa-solid fa-circle-info',
   SEND: 'fa-regular fa-paper-plane',
   DOWNLOAD: 'fa-solid fa-download',
+  CLEAR: 'fa-solid fa-filter-circle-xmark',
 };
 // <i class=""></i>
 // <i class=""></i>

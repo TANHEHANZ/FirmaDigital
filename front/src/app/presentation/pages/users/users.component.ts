@@ -4,7 +4,6 @@ import { Toast } from 'primeng/toast';
 import { FormRegisterComponent } from './components/form-register.component';
 import { ModalComponent } from '../../shared/ui/modal.component';
 import { SwichService } from '../../../application/global/swich.service';
-import { UserFilerComponet } from './components/filters.component';
 import { UserTable } from './components/table.component';
 import { TokenAssignComponent } from './components/token-assign.component';
 
@@ -15,38 +14,32 @@ import { TokenAssignComponent } from './components/token-assign.component';
     FormRegisterComponent,
     ModalComponent,
     ButtonPrimaryComponent,
-    UserFilerComponet,
     UserTable,
     TokenAssignComponent,
   ],
   template: `
-    <section class="flex justify-center items-start flex-col h-full p-8">
-      <h1 class="text-2xl font-bold my-2">Administrar usuarios</h1>
-      <section class="w-full">
-        <p-toast></p-toast>
-        <section class="flex justify-between w-full gap-8">
-          <user-filter></user-filter>
-          <button-primary
-            (clicked)="openModal('register')"
-            label="Registrar usuario"
-            label="Registrar usuario"
-          ></button-primary>
-        </section>
-        @if(currentModal !== null) {
-        <modal>
-          @if(currentModal === 'register') {
-          <form-register></form-register>
-          } @if(currentModal === 'assign-token') {
-          <token-assign></token-assign>
-          }
-        </modal>
-        }
+    <p-toast></p-toast>
+    <section class="flex flex-col gap-2">
+      <h1 class="text-2xl font-bold my-8">Administrar usuarios</h1>
+      <section class="w-full flex flex-col justify-center items-start">
+        <button-primary
+          (clicked)="openModal('register')"
+          label="Registrar usuario"
+          label="Registrar usuario"
+        ></button-primary>
 
-        <section class="border border-gray-300 rounded-md min-h-[70vh]">
-          <user-table></user-table>
-        </section>
+        <user-table></user-table>
       </section>
     </section>
+    @if(currentModal !== null) {
+    <modal>
+      @if(currentModal === 'register') {
+      <form-register></form-register>
+      } @if(currentModal === 'assign-token') {
+      <token-assign></token-assign>
+      }
+    </modal>
+    }
   `,
 })
 export class UsersComponent implements OnInit {
@@ -58,5 +51,6 @@ export class UsersComponent implements OnInit {
   }
   openModal(type: string) {
     this.modalS.$modal.emit(type);
+    this.modalS.setData(null);
   }
 }

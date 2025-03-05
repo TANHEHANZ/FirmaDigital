@@ -8,7 +8,7 @@ import { Component, input, output } from '@angular/core';
   template: `
     <button
       (click)="onClick()"
-      class="bg-primary text-white  rounded-full flex gap-2 justify-center items-center py-[6px] px-4 overflow-hidden  hover:bg-primary/80 duration-300 transition-all cursor-pointer z-2 border border-gray-300 w-full"
+      class="bg-primary text-white  rounded-xl flex gap-2 justify-center items-center py-[6px] px-4 overflow-hidden  hover:bg-primary/80 duration-300 transition-all cursor-pointer z-2 border border-gray-300 w-full"
     >
       <label
         *ngIf="icon()"

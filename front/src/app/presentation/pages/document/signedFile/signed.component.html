@@ -31,10 +31,4 @@
     }
   </modal>
   }
-
-  <app-drawer>
-    <ng-container *ngIf="drawerService.getContent() | async as content">
-      <ng-container *ngComponentOutlet="content"></ng-container>
-    </ng-container>
-  </app-drawer>
 </section>

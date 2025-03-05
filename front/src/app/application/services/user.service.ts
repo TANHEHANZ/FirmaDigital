@@ -76,4 +76,9 @@ export class UserService {
       .patch<any>(this.URL_REGISTER + '/' + id, { state })
       .pipe(tap(() => this.refreshSubject.next(true)));
   }
+  updateUser(id: string, data: any): Observable<res<any>> {
+    return this.http
+      .put<res<any>>(`${this.URL_REGISTER}/${id}`, data)
+      .pipe(tap(() => this.refreshSubject.next(true)));
+  }
 }

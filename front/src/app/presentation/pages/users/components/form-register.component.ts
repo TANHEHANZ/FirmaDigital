@@ -27,7 +27,9 @@ import { SwichService } from '../../../../application/global/swich.service';
       class="w-full flex justify-center items-center  gap-2"
     >
       <section class="flex flex-col justify-center items-center gap-2">
-        <p class="text-2xl font-bold mb-4">Registro de Usuarios</p>
+        <p class="text-2xl font-bold mb-4">
+          {{ isEditing ? 'Editar Usuario' : 'Registro de Usuarios' }}
+        </p>
         <p class="self-start">Busca a un funcionario por el ci</p>
         <div class=" flex justify-center items-end  gap-2  w-full">
           <custom-input
@@ -46,30 +48,35 @@ import { SwichService } from '../../../../application/global/swich.service';
         <section class=" flex w-full flex-col justify-center items-center">
           <section class=" grid grid-cols-3 gap-2">
             <custom-input
+              [isDisabled]="true"
               class="w-full"
               label="Nombre"
               type="text"
               [control]="form.controls.name"
             />
             <custom-input
+              [isDisabled]="true"
               class="w-full"
               label="Ci"
               type="text"
               [control]="form.controls.ci"
             />
             <custom-input
+              [isDisabled]="true"
               class="w-full"
               label="Unidad"
               type="text"
               [control]="form.controls.unidad"
             />
             <custom-input
+              [isDisabled]="true"
               class="w-full"
               label="Institucion"
               type="text"
               [control]="form.controls.institucion"
             />
             <custom-input
+              [isDisabled]="true"
               class="w-full"
               label="Cargo"
               type="text"
@@ -107,7 +114,7 @@ import { SwichService } from '../../../../application/global/swich.service';
           <button-secundary
             class="self-end mt-4"
             [icon]="ICONS.SAVE"
-            label="Registrar usuario"
+            [label]="isEditing ? 'Actualizar usuario' : 'Registrar usuario'"
             (clicked)="registerUser()"
           />
         </section>
@@ -132,6 +139,9 @@ export class FormRegisterComponent implements OnInit {
   ICONS = ICONS;
   informacion: any;
   roles = [];
+  isEditing = false;
+  userId: string = '';
+
   ngOnInit(): void {
     this.userService.getRolUser().subscribe({
       next: (data) => {
@@ -148,6 +158,29 @@ export class FormRegisterComponent implements OnInit {
           life: 3000,
         });
       },
+    });
+    this.modalS.$data.subscribe((user) => {
+      if (user) {
+        this.isEditing = true;
+        this.userId = user.id;
+        this.informacion = user;
+        this.form.patchValue({
+          name: user.name || '',
+          ci: user.ci || '',
+          institucion: user.institucion || '',
+          unidad: user.unidad || '',
+          cargo: user.cargo || '',
+          tipo_user: user.tipo_user || '',
+          estado_user: user.estado_user || '',
+          idRol: user.rol?.id || '',
+          password: user.password || '',
+        });
+      } else {
+        this.isEditing = false;
+        this.userId = '';
+        this.informacion = null;
+        this.form.reset();
+      }
     });
   }
   form = new FormGroup({
@@ -211,49 +244,53 @@ export class FormRegisterComponent implements OnInit {
   }
 
   registerUser() {
-    console.log(this.form.value);
     if (this.form.invalid) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail:
-          'Por favor, llene todos los campos o coriga los erroes del formulario .',
+          'Por favor, llene todos los campos o corrija los errores del formulario.',
         life: 3000,
       });
       return;
     }
-    this.userService
-      .register({
-        password: this.form.value.password ?? '',
-        ci: this.form.value.ci ?? '',
-        name: this.form.value.name ?? '',
-        idRol: this.form.value.idRol ?? '',
-        tipo_user: this.form.value.tipo_user ?? '',
-        estado_user: this.form.value.estado_user ?? '',
-        cargo: this.form.value.cargo ?? '',
-        institucion: this.form.value.institucion ?? '',
-        unidad: this.form.value.unidad ?? '',
-      })
-      .subscribe({
-        next: (response) => {
-          if (response.status === 200 && response.data) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Éxito',
-              detail: response.message,
-              life: 3000,
-            });
-          }
-          this.modalS.$modal.emit(null);
-        },
-        error: (error: any) => {
+
+    const userData = {
+      password: this.form.value.password ?? '',
+      ci: this.form.value.ci ?? '',
+      name: this.form.value.name ?? '',
+      idRol: this.form.value.idRol ?? '',
+      tipo_user: this.form.value.tipo_user ?? '',
+      estado_user: this.form.value.estado_user ?? '',
+      cargo: this.form.value.cargo ?? '',
+      institucion: this.form.value.institucion ?? '',
+      unidad: this.form.value.unidad ?? '',
+    };
+
+    const request = this.isEditing
+      ? this.userService.updateUser(this.userId, userData)
+      : this.userService.register(userData);
+
+    request.subscribe({
+      next: (response) => {
+        if (response.status === 200 && response.data) {
           this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.error?.errors || 'Ocurrió un error inesperado',
+            severity: 'success',
+            summary: 'Éxito',
+            detail: response.message,
             life: 3000,
           });
-        },
-      });
+        }
+        this.modalS.$modal.emit(null);
+      },
+      error: (error: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error?.errors || 'Ocurrió un error inesperado',
+          life: 3000,
+        });
+      },
+    });
   }
 }

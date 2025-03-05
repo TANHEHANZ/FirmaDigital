@@ -8,18 +8,27 @@ import { MenuModule } from 'primeng/menu';
 import { SwichService } from '../../../../application/global/swich.service';
 import { DrawerService } from '../../../../application/global/drawer.service';
 import { DrawerComponent } from '../../../shared/drawer/drawer.component';
-import { UserFilerComponet } from './filters.component';
 import { InformacionUserComponent } from './informacion-user.component';
 import { state } from '@angular/animations';
 import { ButtonSecundaryComponent } from '../../../shared/ui/button/secundary.component';
 import { Subscription } from 'rxjs';
+import { UserFilterComponent } from './filters.component';
 @Component({
   selector: 'user-table',
-  imports: [CommonModule, MenuModule, ButtonSecundaryComponent, FormsModule],
+  imports: [
+    CommonModule,
+    MenuModule,
+    ButtonSecundaryComponent,
+    FormsModule,
+    UserFilterComponent,
+  ],
   template: `
-    <article class=" overflow-y-scroll max-h-[70dvh] ">
+    <user-filter (filterChanged)="applyFilters($event)"></user-filter>
+    <article
+      class="min-h-[55dvh] max-h-[55dvh] border border-gray-300 rounded-xl overflow-hidden w-full overflow-y-scroll  min-w-[80dvw]  "
+    >
       <table class="w-full">
-        <thead class="text-sm border-b border-gray-300  ">
+        <thead class="text-sm border-b border-gray-300 sticky top-0 bg-white ">
           <tr class="">
             <th>#</th>
             <th class="font-light text-start p-2">Nombre</th>
@@ -68,13 +77,15 @@ import { Subscription } from 'rxjs';
                 [popup]="true"
                 #menu
               ></p-menu>
-              <button (click)="menu.toggle($event)">
+              <button (click)="menu.toggle($event)" class="w-full ">
                 <i [ngClass]="ICONS.MENU_VERTICAL"></i>
               </button>
             </td>
           </tr>
           }@empty {
-          <p>No hay Datos de usuarios</p>
+          <tr>
+            No hay Datos de usuarios
+          </tr>
           }
         </tbody>
       </table>
@@ -88,7 +99,7 @@ import { Subscription } from 'rxjs';
           [(ngModel)]="limit"
           (change)="changeLimit()"
         >
-          <option *ngFor="let opt of [10, 20, 30]" [value]="opt">
+          <option *ngFor="let opt of [5, 10, 20, 30]" [value]="opt">
             {{ opt }}
           </option>
         </select>
@@ -120,7 +131,13 @@ export class UserTable implements OnInit, OnDestroy {
   limit = 10;
   lastPage = 1;
   total = 0;
-
+  filters = {
+    nameFilter: '',
+    TipoFilter: '',
+    state: '',
+    page: 1,
+    limit: 10,
+  };
   getMenuItems(user: any) {
     return [
       {
@@ -141,7 +158,29 @@ export class UserTable implements OnInit, OnDestroy {
       },
     ];
   }
-
+  applyFilters(filters: {
+    nameFilter?: string;
+    TipoFilter?: string;
+    state?: string;
+  }) {
+    this.page = 1;
+    this.filters = {
+      ...this.filters,
+      ...filters,
+      page: this.page,
+      limit: this.limit,
+    };
+    if (!filters.nameFilter && !filters.TipoFilter && !filters.state) {
+      this.filters = {
+        nameFilter: '',
+        TipoFilter: '',
+        state: '',
+        page: 1,
+        limit: this.limit,
+      };
+    }
+    this.loadUsers();
+  }
   ngOnInit(): void {
     this.loadUsers();
 
@@ -152,7 +191,9 @@ export class UserTable implements OnInit, OnDestroy {
   loadUsers() {
     this.userS
       .getAllUser({
-        TipoFilter: 'Juridica',
+        nameFilter: this.filters.nameFilter,
+        TipoFilter: this.filters.TipoFilter,
+        state: this.filters.state,
         page: this.page,
         limit: this.limit,
       })
@@ -162,6 +203,7 @@ export class UserTable implements OnInit, OnDestroy {
         this.lastPage = response.pagination.lastPage;
       });
   }
+
   asignarToken(selectedUser: any) {
     this.modalS.$modal.emit('assign-token');
     this.modalS.setData(selectedUser);
@@ -181,11 +223,12 @@ export class UserTable implements OnInit, OnDestroy {
   }
 
   changeLimit() {
-    this.page = 1; // Reiniciar a la primera página
+    this.page = 1;
     this.loadUsers();
   }
-  editarUsuario(use: any) {
+  editarUsuario(user: any) {
     this.modalS.$modal.emit('register');
+    this.modalS.setData(user);
   }
 
   iformacion(selectedUser: any) {

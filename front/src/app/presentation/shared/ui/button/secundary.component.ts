@@ -12,15 +12,15 @@ import { Component, EventEmitter, input, Output, output } from '@angular/core';
       [class]="
         disabled() ? 'bg-gray-300 cursor-not-allowed opacity-25' : 'bg-white'
       "
-      class=" text-primary  rounded-md flex gap-2 justify-center items-center h-12 overflow-hidden border  border-uploaded hover:bg-uploaded/20 duration-300 transition-all cursor-pointer z-50"
+      class=" text-primary   rounded-xl flex gap-2 justify-center items-center h-9  overflow-hidden border  border-secundary hover:bg-secundary/20 duration-300 transition-all cursor-pointer z-50"
     >
       <label
         *ngIf="icon()"
-        class=" flex  justify-center items-center h-full bg-primary text-white px-4 cursor-pointer "
+        class=" flex  justify-center items-center h-full w-9 bg-primary text-white  cursor-pointer "
       >
         <i [class]="icon()"></i>
       </label>
-      <label class=" px-8 font-medium" *ngIf="label()">
+      <label class=" pl-4 pr-8 font-medium py-2" *ngIf="label()">
         {{ label() }}
       </label>
     </button>
