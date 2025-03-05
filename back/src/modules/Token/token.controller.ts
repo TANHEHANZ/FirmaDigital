@@ -3,37 +3,87 @@ import { Request, Response } from "express";
 import ManageResponse from "../../infraestrucure/response/api";
 import { TokenDTO } from "../../infraestrucure/DTO/token.dto";
 import { Status } from "../../infraestrucure/interface/state";
+import { getPaginatedResults } from "../../infraestrucure/helpers/prisma.pagination";
 const prisma = new PrismaClient();
 export const TokenAll = async (req: Request, res: Response) => {
   const state = req.params.state as Status;
+  const { limit, skip } = req.pagination;
+  const { nombreTitular, ciTitular, entidadEmisora, fechaExpiracion } =
+    req.query;
+
   try {
-    const tokens = await prisma.token.findMany({
-      where: {
-        estado_token: state,
-        NOT: { estado_token: "ELIMINADO" },
-      },
-      omit: { id_certificado: true },
-      include: {
+    const whereClause: any = {
+      estado_token: state,
+      NOT: { estado_token: "ELIMINADO" },
+    };
+    if (nombreTitular || ciTitular || entidadEmisora || fechaExpiracion) {
+      whereClause.Certificado = {
+        AND: [] as any[],
+      };
+
+      if (nombreTitular) {
+        whereClause.Certificado.AND.push({
+          titular: {
+            nombre: { contains: nombreTitular as string, mode: "insensitive" },
+          },
+        });
+      }
+
+      if (ciTitular) {
+        whereClause.Certificado.AND.push({
+          titular: {
+            ci: { contains: ciTitular as string, mode: "insensitive" },
+          },
+        });
+      }
+
+      if (entidadEmisora) {
+        whereClause.Certificado.AND.push({
+          Emisor: {
+            entidad: {
+              contains: entidadEmisora as string,
+              mode: "insensitive",
+            },
+          },
+        });
+      }
+
+      if (fechaExpiracion) {
+        whereClause.Certificado.AND.push({
+          hasta: {
+            lte: new Date(fechaExpiracion as string),
+          },
+        });
+      }
+    }
+
+    const result = await getPaginatedResults(
+      prisma,
+      "token",
+      { skip, limit },
+      whereClause,
+      {
         Certificado: {
           include: {
             Emisor: { select: { entidad: true } },
             titular: {
-              omit: {
-                id: true,
+              select: {
+                nombre: true,
+                ci: true,
+                email: true,
+                descripcion: true,
               },
             },
           },
         },
       },
-    });
-    if (!tokens) {
-      ManageResponse.notFound(res, "Lista de tokens no obtenidas");
-      return;
-    }
-    ManageResponse.success(
+      { alias: "asc" }
+    );
+
+    ManageResponse.paginatedSuccess(
       res,
       "Lista de tokens obtenidas exitosamente",
-      tokens
+      result
     );
   } catch (error) {
     ManageResponse.serverError(res, "Error en el servidor ", error);
