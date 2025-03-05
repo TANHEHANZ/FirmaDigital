@@ -24,11 +24,67 @@ export class SidebarComponent {
   PATH_ROUTES = PATH_ROUTES;
   ICONS = ICONS;
   readonly sidebarService = inject(SidebarService);
+
   constructor(
     private authService: AuthService,
     private tokenStateService: TokenStateService
   ) {}
+
   private router = inject(Router);
+
+  get isAdmin() {
+    return this.authService.getUserRole() === 'ADMINISTRADOR';
+  }
+
+  get userMenuItems() {
+    return [
+      {
+        title: 'Gestionar Documentos',
+        items: [
+          {
+            label: 'Documentos Firmados',
+            route: this.PATH_ROUTES.DASHBOARD_SIGNED,
+            icon: this.ICONS.SHIELD,
+          },
+          {
+            label: 'Validar Documentos',
+            route: this.PATH_ROUTES.DASHBOARD_VALIDATE,
+            icon: this.ICONS.VALIDATE,
+          },
+        ],
+      },
+    ];
+  }
+
+  get adminMenuItems() {
+    return [
+      {
+        title: 'Gestionar Tokens',
+        items: [
+          {
+            label: 'Tokens',
+            route: this.PATH_ROUTES.DASHBOARD_TOKEN,
+            icon: this.ICONS.TOKEN,
+          },
+        ],
+      },
+      {
+        title: 'Configuración',
+        items: [
+          {
+            label: 'Usuarios',
+            route: this.PATH_ROUTES.DASHBOARD_USERS,
+            icon: this.ICONS.USER,
+          },
+        ],
+      },
+    ];
+  }
+
+  get menuItems() {
+    return this.isAdmin ? [...this.adminMenuItems] : this.userMenuItems;
+  }
+
   handleLogout() {
     this.authService.logout();
     this.tokenStateService.clearState();

@@ -11,6 +11,7 @@ import { ValidateComponent } from './presentation/pages/validate/validate.compon
 import { SignedComponent } from './presentation/pages/signed/signed.component';
 import { SignedFileComponent } from './presentation/pages/document/signedFile/signed.component';
 import { UsersComponent } from './presentation/pages/users/users.component';
+import { RoleGuard } from './application/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -29,26 +30,38 @@ export const routes: Routes = [
       {
         path: 'firmar',
         component: SignedComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'USUARIO' },
       },
       {
         path: 'document-signed',
         component: SignedFileComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'USUARIO' },
       },
       {
         path: 'validar-documentos',
         component: ValidateComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'USUARIO' },
       },
       {
         path: 'token',
         component: TokenComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'ADMINISTRADOR' },
       },
       {
         path: 'users',
         component: UsersComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'ADMINISTRADOR' },
       },
       {
         path: 'configuration',
         component: ConfigurationComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'ADMINISTRADOR' },
       },
     ],
   },

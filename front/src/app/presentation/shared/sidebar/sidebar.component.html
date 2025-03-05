@@ -15,41 +15,24 @@
     </span>
   </h3>
 
-  <app-wrapperlink [title]="'Gestionar Documentos'">
+  @for(section of menuItems; track section.title) {
+  <app-wrapperlink [title]="section.title">
+    @for(item of section.items; track item.label) {
     <app-link
       class="w-full"
-      [label]="'Documentos Firmados'"
-      [route]="PATH_ROUTES.DASHBOARD_SIGNED"
-      [iconName]="ICONS.SHIELD"
+      [label]="item.label"
+      [route]="item.route"
+      [iconName]="item.icon"
     />
-    <app-link
-      class="w-full"
-      [label]="'Validar Documentos'"
-      [route]="PATH_ROUTES.DASHBOARD_VALIDATE"
-      [iconName]="ICONS.VALIDATE"
-    />
+    }
   </app-wrapperlink>
-  <app-wrapperlink [title]="'Gestionar Tokens'">
-    <app-link
-      class="w-full"
-      [label]="'Tokens'"
-      [route]="PATH_ROUTES.DASHBOARD_TOKEN"
-      [iconName]="ICONS.TOKEN"
-    />
-  </app-wrapperlink>
-  <app-wrapperlink [title]="'Configuración'">
-    <app-link
-      class="w-full"
-      [label]="'Usuarios'"
-      [route]="PATH_ROUTES.DASHBOARD_USERS"
-      [iconName]="ICONS.USER"
-    />
-  </app-wrapperlink>
+  }
+
   <section class="h-[20%] w-full flex justify-center items-center">
     <button-primary
       class="text-sm"
       (clicked)="handleLogout()"
-      label=" Cerrar Secion"
+      label=" Cerrar Sesion"
       [icon]="ICONS.LOGOUT"
     >
     </button-primary>

@@ -3,13 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { API } from '../models/api.enum';
 import { res } from '../models/api.response';
-import { loginPeyload, RegisterPeyload } from '../models/interfaces/api/login';
+import { loginPeyload } from '../models/interfaces/api/login';
 import { LocalStorageService } from '../utils/local-storage.service';
 import { ACCESS_TOKEN, REFRESH__TOKEN } from '../constants/CONSTANTS';
 
 export interface res_data {
   accessToken: string;
   refreshToken: string;
+  user: {
+    rol: string;
+    name: string;
+  };
 }
 
 @Injectable({
@@ -32,10 +36,15 @@ export class AuthService {
           : response.data;
         this.setAccessToken(data.accessToken);
         this.setRefreshToken(data.refreshToken);
+        console.log(data);
+        localStorage.setItem('userRole', data.user?.rol.toUpperCase());
+        localStorage.setItem('userName', data.user?.name);
       })
     );
   }
-
+  getUserRole(): string {
+    return localStorage.getItem('userRole') || 'USUARIO';
+  }
   refreshToken(refreshToken: string): Observable<res<res_data>> {
     return this.http
       .post<res<res_data>>(this.URL_REFRESH, { refreshToken })
