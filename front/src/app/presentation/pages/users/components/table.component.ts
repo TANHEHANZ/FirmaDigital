@@ -72,16 +72,12 @@ import { UserFilterComponent } from './filters.component';
             </td>
             <td class="p-2 ">{{ item.rol.tipo }}</td>
             <td class="p-2 text-center">
-              <p-menu
-                [model]="getMenuItems(item)"
-                [popup]="true"
-                #menu
-              ></p-menu>
               <button (click)="menu.toggle($event)" class="w-full ">
                 <i [ngClass]="ICONS.MENU_VERTICAL"></i>
               </button>
             </td>
           </tr>
+          <p-menu [model]="getMenuItems(item)" [popup]="true" #menu></p-menu>
           }@empty {
           <tr>
             No hay Datos de usuarios

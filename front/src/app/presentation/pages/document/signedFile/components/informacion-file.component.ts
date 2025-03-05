@@ -19,13 +19,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'informationFile',
   standalone: true,
-  imports: [
-    CommonModule,
-    ButtonPrimaryComponent,
-    CardComponenr,
-    CalendarModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, CardComponenr, CalendarModule, FormsModule],
   template: `
     <section class="p-4">
       <h2 class="text-xl mb-4">Historial del documento</h2>

@@ -9,6 +9,8 @@ import { TokenFiltersComponet } from './filers.token.component';
 import { ButtonSecundaryComponent } from '../../../shared/ui/button/secundary.component';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { DrawerService } from '../../../../application/global/drawer.service';
+import InformacionTokenComponent from './informacion.token.component';
 @Component({
   selector: 'token-table',
   imports: [
@@ -26,6 +28,7 @@ import { Subscription } from 'rxjs';
       <table class="w-full">
         <thead class="text-sm border-b border-gray-300">
           <tr>
+            <th class="font-light text-start px-1 py-2 w-[5%]">#</th>
             <th class="font-light text-start px-1 py-2 w-[18%]">Titular</th>
             <th class="font-light text-start px-1 py-2 w-[10%]">Ci</th>
             <th class="font-light text-start px-1 py-2 w-[5%]">Estado</th>
@@ -37,27 +40,42 @@ import { Subscription } from 'rxjs';
             <th class="font-light text-start px-1 py-2 w-[12%]">
               Validez del Token
             </th>
+            <th class="font-light text-start px-1 py-2 w-[12%]">Acciones</th>
           </tr>
         </thead>
         <tbody class=" [&>*:nth-child(odd)]:bg-primary/15">
           @for (item of token; track $index) {
           <tr class="text-sm lowercase border-b border-gray-300">
-            <td class="px-1 py-2 truncate" (click)="menu.toggle($event)">
+            <td class="p-2">{{ (page - 1) * limit + $index + 1 }}</td>
+
+            <td class="px-1 py-2 truncate">
               {{ item.Certificado.titular.nombre }}
             </td>
-            <td class="px-1 py-2 truncate" (click)="menu.toggle($event)">
+            <td class="px-1 py-2 truncate">
               {{ item.Certificado.titular.ci }}
             </td>
-            <td class="px-1 py-2 truncate" (click)="menu.toggle($event)">
-              {{ item.estado_token }}
+            <td class="px-1 py-2 truncate">
+              <p
+                class="text-sm border rounded-xl text-center px-4  "
+                [ngClass]="{
+                  'border-signed text-signed': item.estado_token === 'ACTIVO',
+                  'border-error text-error': item.estado_token === 'ELIMINADO',
+                  'border-processing text-processing':
+                    item.estado_token === 'EDITADO',
+                  'border-gray-400 text-graborder-gray-400':
+                    item.estado_token === 'DESHABILITADO'
+                }"
+              >
+                {{ item.estado_token }}
+              </p>
             </td>
-            <td class="px-1 py-2 truncate" (click)="menu.toggle($event)">
+            <td class="px-1 py-2 truncate">
               {{ item.Certificado.titular.email }}
             </td>
-            <td class="px-1 py-2 truncate" (click)="menu.toggle($event)">
+            <td class="px-1 py-2 truncate">
               {{ item.Certificado.Emisor.entidad }}
             </td>
-            <td class="px-1 py-2 truncate" (click)="menu.toggle($event)">
+            <td class="px-1 py-2 truncate">
               {{ item.Certificado.tipo_certificado }}
             </td>
             <td class="px-1 py-2">
@@ -72,9 +90,12 @@ import { Subscription } from 'rxjs';
               </div>
             </td>
 
-            <td class="text-center">
-              <p-menu [model]="menuItems" [popup]="true" #menu></p-menu>
+            <td class=" text-center">
+              <button (click)="menu.toggle($event)" class="w-full ">
+                <i [ngClass]="ICONS.MENU_VERTICAL"></i>
+              </button>
             </td>
+            <p-menu [model]="getMenuItems(item)" [popup]="true" #menu></p-menu>
           </tr>
           }@empty {
           <td colspan="1000" class="text-center h-full">
@@ -116,6 +137,8 @@ export class TokenTable implements OnInit {
   toast = inject(MessageService);
   token: ResponseToken[] = [];
   tokenS = inject(TokenService);
+  drawerService = inject(DrawerService);
+
   subscription!: Subscription;
   page = 1;
   limit = 10;
@@ -130,23 +153,18 @@ export class TokenTable implements OnInit {
     limit: 10,
   };
   ICONS = ICONS;
-  menuItems = [
-    {
-      label: 'Ver mas información',
-      icon: 'pi pi-key',
-      command: () => this.asignarToken(),
-    },
-    {
-      label: 'Editar',
-      icon: 'pi pi-pencil',
-      command: () => this.editarUsuario(),
-    },
-    {
-      label: 'Dar de Baja',
-      icon: 'pi pi-trash',
-      command: () => this.darDeBajaUsuario(),
-    },
-  ];
+  getMenuItems(item: any) {
+    return [
+      {
+        label: 'Informacion del Token',
+        command: () => this.informacion(item),
+      },
+      {
+        label: item.estado_token === 'ACTIVO' ? 'Inhabilitar' : 'Habilitar',
+        command: () => this.deshabilitar(item),
+      },
+    ];
+  }
   applyFilters(filters: {
     nombreTitular?: string;
     ciTitular?: string;
@@ -205,20 +223,6 @@ export class TokenTable implements OnInit {
         },
       });
   }
-  asignarToken() {
-    // Lógica para asignar token
-    console.log('Asignando token...');
-  }
-
-  editarUsuario() {
-    // Lógica para editar usuario
-    console.log('Editando usuario...');
-  }
-
-  darDeBajaUsuario() {
-    // Lógica para dar de baja al usuario
-    console.log('Dando de baja usuario...');
-  }
   prevPage() {
     if (this.page > 1) {
       this.page--;
@@ -236,5 +240,36 @@ export class TokenTable implements OnInit {
   changeLimit() {
     this.page = 1;
     this.getToken();
+  }
+
+  informacion(item: any) {
+    this.drawerService.openDrawer(
+      'Informacion del Token',
+      InformacionTokenComponent,
+      item
+    );
+  }
+  deshabilitar(item: any) {
+    const newState =
+      item.estado_token === 'ACTIVO' ? 'DESHABILITADO' : 'ACTIVO';
+    this.tokenS.unsubscribe(item.id, newState).subscribe({
+      next: (value) => {
+        this.toast.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: value.message,
+          life: 3000,
+        });
+        item.estado_token = newState;
+      },
+      error: (err) => {
+        this.toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error.message || 'Ocurrió un error inesperado',
+          life: 3000,
+        });
+      },
+    });
   }
 }

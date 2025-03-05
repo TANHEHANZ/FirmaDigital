@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { API, API_ROUTES } from '../models/api.enum';
 import { ResponseToken } from '../models/interfaces/api/token/response';
 import { TokenPayload } from '../models/interfaces/api/token/peyload';
@@ -57,5 +57,10 @@ export class TokenService {
   }
   asignarToken(data: any): Observable<res<any>> {
     return this.http.post<any>(`${this.URL_ASIGNAR}`, data);
+  }
+  unsubscribe(id: string, state: string): Observable<any> {
+    return this.http
+      .patch<any>(this.URL_SAVE + '/' + id, { state })
+      .pipe(tap(() => this.refreshSubject.next(true)));
   }
 }

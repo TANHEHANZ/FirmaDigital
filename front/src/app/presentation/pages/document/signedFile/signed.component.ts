@@ -21,7 +21,6 @@ import { CustomSelectComponent } from '../../../shared/ui/select.component';
     Toast,
     CommonModule,
     TableSignedFile,
-    DrawerComponent,
     ModalComponent,
     SignedComponent,
     ButtonPrimaryComponent,
