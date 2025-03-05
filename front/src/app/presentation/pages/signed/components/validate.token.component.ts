@@ -34,8 +34,8 @@ interface response {
   template: `
     <section
       [ngClass]="{
-        'border-primary/50 ': !tokenData?.datos?.connected,
-        'border-gray-300': tokenData?.datos?.connected
+        'border-primary/50 ': !tokenData?.connected,
+        'border-gray-300': tokenData?.connected
       }"
       class="rounded-xl p-4 flex flex-col gap-4 border-2 border-gray-300 relative overflow-auto w-[350px] h-full"
     >
@@ -60,10 +60,10 @@ interface response {
             label="Validar Token"
           />
         </section>
-        @if(tokenData?.datos?.connected){
+        @if(tokenData?.connected){
         <section class="bg-primary/10 p-4 rounded-lg mt-4">
           <h3 class="text-xl font-normal mb-4">Token Conectado</h3>
-          @for(token of tokenData?.datos?.tokens; track token.slot){
+          @for(token of tokenData.tokens; track token.slot){
           <div
             class="bg-white p-4 rounded-lg mb-2 shadow-sm cursor-pointer"
             (click)="seleccionar(token)"
@@ -139,22 +139,22 @@ export class UploadValidateComponent implements OnInit {
   tokenConected() {
     this.conectToken.getListToken().subscribe({
       next: (data) => {
-        this.tokenData = data;
-        if (data.datos.connected) {
+        if (data.data.connected) {
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
             detail: data.mensaje,
             life: 3000,
           });
+          this.tokenData = data.data;
           this.form.patchValue({
-            slot: data.datos.tokens[0].slot,
+            slot: data.tokens[0].slot,
           });
         } else {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: data.error.message,
+            detail: data.message,
             life: 3000,
           });
         }

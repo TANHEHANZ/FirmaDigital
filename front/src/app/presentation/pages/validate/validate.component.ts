@@ -1,38 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ICONS } from '../../shared/ui/icons';
+import { ToastModule } from 'primeng/toast';
+import UploadValidateComponent from './upload.component';
+import { InfoValidatedComponent } from './info.validated.component';
 
 @Component({
-  selector: 'app-profile',
-  imports: [ReactiveFormsModule, CommonModule],
+  selector: 'validate-component',
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    ToastModule,
+    UploadValidateComponent,
+    InfoValidatedComponent,
+  ],
   templateUrl: './validate.component.html',
 })
 export class ValidateComponent {
-  ICONS = ICONS;
-  fileName = signal<string>('');
+  validationData?: any;
 
-  isDragging = false;
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragging = true;
+  onValidationComplete(data: any) {
+    this.validationData = data;
   }
-
-  onDragLeave() {
-    this.isDragging = false;
-  }
-
-  clear() {
-    this.fileName.set('');
-  }
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragging = false;
-  }
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-  }
-  validarDocumento() {}
 }

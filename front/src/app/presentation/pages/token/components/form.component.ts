@@ -261,7 +261,7 @@ export class FormTokenComponet implements OnInit {
   ngOnInit(): void {
     this.tokenS.getListToken().subscribe({
       next: (value) => {
-        if (!value.datos.connected) {
+        if (!value.data.connected) {
           this.toast.add({
             severity: 'error',
             summary: 'Error',
@@ -269,7 +269,7 @@ export class FormTokenComponet implements OnInit {
             life: 3000,
           });
         }
-        this.slot = value.datos.tokens[0].slot;
+        this.slot = value.data.tokens[0].slot;
       },
       error: (err) => {
         this.toast.add({
