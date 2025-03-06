@@ -43,12 +43,24 @@
             }
           },
           "configurations": {
+            
             "production": {
+                "fileReplacements": [
+                  {
+                    "replace": "src/app/application/config/environment.development.ts",
+                    "with": "src/app/application/config/environment.production.ts"
+                  }
+                ],
+                "optimization": true,
+                "sourceMap": false,
+                "namedChunks": false,
+                "aot": true,
+                "extractLicenses": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+             "maximumWarning": "2mb",
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -61,23 +73,25 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "formJacubitus:build:production"
+              "buildTarget": "formJacubitus:build:production"  
             },
             "development": {
-              "buildTarget": "formJacubitus:build:development"
+              "buildTarget": "formJacubitus:build:development"  
             }
           },
           "defaultConfiguration": "development"
-        },
+        }
+,
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
