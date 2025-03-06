@@ -12,6 +12,7 @@ import { SignedComponent } from './presentation/pages/signed/signed.component';
 import { SignedFileComponent } from './presentation/pages/document/signedFile/signed.component';
 import { UsersComponent } from './presentation/pages/users/users.component';
 import { RoleGuard } from './application/guards/role.guard';
+import PruebaComponent from './presentation/pages/prueba/prueba.component';
 
 export const routes: Routes = [
   {
@@ -48,6 +49,12 @@ export const routes: Routes = [
       {
         path: 'token',
         component: TokenComponent,
+        canActivate: [RoleGuard],
+        data: { userRole: 'ADMINISTRADOR' },
+      },
+      {
+        path: 'prueba',
+        component: PruebaComponent,
         canActivate: [RoleGuard],
         data: { userRole: 'ADMINISTRADOR' },
       },

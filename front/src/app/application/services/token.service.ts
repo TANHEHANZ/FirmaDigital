@@ -5,20 +5,25 @@ import { API, API_ROUTES } from '../models/api.enum';
 import { ResponseToken } from '../models/interfaces/api/token/response';
 import { TokenPayload } from '../models/interfaces/api/token/peyload';
 import { res } from '../models/api.response';
+import { environment } from '../config/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'https://localhost:9000';
-  private readonly URL_SAVE = 'http://localhost:3000' + API.TOKEN;
-  private readonly URL_ASIGNAR = 'http://localhost:3000' + API.ASIGNAR;
-  private readonly URL_LIST = 'http://localhost:3000' + API.LIST_TOKEN;
+  private URL = environment.API_BACK;
+  private URL_JACUBITUS = environment.API_JACUIBITUS;
+
+  private readonly URL_SAVE = this.URL + API.TOKEN;
+  private readonly URL_ASIGNAR = this.URL + API.ASIGNAR;
+  private readonly URL_LIST = this.URL + API.LIST_TOKEN;
+
   private refreshSubject = new Subject<boolean>();
+
   refresh$ = this.refreshSubject.asObservable();
   dataToken(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}${API_ROUTES.DATA_TOKEN}`, {
+    return this.http.post(`${this.URL_JACUBITUS}${API_ROUTES.DATA_TOKEN}`, {
       slot: data.slot,
       pin: data.pin,
     });

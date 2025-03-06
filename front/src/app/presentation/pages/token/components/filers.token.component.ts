@@ -13,7 +13,6 @@ import { CalendarModule } from 'primeng/calendar';
     <div class="flex gap-4 w-full justify-between items-center my-4">
       <div class="grid grid-cols-2 gap-2">
         <section class=" grid grid-cols-2 gap-2">
-          <p class="col-span-2 ">Filtros por titular</p>
           <custom-input
             type="search"
             label="Filtrar por nombre"
@@ -26,7 +25,6 @@ import { CalendarModule } from 'primeng/calendar';
           ></custom-input>
         </section>
         <section class=" grid grid-cols-2 gap-2">
-          <p class="col-span-2 ">Datos Token</p>
           <div>
             <p class="my-1  ">Expiracion token</p>
             <p-calendar

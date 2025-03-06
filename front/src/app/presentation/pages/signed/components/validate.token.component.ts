@@ -1,7 +1,13 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { UploadService } from '../../../../application/services/upload.service';
-import { TokenConnectedResponse } from '../../../../application/models/interfaces/connected';
 import { MessageService } from 'primeng/api';
 import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.component';
 import { ICONS } from '../../../shared/ui/icons';
@@ -14,13 +20,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { TokenService } from '../../../../application/services/token.service';
-import { LocalStorageService } from '../../../../application/utils/local-storage.service';
 import { TokenStateService } from '../../../../application/services/token-state.service';
-interface response {
-  slot: string;
-  alias: string;
-  pin: string;
-}
+
 @Component({
   selector: 'upload-validate',
   imports: [
@@ -47,7 +48,7 @@ interface response {
       <div class="h-full">
         <p-toast></p-toast>
         <section class="flex flex-col flex-1 gap-2 justify-center p-2">
-          <h3 class="text-2xl font-normal">¿Ya conenctaste tu token?</h3>
+          <h3 class="text-2xl font-normal">¿Ya conectaste tu token?</h3>
           <p>
             Recuerda que debes tener instalado
             <span class="bg-primary  text-white rounded-md text-sm px-2"
@@ -86,7 +87,7 @@ interface response {
                 <span class="ml-2">{{ token.serial }}</span>
               </p>
             </div>
-            @if(selectToken?.slot === token.slot) {
+            @if(selectToken?.slot === token.slot ) {
             <form class="mt-4 border-t pt-4" [formGroup]="form">
               <custom-input
                 label="Ingrese el PIN"
@@ -108,24 +109,12 @@ interface response {
     </section>
   `,
 })
-export class UploadValidateComponent implements OnInit {
+export class UploadValidateComponent {
   readonly conectToken = inject(UploadService);
   readonly messageService = inject(MessageService);
   readonly tokenService = inject(TokenService);
   private tokenStateService = inject(TokenStateService);
-
-  ngOnInit(): void {
-    // this.tokenStateService.getState().subscribe((state) => {
-    //   if (state.slot) {
-    //     this.form.patchValue({
-    //       slot: state.slot,
-    //     });
-    //     this.alias = state.alias || '';
-    //     this.selectToken = state.selectedToken;
-    //   }
-    // });
-  }
-
+  @Output() showJacubitusError = new EventEmitter<boolean>();
   ICONS = ICONS;
   tokenData: any = null;
   selectToken: any = null;
@@ -139,17 +128,14 @@ export class UploadValidateComponent implements OnInit {
   tokenConected() {
     this.conectToken.getListToken().subscribe({
       next: (data) => {
-        if (data.data.connected) {
+        if (data.datos.connected) {
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
             detail: data.mensaje,
             life: 3000,
           });
-          this.tokenData = data.data;
-          this.form.patchValue({
-            slot: data.tokens[0].slot,
-          });
+          this.tokenData = data.datos;
         } else {
           this.messageService.add({
             severity: 'error',
@@ -160,7 +146,7 @@ export class UploadValidateComponent implements OnInit {
         }
       },
       error: (e) => {
-        console.log(e);
+        this.showJacubitusError.emit(true);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -174,9 +160,6 @@ export class UploadValidateComponent implements OnInit {
   seleccionar(token: any) {
     this.selectToken = token;
     this.form.patchValue({ slot: token.slot });
-    this.tokenStateService.updateState({
-      slot: token.slot,
-    });
   }
 
   validatePin() {
@@ -212,9 +195,10 @@ export class UploadValidateComponent implements OnInit {
             detail: value.mensaje,
             life: 3000,
           });
-
+          console.log(value.datos);
           this.alias = value.datos.data_token.data[0].alias;
           this.tokenStateService.updateState({
+            token_id: value.datos.data_token.data[0].id,
             slot: this.form.value.slot!,
             alias: this.alias,
             pin: this.form.value.pin!,

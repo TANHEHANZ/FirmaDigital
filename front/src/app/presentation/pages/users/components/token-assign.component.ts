@@ -65,9 +65,11 @@ export class TokenAssignComponent {
             life: 3000,
           });
         }
+
         const tokenData = Array.isArray(value.data) ? value.data : [value.data];
+        console.log(tokenData);
         this.data = tokenData.map((token) => ({
-          label: token.tipo_token,
+          label: token.Certificado.titular.nombre,
           value: token.id,
         }));
       },

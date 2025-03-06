@@ -6,16 +6,18 @@ import { res } from '../models/api.response';
 import { infoUser } from '../models/interfaces/api/infoUser';
 import { RegisterPeyload } from '../models/interfaces/api/login';
 import { tap } from 'rxjs/operators';
+import { environment } from '../config/environment.development';
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   http = inject(HttpClient);
-  private API_SERVER = 'http://localhost:3000';
-  private URL_SEARCH_USER = this.API_SERVER + API.SERVICE_EXTERNAL;
-  private URL_REGISTER = this.API_SERVER + API.REGISTER;
-  private URL_ROL = this.API_SERVER + API.ROL;
-  private URL_UNSUB = this.API_SERVER + API.UNSUB;
+  private URL = environment.API_BACK;
+
+  private URL_SEARCH_USER = this.URL + API.SERVICE_EXTERNAL;
+  private URL_REGISTER = this.URL + API.REGISTER;
+  private URL_ROL = this.URL + API.ROL;
+  private URL_UNSUB = this.URL + API.UNSUB;
 
   private refreshSubject = new BehaviorSubject<boolean>(false);
 

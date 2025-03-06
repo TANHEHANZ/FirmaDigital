@@ -4,16 +4,18 @@ import { API } from '../models/api.enum';
 import { map, Observable } from 'rxjs';
 import { res } from '../models/api.response';
 import { responceSigned } from '../models/interfaces/api/signed';
+import { environment } from '../config/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SignedService {
   private http = inject(HttpClient);
-  private URL_ADDRESS = 'http://localhost:3000';
-  private URL_DOCUMENTS_SIGNED = this.URL_ADDRESS + API.SIGNED;
-  private URL_SIGNED_HISTORY = this.URL_ADDRESS + API.SIGNED_HISTORY;
-  private URL_SIGNED_FILE_BY_ID = this.URL_ADDRESS + API.SIGNED_FILE_BY_ID;
+  private URL = environment.API_BACK;
+
+  private URL_DOCUMENTS_SIGNED = this.URL + API.SIGNED;
+  private URL_SIGNED_HISTORY = this.URL + API.SIGNED_HISTORY;
+  private URL_SIGNED_FILE_BY_ID = this.URL + API.SIGNED_FILE_BY_ID;
 
   docuemntsSigned(params: {
     page?: number;

@@ -4,6 +4,7 @@ interface TokenState {
   slot?: string;
   alias?: string;
   pin?: string;
+  token_id?: string;
   documentName?: string;
   documentType?: string;
 }
@@ -45,13 +46,14 @@ export class TokenStateService {
     const currentState = this.state.value;
     const updatedState = { ...currentState, ...newState };
     this.state.next(updatedState);
+    console.log(updatedState);
   }
 
   getState() {
     return this.state.asObservable();
   }
 
-  getCurrentState(): TokenState {
+  getDataT(): TokenState {
     return this.state.value;
   }
 
@@ -74,6 +76,7 @@ export class TokenStateService {
         slot: currentState.slot,
         alias: currentState.alias,
         pin: currentState.pin,
+        token_id: currentState.token_id,
         documentName: currentState.documentName,
         documentType: currentState.documentType,
       };

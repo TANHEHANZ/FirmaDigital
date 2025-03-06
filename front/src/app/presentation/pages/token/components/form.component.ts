@@ -261,6 +261,7 @@ export class FormTokenComponet implements OnInit {
   ngOnInit(): void {
     this.tokenS.getListToken().subscribe({
       next: (value) => {
+        console.log(value);
         if (!value.data.connected) {
           this.toast.add({
             severity: 'error',
@@ -275,7 +276,7 @@ export class FormTokenComponet implements OnInit {
         this.toast.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error jacubitus no esta siendo ejecutado ',
+          detail: err.error.message,
           life: 3000,
         });
       },

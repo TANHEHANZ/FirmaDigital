@@ -29,7 +29,7 @@ import { Subscription } from 'rxjs';
   template: `
     <signed-filter (filterChanged)="applyFilters($event)"></signed-filter>
     <article
-      class="min-h-[55dvh] max-h-[55dvh] border border-gray-300 rounded-xl overflow-hidden w-full overflow-y-scroll  min-w-[80dvw]  "
+      class="min-h-[55dvh] max-h-[55dvh] border border-gray-300 rounded-xl overflow-hidden w-full overflow-y-auto  min-w-[80dvw]  "
     >
       <table class="w-full">
         <thead class="text-sm border-b border-gray-300">
@@ -76,7 +76,12 @@ import { Subscription } from 'rxjs';
             </td>
           </tr>
           }@empty {
-          <p>No hay Datos de usuarios</p>
+          <tr class="h-[45dvh]">
+            <td colspan="8" class="text-center text-xl align-middle">
+              No
+              <span class="text-primary ">hay documentos</span> firmados
+            </td>
+          </tr>
           }
         </tbody>
       </table>

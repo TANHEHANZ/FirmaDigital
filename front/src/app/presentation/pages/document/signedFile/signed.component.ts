@@ -68,16 +68,4 @@ export class SignedFileComponent implements OnInit {
       },
     });
   }
-
-  validar() {
-    this.pruebaS.conectedToken().subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
 }

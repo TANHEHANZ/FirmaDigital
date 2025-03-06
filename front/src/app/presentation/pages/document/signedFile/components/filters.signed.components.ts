@@ -13,7 +13,6 @@ import { CustomSelectComponent } from '../../../../shared/ui/select.component';
     <div class="flex gap-4 w-full justify-between items-center my-4">
       <div class="grid grid-cols-2 gap-2">
         <section class=" grid grid-cols-2 gap-2">
-          <p class="col-span-2 ">Filtros por usuario firmador</p>
           <custom-input
             type="search"
             label="Nombre"
@@ -26,7 +25,6 @@ import { CustomSelectComponent } from '../../../../shared/ui/select.component';
           ></custom-input>
         </section>
         <section class=" grid grid-cols-2 gap-2">
-          <p class="col-span-2 ">Filtrar por datos del documento</p>
           <div>
             <p class="my-1  ">Fecha de creacion</p>
             <p-calendar
@@ -37,7 +35,7 @@ import { CustomSelectComponent } from '../../../../shared/ui/select.component';
             ></p-calendar>
           </div>
           <custom-select
-            label="Filtrar por estado del documento :"
+            label="Estado del documento :"
             [(ngModel)]="state"
             [options]="[
               { label: 'ACTIVO', value: 'ACTIVO' },

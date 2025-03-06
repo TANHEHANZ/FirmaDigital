@@ -6,6 +6,7 @@ import { res } from '../models/api.response';
 import { loginPeyload } from '../models/interfaces/api/login';
 import { LocalStorageService } from '../utils/local-storage.service';
 import { ACCESS_TOKEN, REFRESH__TOKEN } from '../constants/CONSTANTS';
+import { environment } from '../config/environment.development';
 
 export interface res_data {
   accessToken: string;
@@ -20,8 +21,9 @@ export interface res_data {
   providedIn: 'root',
 })
 export class AuthService {
-  private URL_LOGIN = 'http://localhost:3000' + API.LOGIN;
-  private URL_REFRESH = 'http://localhost:3000' + API.REFRESH__TOKEN;
+  private URL = environment.API_BACK;
+  private URL_LOGIN = this.URL + API.LOGIN;
+  private URL_REFRESH = this.URL + API.REFRESH__TOKEN;
 
   constructor(
     private http: HttpClient,
@@ -36,7 +38,6 @@ export class AuthService {
           : response.data;
         this.setAccessToken(data.accessToken);
         this.setRefreshToken(data.refreshToken);
-        console.log(data);
         localStorage.setItem('userRole', data.user?.rol.toUpperCase());
         localStorage.setItem('userName', data.user?.name);
       })
@@ -76,7 +77,7 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const token = this.getAccessToken();
-    return !!token; // Retorna `true` si hay un token válido
+    return !!token;
   }
 
   logout(): void {

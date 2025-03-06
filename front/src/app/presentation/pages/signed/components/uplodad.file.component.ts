@@ -30,7 +30,7 @@ interface response {
         }"
         (click)="fileInput.click()"
         (dragover)="onDragOver($event)"
-        (dragleave)="onDragLeave()"
+        (dragleave)="this.isDragging = false"
         (drop)="onDrop($event)"
       >
         <p
@@ -102,10 +102,6 @@ export class UploadFile implements OnInit {
     this.isDragging = true;
   }
 
-  onDragLeave() {
-    this.isDragging = false;
-  }
-
   clear() {
     this.fileName.set('');
   }
@@ -114,7 +110,7 @@ export class UploadFile implements OnInit {
     event.stopPropagation();
     this.isDragging = false;
 
-    const currentState = this.TokenS.getCurrentState();
+    const currentState = this.TokenS.getDataT();
     if (!currentState.slot || !currentState.pin || !currentState.alias) {
       this.messageService.add({
         severity: 'error',
@@ -134,7 +130,7 @@ export class UploadFile implements OnInit {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    const currentState = this.TokenS.getCurrentState();
+    const currentState = this.TokenS.getDataT();
     if (!currentState.slot || !currentState.pin || !currentState.alias) {
       this.messageService.add({
         severity: 'error',
@@ -162,8 +158,8 @@ export class UploadFile implements OnInit {
   }
 
   firmarDocumento() {
-    const signingData = this.TokenS.getSigningData();
-    if (!signingData) {
+    const firmar = this.TokenS.getDataT();
+    if (!firmar.slot || !firmar.pin || !firmar.alias || !firmar.token_id) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -172,26 +168,50 @@ export class UploadFile implements OnInit {
       });
       return;
     }
-
-    if (!this.fileBase64) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Debe seleccionar un archivo',
-        life: 3000,
+    this.serviceSign
+      .signedFile({
+        slot: firmar.slot,
+        alias: firmar.alias,
+        pin: firmar.pin,
+        pdf: this.fileBase64!,
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('respuesta del jacubitus', response);
+          this.TokenS.setSignedDocument(response);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Documento firmado correctamente',
+            life: 3000,
+          });
+          if (response.finalizado) {
+            this.guardarDocumento(response?.datos?.pdf_firmado);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message || 'Error al firmar el documento',
+            life: 3000,
+          });
+        },
       });
-      return;
-    }
-    console.log(signingData);
+  }
+
+  guardarDocumento(pdfFirmado: string) {
+    const saveFile = this.TokenS.getSigningData();
     this.serviceSign
       .uploadFile(
         {
-          slot: Number(signingData.slot!),
-          alias: signingData.alias!,
-          pin: signingData.pin!,
-          nombre: signingData.documentName!,
-          tipo_documento: signingData.documentType!,
-          pdf: this.fileBase64,
+          slot: Number(saveFile?.slot!),
+          alias: saveFile?.alias!,
+          pin: saveFile?.pin!,
+          nombre: saveFile?.documentName!,
+          tipo_documento: saveFile?.documentType!,
+          pdf: pdfFirmado,
         },
         this.documentId || undefined
       )

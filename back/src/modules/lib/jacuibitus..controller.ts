@@ -88,7 +88,7 @@ export const listToken = async (req: Request, res: Response) => {
 };
 
 export const firmar = async (req: Request, res: Response) => {
-  const { slot, alias, pin, nombre, tipo_documento, pdf } = req.body;
+  const { nombre, tipo_documento, pdf, token_id } = req.body;
   const idUser = req.user?.userId;
   const id_historial = req.params.id_historial || null;
   try {
@@ -102,6 +102,7 @@ export const firmar = async (req: Request, res: Response) => {
           token: {
             NOT: {
               estado_token: "DESHABILITADO",
+              token_id: token_id,
             },
           },
         },
@@ -112,33 +113,11 @@ export const firmar = async (req: Request, res: Response) => {
       return;
     }
     try {
-      const response = await fetch(jacubitus + PATH_LIB.UPLOAD_FILE_PDF, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          slot,
-          alias,
-          pin,
-          pdf,
-        }),
-        agent: new https.Agent({
-          rejectUnauthorized: false,
-        }),
-      });
-
-      const data = (await response.json()) as resJacubitus<dataPdf>;
-      if (!data.finalizado) {
-        ManageResponse.notFound(res, "No hay token conectados");
-        return;
-      }
       const document = await prisma.documento.create({
         data: {
           nombre,
           tipo_documento,
-          documento_blob: data.datos.pdf_firmado,
+          documento_blob: pdf,
           estado: "ACTIVO",
           id_historial: id_historial ? id_historial : null,
         },
@@ -174,7 +153,7 @@ export const firmar = async (req: Request, res: Response) => {
         );
       }
 
-      ManageResponse.success(res, data.mensaje, firmar);
+      ManageResponse.success(res, "Documento Firmado Guardado", firmar);
     } catch (error) {
       console.error(error);
       ManageResponse.serverError(
