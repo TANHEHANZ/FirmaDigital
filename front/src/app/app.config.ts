@@ -7,7 +7,6 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import {
-  HttpClient,
   provideHttpClient,
   withFetch,
   withInterceptors,

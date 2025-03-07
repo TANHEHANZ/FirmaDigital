@@ -73,13 +73,18 @@ export const userById = async (req: Request, res: Response) => {
 
         Firmar: {
           select: {
-            Documento: true,
+            Documento: {
+              omit: {
+                documento_blob: true,
+              },
+            },
           },
         },
       },
     });
     if (!user) {
       ManageResponse.notFound(res, "Usuario no encontrado");
+      return;
     }
     ManageResponse.success(res, "Usuario encontrado exitosamente", user);
   } catch (e) {

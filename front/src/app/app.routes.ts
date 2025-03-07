@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ProfileComponent } from './presentation/pages/profile/profile.component';
 import { LoginComponent } from './presentation/pages/login/login.component';
 import { PrivateComponent } from './presentation/layouts/private/private.component';
 import { FormRegisterComponent } from './presentation/pages/users/components/form-register.component';
@@ -74,7 +73,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/login',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
 ];

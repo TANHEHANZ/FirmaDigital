@@ -54,6 +54,7 @@ import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.compon
           [showWeek]="true"
           [showIcon]="true"
           disabled="true"
+          [dateFormat]="'dd/mm/yy'"
         ></p-calendar>
       </app-card>
 
@@ -107,15 +108,8 @@ import { ButtonPrimaryComponent } from '../../../shared/ui/button/primary.compon
       <div class=" w-full flex justify-center items-center text-[14px] gap-4 ">
         <button-primary
           (click)="donwload(signedDocument()?.Documento?.documento_blob)"
-          label="Descargar "
+          label="Descargar documento"
           class="w-full"
-        >
-        </button-primary>
-        <button-primary
-          (click)="donwload(signedDocument()?.Documento?.documento_blob)"
-          class=""
-          class="w-full"
-          label="Validar "
         >
         </button-primary>
       </div>

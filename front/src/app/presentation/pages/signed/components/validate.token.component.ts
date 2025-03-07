@@ -140,7 +140,7 @@ export class UploadValidateComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: data.message,
+            detail: data.mensaje,
             life: 3000,
           });
         }

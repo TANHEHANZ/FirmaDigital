@@ -5,9 +5,9 @@ import { FormsModule } from '@angular/forms';
 import CardComponenr from '../../shared/ui/card..component';
 
 interface ValidatedResponse {
-  status: number;
-  message: string;
-  data: {
+  finalizado: boolean;
+  mensaje: string;
+  datos: {
     firmas: Array<{
       noModificado: boolean;
       cadenaConfianza: boolean;
@@ -40,24 +40,34 @@ interface ValidatedResponse {
   template: `
     <section class=" max-h-[80vh] overflow-y-scroll h-full">
       @if (validationData) {
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 ">
         <h2 class="text-xl mb-4">Información de validación del documento</h2>
         <h3 class="font-medium col-span-2 mb-4">Estado de validación</h3>
         <app-card title="Estado">
           <p
             class="text-sm border rounded-xl text-center px-4"
             [ngClass]="{
-              'border-signed text-signed': validationData.status === 200,
-              'border-error text-error': validationData.status !== 200
+              'border-signed text-signed': validationData.finalizado === true,
+              'border-error text-error': validationData.finalizado !== true
             }"
           >
-            {{ validationData.message }}
+            {{ validationData.mensaje || 'Documento Anallizado por jacubitus' }}
           </p>
         </app-card>
-
-        @for (firma of validationData.data.firmas; track $index) {
+        @if(validationData.datos.firmas.length === 0){
+        <div
+          class="flex flex-col items-center justify-center p-8 text-gray-200 border-2 border-gray-300 rounded-xl h-full bg-primary col-span-2"
+        >
+          <i
+            class="pi pi-file-pdf text-4xl mb-4 p-4 rounded-full bg-white text-black"
+          ></i>
+          <p class="text-center text-white text-xl">
+            El documento no ha sido firmado digitalmente
+          </p>
+        </div>
+        } @for (firma of validationData.datos.firmas; track $index) {
         <h3 class="font-medium col-span-2 mt-4">
-          Firma {{ $index + 1 }} de {{ validationData.data.firmas.length }}
+          Firma {{ $index + 1 }} de {{ validationData.datos.firmas.length }}
         </h3>
 
         <app-card title="Estado de la firma">
@@ -122,7 +132,7 @@ interface ValidatedResponse {
       </div>
       } @else {
       <div
-        class="flex flex-col items-center justify-center p-8 text-gray-500 border-2 border-gray-300 rounded-xl h-full bg-primary text-white"
+        class="flex flex-col items-center justify-center p-8 text-gray-100 border-2 border-gray-300 rounded-xl h-full bg-primary "
       >
         <i class="pi pi-file-pdf text-4xl mb-4"></i>
         <p class="text-center">

@@ -179,12 +179,12 @@ export class UploadFile implements OnInit {
         next: (response) => {
           console.log('respuesta del jacubitus', response);
           this.TokenS.setSignedDocument(response);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: 'Documento firmado correctamente',
-            life: 3000,
-          });
+          // this.messageService.add({
+          //   severity: 'success',
+          //   summary: 'Éxito',
+          //   detail: 'Documento firmado correctamente',
+          //   life: 3000,
+          // });
           if (response.finalizado) {
             this.guardarDocumento(response?.datos?.pdf_firmado);
           }

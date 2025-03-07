@@ -58,7 +58,7 @@ import { CommonModule } from '@angular/common';
             class="bg-primary text-white rounded-md cursor-pointer px-2 py-1"
             (click)="validarDocumento()"
           >
-            <i [class]="ICONS.SEND"></i> Firmar
+            <i [class]="ICONS.SEND"></i> Validar documento
           </button>
         </div>
       </div>
@@ -91,6 +91,7 @@ export default class UploadValidateComponent {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
+    this.validationComplete.emit(undefined);
 
     const files = event.dataTransfer?.files;
     if (files && files[0]) {
@@ -105,6 +106,8 @@ export default class UploadValidateComponent {
   }
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+    this.validationComplete.emit(undefined);
+
     if (input.files && input.files[0]) {
       const file = input.files[0];
       this.fileName.set(file.name);
@@ -126,7 +129,7 @@ export default class UploadValidateComponent {
         .validateDocument(this.currentBase64File())
         .subscribe({
           next: (response) => {
-            if (response.status === 200) {
+            if (response.finalizado === true) {
               this.toastS.add({
                 severity: 'success',
                 summary: 'Success',
@@ -137,7 +140,7 @@ export default class UploadValidateComponent {
               this.toastS.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: response.error.message,
+                detail: response.error.mensaje,
               });
             }
           },
