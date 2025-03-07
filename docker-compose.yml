@@ -1,0 +1,27 @@
+name: FirmaDigital
+services:
+  frontend:
+    build:
+      context: ./front
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - signed-net
+
+  backend:
+    build:
+      context: ./back
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    restart: always
+    command: >
+      sh -c "npx prisma generate && npx prisma db push && node dist/index.js"
+    networks:
+      - signed-net
+
+networks:
+  signed-net:
+    driver: bridge
