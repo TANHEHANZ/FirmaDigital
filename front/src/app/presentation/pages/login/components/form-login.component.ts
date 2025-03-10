@@ -131,6 +131,6 @@ export class FormLoginComponent {
   }
 
   register() {
-    this.router.navigate(['/login/register']);
+    this.router.navigate(['/register']);
   }
 }

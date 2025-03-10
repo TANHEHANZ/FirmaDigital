@@ -2,7 +2,7 @@ name: FirmaDigital
 services:
   frontend:
     build:
-      context: ./front
+      context: ./frontend
       dockerfile: dockerfile
     restart: always
     ports:

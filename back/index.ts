@@ -17,6 +17,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-app.listen(3005, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log("Server running at PORT: 3000 and accessible on the network");
 });

@@ -6,10 +6,13 @@
 /out-tsc
 /bazel-out
 .env
+.env.docker
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+
+# configure : DB_HOST=host.docker.internal
 
 # IDEs and editors
 .idea/

@@ -88,6 +88,6 @@ export class SidebarComponent {
   handleLogout() {
     this.authService.logout();
     this.tokenStateService.clearState();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

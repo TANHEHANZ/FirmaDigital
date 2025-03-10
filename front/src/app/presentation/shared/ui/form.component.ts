@@ -1,12 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dynamic-form',
